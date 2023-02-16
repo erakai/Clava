@@ -1,0 +1,21 @@
+{
+  "ts-node": {
+    "compilerOptions": {
+      "module": "CommonJS"
+    },
+    "files": true
+  },
+  "compilerOptions": {
+      "lib": ["ES2022", "DOM"],
+      "module": "ES2022",
+      "moduleResolution": "Node",
+      "target": "ES2022",
+      "esModuleInterop": true,
+      "outDir": "dist/",
+      "baseUrl": "src",
+      "typeRoots": [
+        "./node_modules/@types",
+        "./src/types"
+      ]
+  },
+}
