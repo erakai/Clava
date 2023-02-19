@@ -9,7 +9,7 @@ const UserAuthSchema = new Schema<IUserAuth>({
 
 UserAuthSchema.plugin(passportLocalMongoose, {
   usernameField: 'email',
-  usernameCaseInsensitive: 'true',
+  usernameCaseInsensitive: 'true'
 })
 
 const UserAuth  = model('userAuth', UserAuthSchema)

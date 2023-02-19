@@ -6,6 +6,8 @@ import rootRouter from 'routes';
 import passport from 'passport';
 import UserAuth from 'models/userAuth.model';
 import mongoose from 'mongoose'
+import bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser';
 
 dotenv.config()
 
@@ -29,6 +31,11 @@ app.use(
   })
 )
 
+// enable data parsing
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }))
+app.use(cookieParser(process.env.SESSION_SECRET as string))
+
 // this is unsafe; enables all requests with cors
 // https://www.npmjs.com/package/cors
 app.use(cors())
@@ -38,7 +45,7 @@ app.use(cors())
 app.use(passport.initialize())
 app.use(passport.session())
 passport.use(UserAuth.createStrategy())
-passport.serializeUser(UserAuth.serializeUser);
+passport.serializeUser(UserAuth.serializeUser());
 passport.deserializeUser(UserAuth.deserializeUser())
 
 // add all API routes
@@ -51,6 +58,6 @@ mongoose.connection.once('open', () => {
 })
 
 app.listen(port, () => {
-  console.log('Server initialized and listneing on port', port)
+  console.log('Server initialized and listening on port', port)
 })
 
