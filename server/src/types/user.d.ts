@@ -1,18 +1,12 @@
 import { PassportLocalDocument } from "mongoose";
 
-interface IUser {
-  user_id: number,
+type Session = string
+
+interface IUser extends PassportLocalDocument {
   name: string,
   email: string,
   password: string,
   club_ids: Array<number>,
-  officer_ids: Array<number>
-}
-
-type Session = string
-
-interface IUserAuth extends PassportLocalDocument {
-  email: string
-  password: string
+  officer_ids: Array<number>,
   sessionTokens: Array<Session>
 }

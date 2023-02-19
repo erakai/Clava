@@ -4,7 +4,7 @@ import session from 'express-session';
 import cors from 'cors';
 import rootRouter from 'routes';
 import passport from 'passport';
-import UserAuth from 'models/userAuth.model';
+import User from 'models/user.model';
 import mongoose from 'mongoose'
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
@@ -44,9 +44,9 @@ app.use(cors())
 // https://mherman.org/blog/user-authentication-with-passport-dot-js/
 app.use(passport.initialize())
 app.use(passport.session())
-passport.use(UserAuth.createStrategy())
-passport.serializeUser(UserAuth.serializeUser());
-passport.deserializeUser(UserAuth.deserializeUser())
+passport.use(User.createStrategy())
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser())
 
 // add all API routes
 app.use(rootRouter)
