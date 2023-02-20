@@ -9,9 +9,11 @@ function Login() {
       <Stack 
         spacing={2} 
         className="bg-emerald-300 items-center m-8 p-8"
-        sx={{ borderRadius: '2%', borderColor: 'grey.500' }}
-        >
-        <Stack className="flex-row w-full items-center" direction="row">
+        sx={{ borderRadius: '2%', borderColor: 'grey.500' }}>
+        <Stack 
+          spacing={1}
+          className="flex-row w-full items-center" 
+          direction="row">
           <IconButton component={Link} to="/">
             <ArrowBack color="action" />
           </IconButton>
