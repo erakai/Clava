@@ -24,14 +24,15 @@ export const getToken = (user: Signed) => {
 }
 
 export const getRefreshToken = (user: Signed) => {
-  const refresh = jwt.sign(user, process.env.REFRESH_SECRET, {
+  return jwt.sign(user, process.env.REFRESH_SECRET, {
     expiresIn: process.env.REFRESH_EXPIRY
   })
-  return refresh
 }
 
 export const verifyUser = (req: Request, res: Response, next: NextFunction) => {
-  if (!req.signedCookies) {
+  const { signedCookies = {} } = req
+  const { refreshToken } = signedCookies
+  if (!refreshToken) {
     res.status(401).send('Unauthorized')
   } else {
     passport.authenticate('jwt', { session: false })(req, res, next)

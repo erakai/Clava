@@ -41,7 +41,7 @@ export const login = async (req: Request, res: Response) => {
   // TODO: Why am I forced to put any here? It should infer.
   const user: any = req.user
   if (!user) {
-    return res.status(401).json({error: 'invalid login request'})
+    return res.status(401).send('Unauthorized')
   }
 
   const token = getToken({ _id: user._id })
@@ -106,9 +106,33 @@ export const refresh = async (req: Request, res: Response) => {
 
 }
 
-// what does this actually do if we don't have sesion tokens yet?
+// return the user making the request
+export const getSelf = async (req: Request, res: Response) => {
+  return res.status(200).json({user: req.user})
+}
+
+// very similar to log in, revoke refresh token
 export const logout = async (req: Request, res: Response) => {
-  req.logout(() => {
-    res.status(200)
+  // again, why forced to use any?
+  const user: any = req.user
+  const { signedCookies = {} } = req
+  const { refreshToken } = signedCookies
+
+  if (!user) {
+    return res.status(401).send('Unauthorized')
+  }
+
+  const tokenIndex = user.refreshTokens.indexOf(refreshToken)
+  
+  if (tokenIndex == -1) {
+    return res.status(401).send('Unauthorized')
+  }
+
+  user.refreshTokens.splice(tokenIndex, 1)
+  user.save((err, user) => {
+    if (err) {
+      return res.status(500).json({err})
+    }
+    res.status(200).send({success: true})
   })
 }
