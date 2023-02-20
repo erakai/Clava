@@ -1,7 +1,7 @@
 import { Box, TextField, Stack, Typography, Button, IconButton } from "@mui/material"
+import { Link } from "react-router-dom"
 import {ArrowBack} from "@mui/icons-material"
 import { getUsers } from "api/user"
-import { grey } from "@mui/material/colors"
 
 function Login() {
   return (
@@ -12,8 +12,8 @@ function Login() {
         sx={{ borderRadius: '2%', borderColor: 'grey.500' }}
         >
         <Stack className="flex-row w-full items-center" direction="row">
-          <IconButton>
-            <ArrowBack />
+          <IconButton component={Link} to="/">
+            <ArrowBack color="action" />
           </IconButton>
           <Typography variant="h5" component="h1">Login</Typography>
         </Stack>
