@@ -1,12 +1,14 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom"
 
-import Main from 'views/Main'
+import Main from '../Main'
+import Reset from '../Reset'
 
 function Root() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route index element={<Main />} />
+          <Route path="/" element={<Main />} />
+          <Route path="reset" element={<Reset />} />v
       </Routes>
     </BrowserRouter>
   )

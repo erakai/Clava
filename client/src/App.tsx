@@ -6,7 +6,7 @@ import Root from './views/Root'
 import store from './store' 
 
 console.log('Initialized environment.')
-dotenv.config()
+//dotenv.config()
 
 function App() {
   // Set up MUI theme
