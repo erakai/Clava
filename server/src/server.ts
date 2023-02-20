@@ -8,6 +8,8 @@ import User from 'models/user.model';
 import mongoose from 'mongoose'
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
+import { ExtractJwt, Strategy } from 'passport-jwt'
+import to from 'await-to-js';
 
 dotenv.config()
 
@@ -15,8 +17,7 @@ const app = express()
 const port = process.env.PORT || 8000;
 
 // TODO: Separate middleware into their own config files 
-// like in MERN boilerplate, right now they are all in server
-// when they shouldn't be
+// like in MERN boilerplate, right now they are all in server when they shouldn't be
 
 // used for session refresh tokens
 // https://www.npmjs.com/package/express-session
@@ -40,10 +41,25 @@ app.use(cookieParser(process.env.SESSION_SECRET as string))
 // https://www.npmjs.com/package/cors
 app.use(cors())
 
-// used for passport mongoose username-password authentication
-// https://mherman.org/blog/user-authentication-with-passport-dot-js/
+// initialize passport authentication middleware
 app.use(passport.initialize())
 app.use(passport.session())
+
+// checks the JWT to approve the request
+// https://www.codingdeft.com/posts/react-authentication-mern-node-passport-express-mongo/
+passport.use(new Strategy({
+    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+    secretOrKey: process.env.JWT_SECRET as string
+  }, async (jwt_payload, done) => {
+    const [err, user] = await to(User.findById(jwt_payload._id).exec())
+    if (err) return done(err, false)
+    if (user) return done(null, user)
+    return done(null, false)
+  }
+))
+
+// passport-local authentication with user/password
+// https://mherman.org/blog/user-authentication-with-passport-dot-js/
 passport.use(User.createStrategy())
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser())

@@ -8,5 +8,5 @@ interface IUser extends PassportLocalDocument {
   password: string,
   club_ids: Array<number>,
   officer_ids: Array<number>,
-  sessionTokens: Array<Session>
+  refreshTokens: Array<Session>
 }

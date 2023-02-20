@@ -8,14 +8,25 @@ const UserSchema = new Schema<IUser>({
     type: SchemaTypes.String,
     required: true,
   },
-  sessionTokens: [SchemaTypes.String],
+  refreshTokens: [SchemaTypes.String],
   club_ids: [SchemaTypes.ObjectId],
   officer_ids: [SchemaTypes.ObjectId]
 }) 
 
+// Enable passport authentication using email as username
 UserSchema.plugin(passportLocalMongoose, {
   usernameField: 'email',
   usernameCaseInsensitive: 'true'
+})
+
+// Remove information we don't need the client to have access to
+UserSchema.set('toJSON', {
+  transform: (_doc, ret) => {
+    delete ret.refreshTokens
+    delete ret.salt 
+    delete ret.hash
+    return ret
+  }
 })
 
 const User = model('user', UserSchema)
