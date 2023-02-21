@@ -18,7 +18,16 @@ function App() {
         },
       },
     },
+    palette: {
+      primary: {
+        main: "#ffb500"
+      },
+      secondary: {
+        main: "#ffd366"
+      }
+    }
   })
+
 
   return (
     <Provider store={store}>
