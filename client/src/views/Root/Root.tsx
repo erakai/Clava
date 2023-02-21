@@ -1,12 +1,9 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom"
 
 import Main from '../Main'
-<<<<<<< HEAD
 import Members from "../Members"
-=======
 import Reset from '../Reset'
 import Login from '../Login'
->>>>>>> main
 
 function Root() {
   return (
