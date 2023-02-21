@@ -11,6 +11,7 @@ import cookieParser from 'cookie-parser';
 import { JwtStrategy } from 'config/jwt';
 
 dotenv.config()
+console.log(process.env.PORT)
 
 const app = express()
 const port = process.env.PORT || 8000;

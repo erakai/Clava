@@ -8,7 +8,7 @@ function Login() {
     <Box className="Register flex w-screen h-screen items-center justify-center">
       <Stack 
         spacing={2} 
-        className="bg-emerald-300 items-center m-8 p-8 w-[30%]"
+        className="bg-emerald-300 items-center m-8 p-8 max-w-md"
         sx={{ borderRadius: '2%' }}>
         <Stack 
           spacing={1}

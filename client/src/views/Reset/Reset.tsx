@@ -8,7 +8,7 @@ function Reset() {
         <Box className="flex w-screen h-screen items-center justify-center">
             <Stack
                 spacing={7}
-                className="bg-emerald-300 items-center m-8 p-8 pb-20 max-w-[30%]"
+                className="bg-emerald-300 items-center m-8 p-8 pb-20 max-w-md"
                 sx={{ borderRadius: '2%', borderColor: 'grey.500' }}
             >
                     <Stack spacing={1} className="flex w-full items-center">
