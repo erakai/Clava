@@ -5,7 +5,7 @@ import { getUsers } from "api/user"
 
 function Login() {
   return (
-    <Box className="Login flex w-screen h-screen items-center justify-center">
+    <Box className="Register flex w-screen h-screen items-center justify-center">
       <Stack 
         spacing={2} 
         className="bg-emerald-300 items-center m-8 p-8 w-[30%]"
@@ -17,8 +17,20 @@ function Login() {
           <IconButton component={Link} to="/">
             <ArrowBack color="action" />
           </IconButton>
-          <Typography variant="h5" component="h1">Login</Typography>
+          <Typography variant="h5" component="h1">Register</Typography>
         </Stack>
+        <TextField
+          className="w-[85%]"
+          id="first-name-text-field"
+          label="First Name"
+          variant="outlined"
+          type="text"/>
+        <TextField
+          className="w-[85%]"
+          id="last-name-text-field"
+          label="Last Name"
+          variant="outlined"
+          type="text"/>
         <TextField
           className="w-[85%]"
           id="email-text-field"
@@ -31,16 +43,19 @@ function Login() {
           label="Password"
           variant="outlined"
           type="password"/>
+        <TextField
+          className="w-[85%]"
+          id="confirm-password-text-field"
+          label="Confirm Password"
+          variant="outlined"
+          type="password"/>
         <Box
-          className="flex w-[85%] items-center">
-          <Link to="/Reset" className="mx-4">
-            <Button variant="text">Forgot password?</Button>
+          className="flex w-[85%]">
+          <Link to="/Login">
+            <Button variant="text">I have a Clava account</Button>
           </Link>
-          <Button variant="contained" className="mx-4">Login</Button>
+          <Button variant="contained" className="items-end">Register</Button>
         </Box>
-        <Link to="/Register">
-          <Button variant="text">Don't have a Clava account yet?</Button>
-        </Link>
       </Stack>
     </Box>
   )
