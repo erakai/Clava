@@ -3,7 +3,7 @@
 Clava is a management software targeted at college organizations. It offers a suite of utilities for their most common needs:
 - A role based permission system for Officers
 - An advanced Member database and editor
-- A financial hub for income/expensee tracking with reimbursement support
+- A financial hub for income/expense tracking with reimbursement support
 - An event manager with attendance tracking through generated QRs
 - A centralized documentation system with Google Drive and YouTube integration
 
@@ -22,7 +22,7 @@ permissions or providing reimbursements. Clava offers a solution to this.
 
 ## High Level Overview
 
-Clava is a MERN app developed with a frontend React application that, using HTTPS requests, communicates with a RESTful API running on a ExpressJS Node server. Information is stored in a MongoDB database that is interfaced with using Mongoose. More information is available in our Design Document, located in `/docs`.
+Clava is a MERN app developed with a frontend React application that, using HTTPS requests, communicates with a RESTful API running on an ExpressJS Node server. Information is stored in a MongoDB database that is interfaced with using Mongoose. More information is available in our Design Document, located in `/docs`.
 
 ## Installation
 1. Clone this repository: `git clone https://github.com/erakai/Clava.git`.
