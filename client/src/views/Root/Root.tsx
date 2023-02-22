@@ -9,7 +9,10 @@ function Root() {
   return (
     <BrowserRouter>
       <Routes>
-        <ClubPage></ClubPage>
+        <Route index element={<ClubPage />} />
+        <Route path="/" element={<Main />} />
+        <Route path="login" element={<Login />} />
+        <Route path="reset" element={<Reset />} />
       </Routes>
     </BrowserRouter>
   )

@@ -1,4 +1,5 @@
 import { Card, CardActionArea, CardMedia, CardContent, Typography, CardActions, Button} from '@mui/material'
+import PlaceHolder from '../assets/placeholder.png'
 
 type ClubProps = {
     name: string,
@@ -12,7 +13,7 @@ export default function ClubCard({name, description} : ClubProps) {
                 <CardMedia
                     component="img"
                     height="140"
-                    src="assets/placeholder.png"
+                    src={PlaceHolder}
                     alt="image failed load"
                 />
                 <CardContent>

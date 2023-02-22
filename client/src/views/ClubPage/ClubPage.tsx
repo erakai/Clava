@@ -1,6 +1,6 @@
 import { getUsers } from "api/user"
 import { Box, Stack, Card, CardContent, CardMedia, CardActionArea, CardActions, Typography, Button } from '@mui/material'
-import ClubCard from 'components/ClubCard'
+import ClubCard from '../../components/ClubCard'
 
 function ClubPage() {
   return (
