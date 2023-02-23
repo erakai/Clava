@@ -1,7 +1,12 @@
+import dotenv from 'dotenv'
+console.log('Initialized environment.')
+console.log("htis process????? " + dotenv)
+// const buf = Buffer.from('BASIC=basic')
+// const config = dotenv.parse(buf)
+// console.log(config)
+dotenv.config()
 import { CssBaseline, ThemeProvider, createTheme } from '@mui/material'
 import { Provider } from 'react-redux'
-import dotenv from 'dotenv'
-
 import Root from './views/Root'
 import store from './store' 
 
