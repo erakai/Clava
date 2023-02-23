@@ -32,10 +32,10 @@ function Login() {
           variant="outlined"
           type="password"/>
         <Box
-          className="flex w-[95%] items-center justify-center">
+            className="flex w-[95%] items-center justify-center">
           <Button variant="contained" className="mx-4 w-[100%]">Login</Button>
         </Box>
-        <div>
+        <Stack className="w-[100%] content-center pl-1">
           <Link to="/Reset" className="mx-4">
             <Button variant="text">Forgot password?</Button>
           </Link>
@@ -44,7 +44,7 @@ function Login() {
               className="flex w-[95%] items-center justify-center">
             <Button component={Link} to="/Register" variant="contained" className="mx-4 w-[100%]">Sign Up</Button>
           </Box>
-        </div>
+        </Stack>
       </Stack>
     </Box>
   )
