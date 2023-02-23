@@ -7,4 +7,4 @@ class UserService {
 
 }
 
-export default new UserService
+export default new UserService()
