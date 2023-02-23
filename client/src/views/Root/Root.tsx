@@ -2,7 +2,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom"
 
 import Main from '../Main'
 import Members from "../Members"
-import Reset from '../Reset'
+import ResetRequest from '../Reset'
 import Login from '../Login'
 
 function Root() {
@@ -13,7 +13,7 @@ function Root() {
         <Route path="members" element={<Members />} />
         <Route path="/" element={<Main />} />
         <Route path="login" element={<Login />} />
-        <Route path="reset" element={<Reset />} /> 
+        <Route path="resetrequest" element={<ResetRequest />} />
       </Routes>
     </BrowserRouter>
   )

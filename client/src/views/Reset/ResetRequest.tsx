@@ -3,7 +3,7 @@ import { Link } from "react-router-dom"
 import {ArrowBack} from "@mui/icons-material"
 import { getUsers } from "api/user"
 
-function Reset() {
+function ResetRequest() {
     return (
         <Box className="flex w-screen h-screen items-center justify-center">
             <Stack
@@ -34,4 +34,4 @@ function Reset() {
     )
 }
 
-export default Reset
+export default ResetRequest
