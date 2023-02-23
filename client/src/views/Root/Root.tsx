@@ -2,8 +2,9 @@ import { BrowserRouter, Route, Routes } from "react-router-dom"
 
 import Main from '../Main'
 import Members from "../Members"
-import ResetRequest from '../Reset'
 import Login from '../Login'
+import ResetRequest from "../RestRequest";
+import Reset from "../Reset"
 
 function Root() {
   return (
@@ -14,6 +15,7 @@ function Root() {
         <Route path="/" element={<Main />} />
         <Route path="login" element={<Login />} />
         <Route path="resetrequest" element={<ResetRequest />} />
+        <Route path="reset" element={<Reset />} />
       </Routes>
     </BrowserRouter>
   )

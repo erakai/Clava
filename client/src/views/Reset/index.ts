@@ -1,3 +1,3 @@
-import ResetRequest from './ResetRequest'
+import Reset from './Reset'
 
-export default ResetRequest
+export default Reset
