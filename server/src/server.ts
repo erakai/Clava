@@ -32,9 +32,12 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(cookieParser(process.env.SESSION_SECRET as string))
 
-// this is unsafe; enables all requests with cors
 // https://www.npmjs.com/package/cors
-app.use(cors())
+app.use(cors({
+  credentials: true,
+  origin: [process.env.CLIENT_URL],
+  optionsSuccessStatus: 200
+}))
 
 // initialize passport authentication middleware
 app.use(passport.initialize())

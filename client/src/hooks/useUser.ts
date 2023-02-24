@@ -9,7 +9,6 @@ import to from "await-to-js"
 const useUser = () => {
   const navigate = useNavigate()
   const isLogin = useMatch('/login')
-  const isRegister = useMatch('/register')
   const isHome = useMatch('/')
   const dispatch = useDispatch<typeof store.dispatch> ()
 
@@ -25,19 +24,19 @@ const useUser = () => {
   useEffect(() => {
     if (state == UserState.NONE) {
       checkStatus().catch(() => {
-        if (!isLogin || !isRegister || !isHome) {
+        if (!isLogin || !isHome) {
           navigate('/login')
         }
       })
     }
-  }, [checkStatus, state, isLogin, isRegister, navigate, isHome])
+  }, [checkStatus, state, isLogin, navigate, isHome, user])
 
   const logout = useCallback(async () => {
     const [err, res] = await to(dispatch(_logout()).unwrap())
-    if (err) throw new Error(err.message)
+    if (err) console.log(err)
 
     return res
-  }, [dispatch])
+  }, [dispatch, navigate])
 
   return { user, logout, loading, checkStatus}
 }

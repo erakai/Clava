@@ -1,52 +1,78 @@
-import { Divider, Box, TextField, Stack, Typography, Button, IconButton} from "@mui/material"
-import { Link } from "react-router-dom"
-import {ArrowBack} from "@mui/icons-material"
-import { getUsers } from "api/user"
+import to from "await-to-js"
+import { useEffect, useState } from "react"
+import { useDispatch } from "react-redux"
+import { useSelector } from "react-redux"
+import { useNavigate } from "react-router-dom"
+import store from "store"
+import { getUser, login, register } from "../../store/user/userThunk"
+import { UserState, userStateSelector } from "../../store/user/userSlice"
+import LoginContainer from "./LoginContainer"
+import RegisterContainer from "./RegisterContainer"
+import ResetContainer from "./ResetContainer"
 
 function Login() {
+  const [page, setPage] = useState<string>('login')
+  const [errorMessage, setErrorMessage] = useState('')
+  const { state } = useSelector(userStateSelector)
+  const navigate = useNavigate()
+  const dispatch = useDispatch<typeof store.dispatch>()
+
+  useEffect(() => {
+    if (state !== UserState.NONE) return
+
+    ;(async () => {
+      const [_, res] = await to(dispatch(getUser()).unwrap())
+
+      if (res) {
+        navigate('/test')
+      }
+    })()
+  }, [dispatch, navigate, state])
+
+  const onLogin = async (req: UserRequest ) => {
+    const [err] = await to(dispatch(login(req)).unwrap())
+
+    if (err) {
+      setErrorMessage('Invalid login.')
+      return
+    }
+  }
+
+  const onRegister = async (req: UserRequest) => {
+    const [err] = await to(dispatch(register(req)).unwrap())
+
+    if (err && err.name == 'UserExistsError') {
+      setErrorMessage('A user with that email already exists.')
+    } else if (err) {
+      setErrorMessage('Invalid register.')
+    } else {
+      navigate('/test')
+    }
+  }
+
+  const switchToLogin = () => { setPage('login'); setErrorMessage('') }
+  const switchToRegister = () => { setPage('register'); setErrorMessage('') }
+  const switchToReset = () => { setPage('reset') }
+
+  const renderSwitch = (st: string) => {
+    switch(st) {
+      case 'register':
+        return <RegisterContainer onRegister={onRegister} 
+          switchToLogin={switchToLogin} errorMessage={errorMessage} 
+          setErrorMessage={setErrorMessage}/>
+      case 'reset':
+        return <ResetContainer switchToLogin={switchToLogin}/>
+      default:
+        return <LoginContainer onLogin={onLogin} switchToReset={switchToReset}
+          switchToRegister={switchToRegister} errorMessage={errorMessage}
+          setErrorMessage={setErrorMessage}/>
+    }
+  }
+
   return (
-    <Box className="Login flex w-screen h-screen items-center justify-center">
-      <Stack 
-        spacing={2} 
-        className="bg-emerald-300 items-center m-8 p-8 max-w-md px-10"
-        sx={{ borderRadius: '2%' }}>
-        <Stack 
-          spacing={1}
-          className="flex-row w-full items-center" 
-          direction="row">
-          <IconButton component={Link} to="/">
-            <ArrowBack color="action" />
-          </IconButton>
-          <Typography variant="h5" component="h1">Login</Typography>
-        </Stack>
-        <TextField
-          className="w-[100%]"
-          id="email-text-field"
-          label="Email"
-          variant="outlined"
-          type="email"/>
-        <TextField
-          className="w-[100%]"
-          id="password-text-field"
-          label="Password"
-          variant="outlined"
-          type="password"/>
-        <Box
-            className="flex w-[95%] items-center justify-center">
-          <Button variant="contained" className="mx-4 w-[100%]">Login</Button>
-        </Box>
-        <Stack className="w-[100%] content-center pl-1">
-          <Link to="/Reset" className="mx-4">
-            <Button variant="text">Forgot password?</Button>
-          </Link>
-          <Divider className="pb-5 pt-3">OR</Divider>
-          <Box
-              className="flex w-[95%] items-center justify-center">
-            <Button component={Link} to="/Register" variant="contained" className="mx-4 w-[100%]">Sign Up</Button>
-          </Box>
-        </Stack>
-      </Stack>
-    </Box>
+    <div>
+      {renderSwitch(page)}
+    </div>
   )
 }
 

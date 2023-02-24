@@ -6,7 +6,7 @@ export enum UserState {
   NONE,
   LOGGING_IN,
   LOGGING_OUT,
-  REGISTERING
+  REGISTERING,
 }
 
 export type errorT = {

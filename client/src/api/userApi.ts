@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { Token } from './config';
-import { intercepts } from 'api/config';
+import { intercepts } from './config';
 
 export type AuthResponse = { user: User; token: Token }
 
@@ -24,7 +24,7 @@ export const _login = ({ email, password }: UserRequest) =>
   UserInstance.post<AuthResponse>('/login', { email, password })
 
 export const _getUser = () => 
-  UserInstance.get<Pick<AuthResponse, 'user'>>('/users')
+  UserInstance.get<Pick<AuthResponse, 'user'>>('/')
 
 export const _logout = () => 
   UserInstance.post('/logout')

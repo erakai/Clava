@@ -1,19 +1,21 @@
 import { Box, TextField, Stack, Typography, Button, IconButton } from "@mui/material"
 import { Link } from "react-router-dom"
 import {ArrowBack} from "@mui/icons-material"
-import { getUsers } from "api/user"
 
-function Reset() {
+type ResetProps = {
+    switchToLogin: () => void
+}
+function ResetContainer({switchToLogin}: ResetProps) {
     return (
         <Box className="flex w-screen h-screen items-center justify-center">
             <Stack
-                spacing={7}
-                className="bg-emerald-300 items-center m-8 p-8 pb-20 max-w-md"
+                spacing={7} color="primary"
+                className="items-center m-8 p-8 pb-20 max-w-md"
                 sx={{ borderRadius: '2%', borderColor: 'grey.500' }}
             >
                     <Stack spacing={1} className="flex w-full items-center">
                         <Stack className="flex-row w-full items-center" direction="row">
-                            <IconButton component={Link} to="/Login">
+                            <IconButton onClick={switchToLogin}>
                                 <ArrowBack color="action"></ArrowBack>
                             </IconButton>
                             <Typography variant="h5" component="h1">Password Reset</Typography>
@@ -27,11 +29,11 @@ function Reset() {
                         label="Email"
                         variant="outlined"
                         type="email"/>
-                    <Button className="w-80" variant="contained">Request Reset</Button>
+                    <Button color="secondary" className="w-80" variant="contained">Request Reset</Button>
                 </Stack>
             </Stack>
         </Box>
     )
 }
 
-export default Reset
+export default ResetContainer   
