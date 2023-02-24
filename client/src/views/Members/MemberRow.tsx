@@ -1,5 +1,5 @@
 import { Checkbox, TableCell, TableRow } from "@mui/material";
-import { RowDisplayProps } from "components/ClavaTable";
+import { RowDisplayProps } from "../../components/ClavaTable";
 
 export default function MemberRow(
   { rowSelected, onClick, row, key}: RowDisplayProps<Member>) {
@@ -14,3 +14,4 @@ export default function MemberRow(
       </TableRow>
     )
 }
+			        
