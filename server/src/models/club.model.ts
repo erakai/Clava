@@ -2,7 +2,6 @@ import { Model, model, Schema, SchemaTypes } from "mongoose";
 import { IClub } from "types/club";
 
 const ClubSchema = new Schema<IClub>({
-  club_id: SchemaTypes.ObjectId,
   name: {
     type: SchemaTypes.String, 
     required: true,
