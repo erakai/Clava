@@ -18,7 +18,7 @@ const pages = ['Members', 'Events', 'Documents', 'Finances'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 type ClavaNavbarProps = {
-  currentRotue : string
+  currentRoute : string
 }
 
 function ClavaNavbar({currentRoute} : ClavaNavbarProps) {
@@ -129,7 +129,7 @@ function ClavaNavbar({currentRoute} : ClavaNavbarProps) {
             sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}
           >
             {pages.map((page) => (
-              <NavButton key={page} title={page} isSelected={currentRoute==page.toLowerCase()} />
+              <NavButton key={page} title={page as any} isSelected={currentRoute==page.toLowerCase()} />
             ))}
           </Box>
           {/* === END OF MENU ITEMS AS BUTTONS === */}

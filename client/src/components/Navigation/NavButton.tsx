@@ -9,15 +9,17 @@ import InsertDriveFileOutlinedIcon from '@mui/icons-material/InsertDriveFileOutl
 import PaidOutlinedIcon from '@mui/icons-material/PaidOutlined'; // Finances
 
 import { Link } from "react-router-dom";
+import { ReactNode } from 'react';
 
 type ButtonParams = {
 	name: 'Members' | 'Events' | 'Documents' | 'Finances';
-	icon: HTMLElement;
-	onClick : () => any;
+	icon?: ReactNode;
+	onClick? : () => any;
+	url?: string
 }
 
 function getButtonParams(title : string) : ButtonParams {
-	var buttonParams : ButtonParams = { name : title }
+	var buttonParams : ButtonParams = { name : title as 'Members' | 'Events' | 'Documents' | 'Finances' }
 	switch (title) {
 		case 'Members': {
 			buttonParams.icon = <GroupsIcon />;
@@ -58,8 +60,7 @@ function NavButton({title, isSelected}: NavButtonProps) {
 			<Avatar sx={{ bgcolor: "secondary.main", mx:1, width:48, height:48 }}>
 				<IconButton
 					disabled={isSelected}
-			        key={title}	
-			        href={buttonParams.url}
+			        key={title as string}	
 			        sx={{ color: 'white', display: 'block', width:48, height:48 }}
 			      >
 		            {buttonParams.icon}
