@@ -13,7 +13,7 @@ function Reset() {
             >
                     <Stack spacing={1} className="flex w-full items-center">
                         <Stack className="flex-row w-full items-center" direction="row">
-                            <IconButton component={Link} to="/">
+                            <IconButton component={Link} to="/Login">
                                 <ArrowBack color="action"></ArrowBack>
                             </IconButton>
                             <Typography variant="h5" component="h1">Password Reset</Typography>
