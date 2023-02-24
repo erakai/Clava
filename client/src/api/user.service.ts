@@ -1,10 +1,12 @@
 import api from './api'
 
-class UserService {
-  
-  // TODO what to actually put here?
-  //https://www.bezkoder.com/react-refresh-token/#React_Refresh_Token_with_JWT_overview
+// TODO what to actually put here?
+//https://www.bezkoder.com/react-refresh-token/#React_Refresh_Token_with_JWT_overview
 
+const getClubs = () => {
 }
 
-export default new UserService()
+
+const UserService = {
+  getClubs,
+}

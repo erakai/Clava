@@ -4,7 +4,8 @@ import TokenService from "./token.service"
 // This script intercepts responses and requests
 
 const instance = axios.create({
-  baseURL: `${process.env.SERVER_URL}/users`,
+  //baseURL: `${process.env.SERVER_URL}/users`,
+  baseURL: `http://localhost:8080/users`,
   headers: { 
     "Content-Type": "application/json"
   }

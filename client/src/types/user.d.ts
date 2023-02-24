@@ -5,3 +5,8 @@ interface User {
   club_ids: Array<number>,
   officer_ids: Array<number>
 }
+
+interface UserRequest {
+  email: string
+  password: string
+}

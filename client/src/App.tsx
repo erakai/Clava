@@ -1,9 +1,9 @@
 import dotenv from 'dotenv'
 console.log('Initialized environment.')
 console.log("htis process????? " + dotenv)
-// const buf = Buffer.from('BASIC=basic')
-// const config = dotenv.parse(buf)
-// console.log(config)
+console.log(dotenv)
+console.log(process.env)
+// console.log(import.meta.env.MODE)
 dotenv.config()
 import { CssBaseline, ThemeProvider, createTheme } from '@mui/material'
 import { Provider } from 'react-redux'

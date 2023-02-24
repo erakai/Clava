@@ -1,7 +1,11 @@
 import api from './api'
 import TokenService from './token.service'
 
-const register = (name: String, email: String, password: String) => {
+
+export type Token = string
+export type AuthResponse = { user: User; token: Token }
+
+export const register = (name: String, email: String, password: String) => {
   return api.post("/register", {
     name,
     email,
@@ -9,7 +13,7 @@ const register = (name: String, email: String, password: String) => {
   })
 }
 
-const login = (email: String, password: String) => {
+export const login = (email: String, password: String) => {
   return api
     .post("/login", {
       email,
@@ -25,19 +29,10 @@ const login = (email: String, password: String) => {
     })
 }
 
-const logout = () => {
+export const logout = () => {
   TokenService.removeUser()
 }
 
-const getCurrentUser = () => {
+export const getUser = () => {
   return TokenService.getUser()
 }
-
-const AuthService = {
-  register,
-  login,
-  logout,
-  getCurrentUser,
-}
-
-export default AuthService
