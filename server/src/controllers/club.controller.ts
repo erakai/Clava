@@ -41,6 +41,10 @@ export const createClub = async (req: Request, res: Response) => {
     return res.status(500).json({error: 'no name provided'})
   }
 
+  if (!description) {
+    description = "No description"
+  }
+
   Club.create({
     name, description
   }, async (err, club) => {

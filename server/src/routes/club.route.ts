@@ -5,11 +5,9 @@ import { Router } from "express";
 const clubRouter = Router()
 
 /*
-Member Routes:
-  - /members GET (club id): returns all members in club 
-  - /members POST (name, club id, ?expiration): creates + returns new member in club
-If you need a temp club_id since we don't have clubs working, use:
-  "5e1a0651741b255ddda996c4"
+Club Routes:
+  - /clubs GET (user id): returns all clubs for a user
+  - /clubs POST (name, description): makes a new club and returns it
 */
 
 clubRouter.get('/', verifyUser, getClubs)
