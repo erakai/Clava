@@ -29,7 +29,7 @@ function RegisterContainer({ onRegister, switchToLogin,
   return (
     <Box className="Register flex w-screen h-screen items-center justify-center">
       <Stack 
-        spacing={2} color="primary"
+        spacing={2} bgcolor="white" color="secondary"
         className="items-center m-8 p-8 max-w-md"
         sx={{ borderRadius: '2%' }}>
         <Stack 

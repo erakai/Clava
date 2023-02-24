@@ -29,7 +29,7 @@ const useUser = () => {
         }
       })
     }
-  }, [checkStatus, state, isLogin, navigate, isHome, user])
+  }, [checkStatus, state, isLogin, navigate, isHome])
 
   const logout = useCallback(async () => {
     const [err, res] = await to(dispatch(_logout()).unwrap())
@@ -38,7 +38,7 @@ const useUser = () => {
     return res
   }, [dispatch, navigate])
 
-  return { user, logout, loading, checkStatus}
+  return { user, logout, loading, checkStatus }
 }
 
 export default useUser

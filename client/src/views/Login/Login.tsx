@@ -8,7 +8,8 @@ import { getUser, login, register } from "../../store/user/userThunk"
 import { UserState, userStateSelector } from "../../store/user/userSlice"
 import LoginContainer from "./LoginContainer"
 import RegisterContainer from "./RegisterContainer"
-import ResetContainer from "./ResetContainer"
+import ResetRequestContainer from "./ResetRequestContainer"
+import { Container } from "@mui/material"
 
 function Login() {
   const [page, setPage] = useState<string>('login')
@@ -61,7 +62,7 @@ function Login() {
           switchToLogin={switchToLogin} errorMessage={errorMessage} 
           setErrorMessage={setErrorMessage}/>
       case 'reset':
-        return <ResetContainer switchToLogin={switchToLogin}/>
+        return <ResetRequestContainer switchToLogin={switchToLogin}/>
       default:
         return <LoginContainer onLogin={onLogin} switchToReset={switchToReset}
           switchToRegister={switchToRegister} errorMessage={errorMessage}
@@ -70,9 +71,9 @@ function Login() {
   }
 
   return (
-    <div>
+    <Container maxWidth={false} sx={{ bgcolor: 'secondary.main'}} >
       {renderSwitch(page)}
-    </div>
+    </Container>
   )
 }
 

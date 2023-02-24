@@ -3,6 +3,9 @@ import { BrowserRouter, Route, Routes } from "react-router-dom"
 import Main from '../Main'
 import Login from '../Login'
 import Test from "../Main/Test"
+import ClubPage from '../ClubPage'
+import MemberView from "../Members"
+import Reset from "../Reset"
 
 function Root() {
   return (
@@ -11,6 +14,9 @@ function Root() {
         <Route path="/" element={<Main />} />
         <Route path="/login" element={<Login />} />
         <Route path="/test" element={<Test />} />
+        <Route path="/clubs" element={<ClubPage />} />
+        <Route path="/members" element={<MemberView />} />
+        <Route path="/reset" element={<Reset />} /> 
       </Routes>
     </BrowserRouter>
   )

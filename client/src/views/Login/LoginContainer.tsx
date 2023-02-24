@@ -19,7 +19,7 @@ function LoginContainer({ onLogin, switchToRegister, switchToReset,
   return (
     <Box className="Login flex w-screen h-screen items-center justify-center">
       <Stack 
-        spacing={2} color="primary"
+        spacing={2} bgcolor="white" color="secondary"
         className="items-center m-8 p-8 max-w-md px-10"
         sx={{ borderRadius: '2%' }}>
         <Stack 

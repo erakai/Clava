@@ -16,7 +16,7 @@ console.log(process.env.PORT)
 const app = express()
 const port = process.env.PORT || 8000;
 
-// used for session refresh tokens
+// used for cookies and sessions
 // https://www.section.io/engineering-education/session-management-in-nodejs-using-expressjs-and-express-session/
 app.use(
   session({

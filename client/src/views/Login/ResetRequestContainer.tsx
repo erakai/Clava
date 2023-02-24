@@ -1,17 +1,21 @@
 import { Box, TextField, Stack, Typography, Button, IconButton } from "@mui/material"
 import { Link } from "react-router-dom"
 import {ArrowBack} from "@mui/icons-material"
+import Popup from 'reactjs-popup';
+import 'reactjs-popup/dist/index.css';
 
 type ResetProps = {
     switchToLogin: () => void
 }
-function ResetContainer({switchToLogin}: ResetProps) {
+
+function ResetRequestContainer({switchToLogin}: ResetProps) {
     return (
-        <Box className="flex w-screen h-screen items-center justify-center">
+        <Box className="flex w-screen h-screen items-center justify-center"
+        >
             <Stack
-                spacing={7} color="primary"
-                className="items-center m-8 p-8 pb-20 max-w-md"
-                sx={{ borderRadius: '2%', borderColor: 'grey.500' }}
+                spacing={7} bgcolor="white" color="secondary"
+                className="items-center m-8 p-8 pb-20 max-w-[30%]"
+                sx={{ borderRadius: '2%', borderColor: 'grey.500', bgcolor: 'white' }}
             >
                     <Stack spacing={1} className="flex w-full items-center">
                         <Stack className="flex-row w-full items-center" direction="row">
@@ -29,11 +33,16 @@ function ResetContainer({switchToLogin}: ResetProps) {
                         label="Email"
                         variant="outlined"
                         type="email"/>
-                    <Button color="secondary" className="w-80" variant="contained">Request Reset</Button>
+                    <Popup trigger={<Button className="w-80" variant="contained" color="primary">Request Reset</Button>} modal>
+                        <div className="modal">
+                            If an account associated with the provided email exists, you will receive a password reset link in your inbox.
+                        </div>
+                    </Popup>
+
                 </Stack>
             </Stack>
         </Box>
     )
 }
 
-export default ResetContainer   
+export default ResetRequestContainer
