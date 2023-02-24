@@ -33,7 +33,7 @@ function ResetRequestContainer({switchToLogin}: ResetProps) {
                         label="Email"
                         variant="outlined"
                         type="email"/>
-                    <Popup trigger={<Button className="w-80" variant="contained" color="primary">Request Reset</Button>} modal>
+                    <Popup trigger={<Button className="w-80" variant="contained" color="secondary">Request Reset</Button>} modal>
                         <div className="modal">
                             If an account associated with the provided email exists, you will receive a password reset link in your inbox.
                         </div>
