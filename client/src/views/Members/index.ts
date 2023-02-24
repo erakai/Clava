@@ -1,3 +1,3 @@
-import Members from './Members'
+import MemberView from './MemberView'
 
-export default Members
+export default MemberView
