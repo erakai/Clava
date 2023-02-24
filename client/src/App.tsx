@@ -5,6 +5,7 @@ import dotenv from 'dotenv'
 import Root from './views/Root'
 import store from './store' 
 
+
 console.log('Initialized environment.')
 //dotenv.config()
 
