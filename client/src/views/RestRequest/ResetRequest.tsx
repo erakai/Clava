@@ -33,10 +33,7 @@ function ResetRequest() {
                         type="email"/>
                     <Popup trigger={<Button className="w-80" variant="contained" color="primary">Request Reset</Button>} modal>
                         <div className="modal">
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Beatae magni
-                            omnis delectus nemo, maxime molestiae dolorem numquam mollitia, voluptate
-                            ea, accusamus excepturi deleniti ratione sapiente! Laudantium, aperiam
-                            doloribus. Odit, aut.
+                            If an account associated with the provided email exists, you will receive a password reset link in your inbox.
                         </div>
                     </Popup>
 
