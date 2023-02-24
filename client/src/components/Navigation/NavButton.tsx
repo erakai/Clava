@@ -1,12 +1,14 @@
 import IconButton from '@mui/material/IconButton';
 import Fingerprint from '@mui/icons-material/Fingerprint';
 import Avatar from '@mui/material/Avatar';
+import Tooltip from '@mui/material/Tooltip';
 
 import GroupsIcon from '@mui/icons-material/Groups'; // Members
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday'; // Events
 import InsertDriveFileOutlinedIcon from '@mui/icons-material/InsertDriveFileOutlined'; // Documents
 import PaidOutlinedIcon from '@mui/icons-material/PaidOutlined'; // Finances
 
+import { Link } from "react-router-dom";
 
 type ButtonParams = {
 	name: 'Members' | 'Events' | 'Documents' | 'Finances';
@@ -19,18 +21,22 @@ function getButtonParams(title : string) : ButtonParams {
 	switch (title) {
 		case 'Members': {
 			buttonParams.icon = <GroupsIcon />;
+			buttonParams.url = "/members"
 			break;
 		} 
 		case 'Events' : {
 			buttonParams.icon = <CalendarTodayIcon />;
+			buttonParams.url = "/";
 			break;
 		}
 		case 'Documents' : {
 			buttonParams.icon = <InsertDriveFileOutlinedIcon />;
+			buttonParams.url = "/";
 			break;
 		} 
 		case 'Finances' : {
 			buttonParams.icon = <PaidOutlinedIcon />;
+			buttonParams.url = "/";
 			break;
 		}  
 	}
@@ -39,22 +45,27 @@ function getButtonParams(title : string) : ButtonParams {
 
 type NavButtonProps = {
 	title: 'Members' | 'Events' | 'Documents' | 'Finances';
+	isSelected: boolean;
 }
 
 
-function NavButton({title}: NavButtonProps) {
+function NavButton({title, isSelected}: NavButtonProps) {
 	console.log(title)
 	const buttonParams : ButtonParams = getButtonParams(title);
 
 	return (
-		<Avatar sx={{ bgcolor: "secondary.main", mx:1, width:48, height:48 }}>
-			<IconButton
-		        key={title}	
-		        sx={{ color: 'white', display: 'block', width:48, height:48 }}
-		      >
-	            {buttonParams.icon}
-	        </IconButton>
-        </Avatar>
+		<Tooltip title={title}>
+			<Avatar sx={{ bgcolor: "secondary.main", mx:1, width:48, height:48 }}>
+				<IconButton
+					disabled={isSelected}
+			        key={title}	
+			        href={buttonParams.url}
+			        sx={{ color: 'white', display: 'block', width:48, height:48 }}
+			      >
+		            {buttonParams.icon}
+		        </IconButton>
+	        </Avatar>
+        </Tooltip>
 	)
 }
 

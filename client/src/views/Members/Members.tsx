@@ -4,7 +4,7 @@ import ClavaNavbar from "../../components/Navigation"
 function Members() {
   return (
     <div className="Members">
-      <ClavaNavbar />
+      <ClavaNavbar currentRoute='members' />
       <h1>Members</h1>
     </div>
   )

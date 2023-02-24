@@ -17,7 +17,11 @@ import NavButton from './NavButton';
 const pages = ['Members', 'Events', 'Documents', 'Finances'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
-function ClavaNavbar() {
+type ClavaNavbarProps = {
+  currentRotue : string
+}
+
+function ClavaNavbar({currentRoute} : ClavaNavbarProps) {
   // menu operations for transformations when window size is changed
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
@@ -125,7 +129,7 @@ function ClavaNavbar() {
             sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}
           >
             {pages.map((page) => (
-              <NavButton key={page} title={page} />
+              <NavButton key={page} title={page} isSelected={currentRoute==page.toLowerCase()} />
             ))}
           </Box>
           {/* === END OF MENU ITEMS AS BUTTONS === */}
