@@ -1,22 +1,18 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom"
 
 import Main from '../Main'
-<<<<<<< HEAD
-import Members from "../Members"
-=======
+import MemberView from "../Members"
 import Reset from '../Reset'
 import Login from '../Login'
->>>>>>> main
 
 function Root() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route index element={<Main />} />
-        <Route path="members" element={<Members />} />
         <Route path="/" element={<Main />} />
-        <Route path="login" element={<Login />} />
-        <Route path="reset" element={<Reset />} /> 
+        <Route path="/members" element={<MemberView />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/reset" element={<Reset />} /> 
       </Routes>
     </BrowserRouter>
   )
