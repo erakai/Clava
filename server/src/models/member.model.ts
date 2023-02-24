@@ -1,6 +1,5 @@
 import { Model, model, Schema, SchemaTypes } from "mongoose";
 import { IMember } from "types/member";
-import { IUser } from "types/user";
 
 const MemberSchema = new Schema<IMember>({
   name: {
@@ -12,6 +11,6 @@ const MemberSchema = new Schema<IMember>({
   tag_ids: [SchemaTypes.ObjectId]
 })
 
-const Member = model('member', MemberSchema) as Model<IUser>
+const Member = model('member', MemberSchema) as Model<IMember>
 
 export default Member
