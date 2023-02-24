@@ -1,13 +1,11 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom"
 import { Typography } from '@mui/material';
+import ClavaNavbar from "../../components/Navigation"
 
 function Members() {
   return (
     <div className="Members">
+      <ClavaNavbar />
       <h1>Members</h1>
-      <Typography color='primary'>
-        Foo Bar
-      </Typography>
     </div>
   )
 }
