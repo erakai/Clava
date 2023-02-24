@@ -1,5 +1,5 @@
 import { Card, CardActionArea, CardMedia, CardContent, Typography, CardActions, Button} from '@mui/material'
-import PlaceHolder from '../assets/placeholder.png'
+import PlaceHolder from '../../assets/placeholder.png'
 
 type ClubProps = {
     name: string,

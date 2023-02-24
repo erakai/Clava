@@ -1,6 +1,6 @@
+import dotenv from 'dotenv'
 import { CssBaseline, ThemeProvider, createTheme } from '@mui/material'
 import { Provider } from 'react-redux'
-
 import Root from './views/Root'
 import store from './store' 
 

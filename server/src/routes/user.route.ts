@@ -9,10 +9,10 @@ const userRouter = Router()
 /*
 User Routes:
   - /users GET (JWT token, refresh token): returns self
-  - /register POST (email, password): returns new user, JWT, refresh tokens
-  - /login POST (email, password): returns user, JWT, refresh tokens
-  - /refresh POST (refresh token): returns new JWT, refresh tokens
-  - /logout POST (JWT token, refresh token): logs user out (revokes their tokens)
+  - /users/register POST (email, password): returns new user, JWT, refresh tokens
+  - /users/login POST (email, password): returns user, JWT, refresh tokens
+  - /users/refresh POST (refresh token): returns new JWT, refresh tokens
+  - /users/logout POST (JWT token, refresh token): logs user out (revokes their tokens)
 
 All other routes will require JWT tokens
 */

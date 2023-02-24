@@ -1,23 +1,25 @@
 import { Box, TextField, Stack, Typography, Button, IconButton } from "@mui/material"
 import { Link } from "react-router-dom"
 import {ArrowBack} from "@mui/icons-material"
-import { getUsers } from "api/user"
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 
-function ResetRequest() {
+type ResetProps = {
+    switchToLogin: () => void
+}
+
+function ResetRequestContainer({switchToLogin}: ResetProps) {
     return (
         <Box className="flex w-screen h-screen items-center justify-center"
-            sx={{ bgcolor: 'secondary.main' }}
         >
             <Stack
-                spacing={7}
+                spacing={7} bgcolor="white" color="secondary"
                 className="items-center m-8 p-8 pb-20 max-w-[30%]"
                 sx={{ borderRadius: '2%', borderColor: 'grey.500', bgcolor: 'white' }}
             >
                     <Stack spacing={1} className="flex w-full items-center">
                         <Stack className="flex-row w-full items-center" direction="row">
-                            <IconButton component={Link} to="/">
+                            <IconButton onClick={switchToLogin}>
                                 <ArrowBack color="action"></ArrowBack>
                             </IconButton>
                             <Typography variant="h5" component="h1">Password Reset</Typography>
@@ -43,4 +45,4 @@ function ResetRequest() {
     )
 }
 
-export default ResetRequest
+export default ResetRequestContainer

@@ -1,6 +1,5 @@
-import { getUsers } from "api/user"
 import { Box, Stack, Card, CardContent, CardMedia, CardActionArea, CardActions, Typography, Button } from '@mui/material'
-import ClubCard from '../../components/ClubCard'
+import ClubCard from './ClubCard'
 
 function ClubPage() {
   return (
@@ -11,7 +10,7 @@ function ClubPage() {
     }}>
       <Stack spacing={2}>
 
-      <h1>Clubs</h1>
+      <Typography variant="h1">Clubs</Typography>
       <p>These are the clubs you are in</p>
 
       <ClubCard name="Book Club" description="Hello"></ClubCard>
