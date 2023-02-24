@@ -2,14 +2,16 @@ import { Box, TextField, Stack, Typography, Button, IconButton } from "@mui/mate
 import { Link } from "react-router-dom"
 import {ArrowBack} from "@mui/icons-material"
 import { getUsers } from "api/user"
+import Popup from 'reactjs-popup';
+import 'reactjs-popup/dist/index.css';
 
 function ResetRequest() {
     return (
         <Box className="flex w-screen h-screen items-center justify-center">
             <Stack
                 spacing={7}
-                className="bg-emerald-300 items-center m-8 p-8 pb-20 max-w-[30%]"
-                sx={{ borderRadius: '2%', borderColor: 'grey.500' }}
+                className="items-center m-8 p-8 pb-20 max-w-[30%]"
+                sx={{ borderRadius: '2%', borderColor: 'grey.500', bgcolor: 'secondary.main' }}
             >
                     <Stack spacing={1} className="flex w-full items-center">
                         <Stack className="flex-row w-full items-center" direction="row">
@@ -27,7 +29,10 @@ function ResetRequest() {
                         label="Email"
                         variant="outlined"
                         type="email"/>
-                    <Button className="w-80" variant="contained">Request Reset</Button>
+                    <Popup trigger={<Button className="w-80" variant="contained" color="primary">Request Reset</Button>} modal>
+                        <span> Modal content </span>
+                    </Popup>
+
                 </Stack>
             </Stack>
         </Box>
