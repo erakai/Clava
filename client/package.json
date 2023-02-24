@@ -14,7 +14,7 @@
     "@emotion/styled": "^11.10.5",
     "@mui/icons-material": "^5.11.9",
     "@mui/material": "^5.11.9",
-    "@reduxjs/toolkit": "^1.9.2",
+    "@reduxjs/toolkit": "^1.9.3",
     "@types/react-redux": "^7.1.25",
     "await-to-js": "^3.0.0",
     "axios": "^1.3.3",

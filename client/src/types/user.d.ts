@@ -1,5 +1,5 @@
 interface User {
-  user_id: number,
+  user_id: string,
   name: string,
   email: string,
   club_ids: Array<number>,
@@ -9,4 +9,5 @@ interface User {
 interface UserRequest {
   email: string
   password: string
+  name?: string
 }
