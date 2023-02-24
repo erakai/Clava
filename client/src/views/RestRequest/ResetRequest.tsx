@@ -7,11 +7,13 @@ import 'reactjs-popup/dist/index.css';
 
 function ResetRequest() {
     return (
-        <Box className="flex w-screen h-screen items-center justify-center">
+        <Box className="flex w-screen h-screen items-center justify-center"
+            sx={{ bgcolor: 'secondary.main' }}
+        >
             <Stack
                 spacing={7}
                 className="items-center m-8 p-8 pb-20 max-w-[30%]"
-                sx={{ borderRadius: '2%', borderColor: 'grey.500', bgcolor: 'secondary.main' }}
+                sx={{ borderRadius: '2%', borderColor: 'grey.500', bgcolor: 'white' }}
             >
                     <Stack spacing={1} className="flex w-full items-center">
                         <Stack className="flex-row w-full items-center" direction="row">
@@ -30,7 +32,12 @@ function ResetRequest() {
                         variant="outlined"
                         type="email"/>
                     <Popup trigger={<Button className="w-80" variant="contained" color="primary">Request Reset</Button>} modal>
-                        <span> Modal content </span>
+                        <div className="modal">
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Beatae magni
+                            omnis delectus nemo, maxime molestiae dolorem numquam mollitia, voluptate
+                            ea, accusamus excepturi deleniti ratione sapiente! Laudantium, aperiam
+                            doloribus. Odit, aut.
+                        </div>
                     </Popup>
 
                 </Stack>
