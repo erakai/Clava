@@ -129,7 +129,7 @@ function ClavaNavbar({currentRoute} : ClavaNavbarProps) {
             sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}
           >
             {pages.map((page) => (
-              <NavButton key={page} title={page as any} isSelected={currentRoute==page.toLowerCase()} />
+              <NavButton key={page} title={page as any} isSelected={page.toLowerCase() === currentRoute.toLowerCase()} />
             ))}
           </Box>
           {/* === END OF MENU ITEMS AS BUTTONS === */}
@@ -137,7 +137,7 @@ function ClavaNavbar({currentRoute} : ClavaNavbarProps) {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                <Avatar alt="Remy Sharp" src="" />
               </IconButton>
             </Tooltip>
             <Menu
