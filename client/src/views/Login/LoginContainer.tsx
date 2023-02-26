@@ -20,19 +20,16 @@ function LoginContainer({ onLogin, switchToRegister, switchToReset,
     <Box className="Login flex w-screen h-screen items-center justify-center">
       <Stack 
         spacing={2} bgcolor="white" color="secondary"
-        className="items-center m-8 p-8 w-96 max-w-md px-10"
-        sx={{ borderRadius: '2%' }}>
-        <Stack 
-          spacing={1}
-          className="flex-row w-full items-center" 
-          direction="row">
+        className="items-center m-8 p-8 w-96 max-w-md rounded-lg">
+        <Box 
+          className="flex w-full items-center">
           <IconButton component={Link} to="/">
             <ArrowBack color="action" />
           </IconButton>
           <Typography variant="h5" component="h1">Login</Typography>
-        </Stack>
+        </Box>
         <TextField
-          className="w-[100%]"
+          className="w-full"
           id="email-text-field"
           label="Email"
           variant="outlined"
@@ -42,7 +39,7 @@ function LoginContainer({ onLogin, switchToRegister, switchToReset,
             setErrorMessage('')
           }}/>
         <TextField
-          className="w-[100%]"
+          className="w-full"
           id="password-text-field"
           label="Password"
           variant="outlined" error={Boolean(errorMessage)} helperText={errorMessage}
@@ -50,11 +47,11 @@ function LoginContainer({ onLogin, switchToRegister, switchToReset,
             setPassword(e.target.value.trim())
             setErrorMessage('')
           }}/>
-        <Button className="w-[95%]" color="secondary" variant="contained"
-        onClick={(e) => {onLogin({email, password})}}>Login</Button>
-        <Button onClick={switchToReset} variant="text">Forgot password?</Button>
-        <Divider className="py-3 w-[95%]">OR</Divider>
-        <Button className="w-[95%]"color="secondary" onClick={switchToRegister} variant="contained">Sign Up</Button>
+        <Button className="w-full" color="secondary" variant="contained"
+          onClick={(e) => {onLogin({email, password})}}>Login</Button>
+        <Button className="w-full" onClick={switchToReset} variant="text">Forgot password?</Button>
+        <Divider className="pb-4 w-full">OR</Divider>
+        <Button className="w-full"color="secondary" onClick={switchToRegister} variant="contained">Sign Up</Button>
       </Stack>
     </Box>
   )

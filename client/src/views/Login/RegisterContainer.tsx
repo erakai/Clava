@@ -30,18 +30,13 @@ function RegisterContainer({ onRegister, switchToLogin,
     <Box className="Register flex w-screen h-screen items-center justify-center">
       <Stack 
         spacing={2} bgcolor="white" color="secondary"
-        className="items-center m-8 p-8 w-96"
-        sx={{ borderRadius: '2%' }}>
-        <Stack 
-          spacing={1}
-          className="flex-row w-full items-center" 
-          direction="row">
+        className="items-center m-8 p-8 w-96 rounded-lg">
+        <Box className="flex w-full items-center">
           <IconButton component={Link} to="/">
             <ArrowBack color="action" />
           </IconButton>
           <Typography variant="h5" component="h1">Register</Typography>
-        </Stack>
-        <Typography color="error" variant="subtitle1">{errorMessage}</Typography>
+        </Box>
         <TextField
           className="w-full"
           id="name-text-field"
@@ -82,8 +77,9 @@ function RegisterContainer({ onRegister, switchToLogin,
             setPassConfirm(e.target.value.trim())
             setErrorMessage('')
           }}/>
-        <Button className="w-[95%] items-end" color="secondary" onClick={registerWrapper} variant="contained">Register</Button>
-        <Button color="secondary" onClick={switchToLogin} variant="text">I have a Clava account</Button>
+        <Typography color="error" variant="subtitle1">{errorMessage}</Typography>
+        <Button className="w-full items-end" color="secondary" onClick={registerWrapper} variant="contained">Register</Button>
+        <Button className="w-full" color="secondary" onClick={switchToLogin} variant="text">I have a Clava account</Button>
       </Stack>
     </Box>
   )

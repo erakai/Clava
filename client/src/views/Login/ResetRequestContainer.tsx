@@ -10,22 +10,18 @@ type ResetProps = {
 
 function ResetRequestContainer({switchToLogin}: ResetProps) {
     return (
-        <Box className="flex w-screen h-screen items-center justify-center"
-        >
-            <Stack
-                spacing={7} bgcolor="white" color="secondary"
-                className="items-center m-8 p-8 pb-20 w-96"
-                sx={{ borderRadius: '2%', borderColor: 'grey.500', bgcolor: 'white' }}
-            >
-                    <Stack spacing={1} className="flex w-full items-center">
-                        <Stack className="flex-row w-full items-center" direction="row">
-                            <IconButton onClick={switchToLogin}>
-                                <ArrowBack color="action"></ArrowBack>
-                            </IconButton>
-                            <Typography variant="h5" component="h1">Password Reset</Typography>
-                        </Stack>
-                        <Typography className="px-8" variant="subtitle2" component="h1">Enter the email address associated with your account and we'll send you a link to reset your password.</Typography>
+        <Box className="flex w-screen h-screen items-center justify-center">
+            <Stack spacing={2} bgcolor="white" color="secondary"
+                className="items-center p-8 w-96 rounded-lg">
+                <Stack spacing={1} className="flex w-full items-center">
+                    <Stack spacing={1} className="flex-row w-full items-center" direction="row">
+                        <IconButton onClick={switchToLogin}>
+                            <ArrowBack color="action"/>
+                        </IconButton>
+                        <Typography variant="h5" component="h1">Password Reset</Typography>
                     </Stack>
+                    <Typography className="" variant="subtitle2" component="h1">Enter the email address associated with your account and we'll send you a link to reset your password.</Typography>
+                </Stack>
                 <Stack spacing={4} className="flex w-full items-center">
                     <TextField
                         className="w-80"
@@ -33,12 +29,11 @@ function ResetRequestContainer({switchToLogin}: ResetProps) {
                         label="Email"
                         variant="outlined"
                         type="email"/>
-                    <Popup trigger={<Button className="w-80" variant="contained" color="primary">Request Reset</Button>} modal>
+                    <Popup trigger={<Button className="w-80" variant="contained" color="secondary">Request Reset</Button>} modal>
                         <div className="modal">
                             If an account associated with the provided email exists, you will receive a password reset link in your inbox.
                         </div>
                     </Popup>
-
                 </Stack>
             </Stack>
         </Box>
