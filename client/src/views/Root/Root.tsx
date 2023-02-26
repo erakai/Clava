@@ -10,6 +10,7 @@ import DocumentView from "../Documents"
 import FinanceView from "../Finances";
 import Reset from "../Reset";
 import ClubComposite from "../ClubComposite"
+import _404View from "../Error";
 
 function Root() {
   return (
@@ -19,9 +20,10 @@ function Root() {
         <Route path="/login" element={<Login />} />
         <Route path="/test" element={<Test />} /> 
         <Route path="/clubs" element={<ClubPage />} />
-        <Route path="/reset" element={<Reset />} />
+        <Route path="/1reset" element={<Reset />} />
         {/*TODO: Add Regex for clubId, clubRoute*/}
         <Route path="/:clubId/:clubRoute" element={<ClubComposite />} />
+        <Route path="*" element={<_404View />} />
       </Routes>
     </BrowserRouter>
   ) 
