@@ -1,4 +1,4 @@
-import { Divider, Box, TextField, Stack, Typography, Button, IconButton} from "@mui/material"
+import { Divider, Box, TextField, Stack, Typography, Button, IconButton, Container} from "@mui/material"
 import { Link } from "react-router-dom"
 import {ArrowBack} from "@mui/icons-material"
 import { Dispatch, useState } from "react"
@@ -20,19 +20,16 @@ function LoginContainer({ onLogin, switchToRegister, switchToReset,
     <Box className="Login flex w-screen h-screen items-center justify-center">
       <Stack 
         spacing={2} bgcolor="white" color="secondary"
-        className="items-center m-8 p-8 max-w-md px-10"
-        sx={{ borderRadius: '2%' }}>
-        <Stack 
-          spacing={1}
-          className="flex-row w-full items-center" 
-          direction="row">
+        className="items-center m-8 p-8 w-96 max-w-md rounded-lg">
+        <Box 
+          className="flex w-full items-center">
           <IconButton component={Link} to="/">
             <ArrowBack color="action" />
           </IconButton>
           <Typography variant="h5" component="h1">Login</Typography>
-        </Stack>
+        </Box>
         <TextField
-          className="w-[100%]"
+          className="w-full"
           id="email-text-field"
           label="Email"
           variant="outlined"
@@ -42,7 +39,7 @@ function LoginContainer({ onLogin, switchToRegister, switchToReset,
             setErrorMessage('')
           }}/>
         <TextField
-          className="w-[100%]"
+          className="w-full"
           id="password-text-field"
           label="Password"
           variant="outlined" error={Boolean(errorMessage)} helperText={errorMessage}
@@ -50,19 +47,11 @@ function LoginContainer({ onLogin, switchToRegister, switchToReset,
             setPassword(e.target.value.trim())
             setErrorMessage('')
           }}/>
-        <Box
-            className="flex w-[95%] items-center justify-center">
-          <Button color="secondary" variant="contained" className="mx-4 w-[100%]"
-            onClick={(e) => {onLogin({email, password})}}>Login</Button>
-        </Box>
-        <Stack className="w-[100%] content-center pl-1">
-          <Button onClick={switchToReset} variant="text">Forgot password?</Button>
-          <Divider className="pb-5 pt-3">OR</Divider>
-          <Box
-              className="flex w-[95%] items-center justify-center">
-            <Button color="secondary" onClick={switchToRegister} variant="contained" className="mx-4 w-[100%]">Sign Up</Button>
-          </Box>
-        </Stack>
+        <Button className="w-full" color="secondary" variant="contained"
+          onClick={(e) => {onLogin({email, password})}}>Login</Button>
+        <Button className="w-full" onClick={switchToReset} variant="text">Forgot password?</Button>
+        <Divider className="pb-4 w-full">OR</Divider>
+        <Button className="w-full"color="secondary" onClick={switchToRegister} variant="contained">Sign Up</Button>
       </Stack>
     </Box>
   )
