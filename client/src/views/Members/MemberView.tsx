@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react"
 import MemberDisplay from "./MemberDisplay"
-import ClavaNavbar from "../../components/Navigation"
 
 const tempMembers: Member[] = [
   {
@@ -41,7 +40,6 @@ export default function MemberView() {
 
   return (
     <div className="p-2 items-center">
-      <ClavaNavbar currentRoute="Members"/>
       <MemberDisplay members={members} setMembers={setMembers}/>
     </div>
   )

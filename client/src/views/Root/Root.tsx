@@ -7,9 +7,9 @@ import ClubPage from '../ClubPage'
 import MemberView from "../Members"
 import EventView from "../Events"
 import DocumentView from "../Documents"
-import Finances from "../Finances";
-import Reset from "../Reset"
-import FinanceView from "../Finances"
+import FinanceView from "../Finances";
+import Reset from "../Reset";
+import ClubComposite from "../ClubComposite"
 
 function Root() {
   return (
@@ -17,16 +17,14 @@ function Root() {
       <Routes>
         <Route path="/" element={<Main />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/test" element={<Test />} />
+        <Route path="/test" element={<Test />} /> 
         <Route path="/clubs" element={<ClubPage />} />
-        <Route path="/members" element={<MemberView />} />
-        <Route path="/events" element={<EventView />} />
-        <Route path="/documents" element={<DocumentView />} />
-        <Route path="/finances" element={<FinanceView />} />
-        <Route path="/reset" element={<Reset />} /> 
+        <Route path="/reset" element={<Reset />} />
+        {/*TODO: Add Regex for clubId, clubRoute*/}
+        <Route path="/:clubId/:clubRoute" element={<ClubComposite />} />
       </Routes>
     </BrowserRouter>
-  )
+  ) 
 }
 
 export default Root

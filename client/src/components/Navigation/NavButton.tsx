@@ -49,16 +49,17 @@ function getButtonParams(title : string) : ButtonParams {
 type NavButtonProps = {
 	title: 'Members' | 'Events' | 'Documents' | 'Finances';
 	isSelected: boolean;
+	clubId : string;
 }
 
 
-function NavButton({title, isSelected}: NavButtonProps) {
+function NavButton({title, isSelected, clubId}: NavButtonProps) {
 	const navigate = useNavigate();
 
 	const buttonParams : ButtonParams = getButtonParams(title);
 
 	const onLinkChange = (): void => {
-		navigate('/' + title.toLowerCase());
+		navigate('/' + clubId + '/' + title.toLowerCase());
 	}
 
 	return (

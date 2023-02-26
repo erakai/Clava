@@ -19,9 +19,10 @@ const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 type ClavaNavbarProps = {
   currentRoute : string
+  clubId : string
 }
 
-function ClavaNavbar({currentRoute} : ClavaNavbarProps) {
+function ClavaNavbar({currentRoute, clubId} : ClavaNavbarProps) {
   // menu operations for transformations when window size is changed
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
@@ -129,7 +130,11 @@ function ClavaNavbar({currentRoute} : ClavaNavbarProps) {
             sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}
           >
             {pages.map((page) => (
-              <NavButton key={page} title={page as any} isSelected={page.toLowerCase() === currentRoute.toLowerCase()} />
+              <NavButton 
+                key={page} title={page as any} 
+                isSelected={page.toLowerCase() === currentRoute.toLowerCase()} 
+                clubId={clubId}
+              />
             ))}
           </Box>
           {/* === END OF MENU ITEMS AS BUTTONS === */}
@@ -167,6 +172,7 @@ function ClavaNavbar({currentRoute} : ClavaNavbarProps) {
         </Toolbar>
       </Container>
     </AppBar>
+
   );
 }
 
