@@ -13,10 +13,10 @@ function Root() {
       <Routes>
         <Route path="/" element={<Main />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/test" element={<Test />} />
         <Route path="/clubs" element={<ClubPage />} />
         <Route path="/members" element={<MemberView />} />
         <Route path="/reset" element={<Reset />} /> 
+        <Route path="/test" element={<Test />} /> 
       </Routes>
     </BrowserRouter>
   )

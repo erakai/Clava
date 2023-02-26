@@ -11,6 +11,8 @@ import RegisterContainer from "./RegisterContainer"
 import ResetRequestContainer from "./ResetRequestContainer"
 import { Container } from "@mui/material"
 
+const pageAfter = '/members'
+
 function Login() {
   const [page, setPage] = useState<string>('login')
   const [errorMessage, setErrorMessage] = useState('')
@@ -19,16 +21,16 @@ function Login() {
   const dispatch = useDispatch<typeof store.dispatch>()
 
   useEffect(() => {
-    if (state !== UserState.NONE) return
+    if (state != UserState.NONE) return
 
     ;(async () => {
       const [_, res] = await to(dispatch(getUser()).unwrap())
 
       if (res) {
-        navigate('/test')
+        navigate(pageAfter)
       }
     })()
-  }, [dispatch, navigate, state])
+  }, [dispatch, navigate])
 
   const onLogin = async (req: UserRequest ) => {
     const [err] = await to(dispatch(login(req)).unwrap())
@@ -37,6 +39,8 @@ function Login() {
       setErrorMessage('Invalid login.')
       return
     }
+
+    navigate(pageAfter)
   }
 
   const onRegister = async (req: UserRequest) => {
@@ -47,7 +51,7 @@ function Login() {
     } else if (err) {
       setErrorMessage('Invalid register.')
     } else {
-      navigate('/test')
+      navigate(pageAfter)
     }
   }
 

@@ -125,7 +125,7 @@ export const logout = async (req: Request, res: Response) => {
   const tokenIndex = user.refreshTokens.indexOf(refreshToken)
   
   if (tokenIndex == -1) {
-    return res.status(401).send('Unauthorized')
+    return res.status(401).send('Invalid Refresh Token')
   }
 
   user.refreshTokens.splice(tokenIndex, 1)

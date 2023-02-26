@@ -9,7 +9,6 @@ import to from "await-to-js"
 const useUser = () => {
   const navigate = useNavigate()
   const isLogin = useMatch('/login')
-  const isHome = useMatch('/')
   const dispatch = useDispatch<typeof store.dispatch> ()
 
   const { user, loading, state } = useSelector(userStateSelector)
@@ -23,18 +22,19 @@ const useUser = () => {
 
   useEffect(() => {
     if (state == UserState.NONE) {
-      checkStatus().catch(() => {
-        if (!isLogin || !isHome) {
+      if (!isLogin) {
+        checkStatus().catch(() => {
           navigate('/login')
-        }
-      })
+        })
+      }
     }
-  }, [checkStatus, state, isLogin, navigate, isHome])
+  }, [checkStatus, state, isLogin, navigate])
 
   const logout = useCallback(async () => {
     const [err, res] = await to(dispatch(_logout()).unwrap())
     if (err) console.log(err)
 
+    navigate('/login')
     return res
   }, [dispatch, navigate])
 
