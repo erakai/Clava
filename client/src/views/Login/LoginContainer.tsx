@@ -50,13 +50,11 @@ function LoginContainer({ onLogin, switchToRegister, switchToReset,
             setPassword(e.target.value.trim())
             setErrorMessage('')
           }}/>
-        <Stack className="w-full items-center" spacing={1}>
-          <Button className="w-[95%]" color="secondary" variant="contained"
-          onClick={(e) => {onLogin({email, password})}}>Login</Button>
-          <Button onClick={switchToReset} variant="text">Forgot password?</Button>
-          <Divider className="py-3 w-[95%]">OR</Divider>
-          <Button className="w-[95%]"color="secondary" onClick={switchToRegister} variant="contained">Sign Up</Button>
-        </Stack>
+        <Button className="w-[95%]" color="secondary" variant="contained"
+        onClick={(e) => {onLogin({email, password})}}>Login</Button>
+        <Button onClick={switchToReset} variant="text">Forgot password?</Button>
+        <Divider className="py-3 w-[95%]">OR</Divider>
+        <Button className="w-[95%]"color="secondary" onClick={switchToRegister} variant="contained">Sign Up</Button>
       </Stack>
     </Box>
   )

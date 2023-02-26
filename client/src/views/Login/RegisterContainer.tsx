@@ -82,10 +82,8 @@ function RegisterContainer({ onRegister, switchToLogin,
             setPassConfirm(e.target.value.trim())
             setErrorMessage('')
           }}/>
-        <Box className="flex w-full" >
-          <Button color="secondary" onClick={switchToLogin} variant="text">I have a Clava account</Button>
-          <Button color="secondary" onClick={registerWrapper} variant="contained" className="items-end">Register</Button>
-        </Box>
+        <Button className="w-[95%] items-end" color="secondary" onClick={registerWrapper} variant="contained">Register</Button>
+        <Button color="secondary" onClick={switchToLogin} variant="text">I have a Clava account</Button>
       </Stack>
     </Box>
   )
