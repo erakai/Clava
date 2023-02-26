@@ -4,11 +4,11 @@ import {ArrowBack} from "@mui/icons-material"
 
 function Reset() {
     return (
-        <Box className="flex w-screen h-screen items-center justify-center">
+        <Box className="flex w-screen h-screen items-center justify-center" sx={{bgcolor: "secondary.main"}}>
             <Stack
-                spacing={7} color="primary"
+                spacing={7}
                 className="items-center m-8 p-8 pb-16 max-w-[30%]"
-                sx={{ borderRadius: '2%', borderColor: 'grey.500' }}
+                sx={{ borderRadius: '2%', borderColor: 'grey.500', bgcolor: "white"}}
             >
                 <Stack className="flex-row w-full items-center" direction="row">
                     <IconButton component={Link} to="/">
@@ -29,7 +29,7 @@ function Reset() {
                         label="Confirm New Password"
                         variant="outlined"
                         type="password"/>
-                    <Button className="w-80" variant="contained">Reset Password</Button>
+                    <Button className="w-80" variant="contained" color="secondary">Reset Password</Button>
                 </Stack>
             </Stack>
         </Box>
