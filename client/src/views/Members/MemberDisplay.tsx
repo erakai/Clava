@@ -34,7 +34,10 @@ function MemberRow(
           <TableCell component="th" scope="row" padding="none">{row.name}</TableCell>
           <TableCell align="left">{row.email}</TableCell>
           <TableCell align="right">
-            {(row.expiration) ? new Date(row.expiration).toLocaleDateString() : "N/A"}
+            {(row.expiration) ? 
+              ((Date.parse(row.expiration as unknown as string).valueOf() != 0) ? 
+              new Date(row.expiration).toLocaleDateString() : 'N/A')
+            : "N/A"}
           </TableCell>
       </TableRow>
     )
@@ -55,6 +58,12 @@ export default function MemberDisplay({ members, setMembers, title }: DisplayPro
       return deleted.indexOf(m) == -1
     })
     setMembers(newMembers)
+
+    console.log('Implement backend deleting.')
+  }
+
+  const onEdit = (mem: Member) => {
+    console.log('Implement editing.') 
   }
 
   const filteredMembers = members.filter(member => {
@@ -72,6 +81,6 @@ export default function MemberDisplay({ members, setMembers, title }: DisplayPro
     <ClavaTable<Member> defaultOrder="name" tableName={title}
       data={filteredMembers} headerCells={headerCells} onDelete={onDelete}
       RowDisplay={MemberRow} dense={dense} searchString={searchString} setSearchString={setSearchString}
-      rowsPerPageOptions={[5, 10, 30, 100]} defaultRowsPerPage={10}/>
+      rowsPerPageOptions={[5, 10, 30, 100]} defaultRowsPerPage={10} onEdit={onEdit}/>
   )
 }

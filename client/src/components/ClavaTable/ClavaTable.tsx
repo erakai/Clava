@@ -48,12 +48,13 @@ type ClavaTableProps<T> = {
   rowsPerPageOptions?: number[],
   defaultRowsPerPage?: number,
   dense?: boolean,
+  onEdit?: (mem: T) => void
 }
 
 
 export default function ClavaTable<T>({defaultOrder, tableName, 
   data, onDelete, searchString, setSearchString,
-  headerCells, RowDisplay, dense, rowsPerPageOptions,
+  headerCells, RowDisplay, dense, rowsPerPageOptions, onEdit,
   defaultRowsPerPage}: ClavaTableProps<T>) {
   const [order, setOrder] = useState(-1)
   const [orderBy, setOrderBy] = useState<keyof T>(defaultOrder)
@@ -113,8 +114,9 @@ export default function ClavaTable<T>({defaultOrder, tableName,
   return (
     <Box className='w-full items-center'>
       <Paper className='w-full mb-2' elevation={3}>
-        <TableToolbar numSelected={selected.length} tableName={tableName}
-          searchString={searchString} setSearchString={setSearchString} onDelete={onDeleteWrapper}/>
+        <TableToolbar<T> numSelected={selected.length} tableName={tableName}
+          searchString={searchString} setSearchString={setSearchString} onDelete={onDeleteWrapper}
+          onEdit={(onEdit ? (() => {onEdit(selected[0])}) : undefined)}/>
         <TableContainer>
           <Table className='min-w-max' size={dense ? 'small' : 'medium'}>
             <TableHeader numSelected={selected.length}

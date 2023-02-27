@@ -2,17 +2,19 @@ import { alpha } from '@mui/material/styles'
 import { Delete, FilterList } from '@mui/icons-material'
 import { Box, Collapse, Grid, IconButton, TextField, Toolbar, Tooltip, Typography } from "@mui/material"
 import { Dispatch, useState } from 'react'
+import EditIcon from '@mui/icons-material/Edit';
 
-type ToolbarProps = {
+type ToolbarProps<T> = {
   tableName: string,
   numSelected: number,
   searchString: string,
   setSearchString: Dispatch<React.SetStateAction<string>>
   onDelete: () => void
+  onEdit?: () => void | undefined
 }
 
-export default function TableToolbar ({
-  tableName, numSelected, searchString, setSearchString, onDelete}: ToolbarProps)
+export default function TableToolbar<T>({
+  tableName, numSelected, searchString, setSearchString, onDelete, onEdit}: ToolbarProps<T>)
 {
   const [filtering, setFiltering] = useState(false)
 
@@ -36,6 +38,13 @@ export default function TableToolbar ({
           {tableName}
         </Typography>
       )}
+      {(onEdit && numSelected == 1) ? (
+        <Tooltip title="Edit">
+          <IconButton onClick={onEdit}>
+            <EditIcon />
+          </IconButton>
+        </Tooltip>
+      ) : <></> }
       {numSelected > 0 ? (
         <Tooltip title="Delete">
           <IconButton onClick={onDelete}>

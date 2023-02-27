@@ -2,7 +2,7 @@ import { Box, Button, Grid, IconButton, Modal, Stack, TextField, Typography } fr
 import { DatePicker } from "@mui/x-date-pickers"
 import moment, { Moment } from "moment"
 import { Dispatch, useState } from "react"
-import { ArrowBack } from "@mui/icons-material"
+import CloseIcon from '@mui/icons-material/Close';
 import useEmailVerify from "../../hooks/useEmailVerify"
 
 type AddMemberProps = {
@@ -12,6 +12,7 @@ type AddMemberProps = {
   errorMessage: string
   setErrorMessage: Dispatch<React.SetStateAction<string>>
   club_id: string
+  disableAddingMember: boolean
 }
 
 const style = {
@@ -28,7 +29,7 @@ const style = {
 }
 
 export default function AddMemberModal({
-  createMember, open, setOpen, errorMessage, setErrorMessage, club_id
+  createMember, open, setOpen, errorMessage, setErrorMessage, club_id, disableAddingMember
 }: AddMemberProps) {
   const emailVerify = useEmailVerify()
   const [name, setName] = useState('')
@@ -52,6 +53,11 @@ export default function AddMemberModal({
       return
     }
 
+    if (date && date.isBefore(moment())) {
+      setErrorMessage('Invalid date.')
+      return
+    }
+
     let newMember: MemberRequest = {
       name, email, club_id
     }
@@ -69,7 +75,7 @@ export default function AddMemberModal({
             <Grid container direction="row">
               <Grid item xs={1}>
                 <IconButton size="small" onClick={close}>
-                  <ArrowBack color="action" />
+                  <CloseIcon color="action" />
                 </IconButton>
               </Grid>
               <Grid item xs={10}>
@@ -121,7 +127,8 @@ export default function AddMemberModal({
             </Grid>
           </Grid>
           <Grid item>
-            <Button color="secondary" variant="contained" className="w-[100%]" onClick={handleAdd}>Add Member</Button>
+            <Button color="secondary" variant="contained" className="w-[100%]" 
+              onClick={handleAdd} disabled={disableAddingMember}>Add Member</Button>
           </Grid>
         </Grid> 
       </Box>

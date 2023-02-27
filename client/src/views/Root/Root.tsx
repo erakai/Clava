@@ -12,7 +12,7 @@ function Root() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Main />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/login/" element={<Login />} />
         <Route path="/clubs" element={<ClubPage />} />
         <Route path="/members" element={<MemberView club_id={'5e1a0651741b255ddda996c4'}/>} />
         <Route path="/reset" element={<Reset />} /> 

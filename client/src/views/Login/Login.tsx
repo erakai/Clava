@@ -2,7 +2,7 @@ import to from "await-to-js"
 import { useEffect, useState } from "react"
 import { useDispatch } from "react-redux"
 import { useSelector } from "react-redux"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import store from "../../store"
 import { getUser, login, register } from "../../store/user/userThunk"
 import { UserState, userStateSelector } from "../../store/user/userSlice"
@@ -56,7 +56,8 @@ function Login() {
       return
     }
 
-    const [err] = await to(dispatch(register(req)).unwrap())
+    const [error] = await to(dispatch(register(req)).unwrap())
+    const err = (error as any).err
 
     if (err && err.name == 'UserExistsError') {
       setErrorMessage('A user with that email already exists.')

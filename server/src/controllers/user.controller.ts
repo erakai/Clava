@@ -133,6 +133,11 @@ export const logout = async (req: Request, res: Response) => {
     if (err) {
       return res.status(500).json({err})
     }
+
+    res.cookie('refreshToken', 'none', {
+      httpOnly: true,
+      maxAge: 1000
+    })
     res.status(200).send({success: true})
   })
 }

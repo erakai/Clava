@@ -5,7 +5,7 @@ import { Box, Button, Fab, Grid, Typography } from "@mui/material"
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import AddMemberModal from "./AddMemberModal"
 import useUser from "../../hooks/useUser";
-import { getMembers } from "../../api/memberApi";
+import { createMember as _createMember, getMembers } from "../../api/memberApi";
 import to from "await-to-js";
 
 type MemberViewProps = {
@@ -15,19 +15,23 @@ type MemberViewProps = {
 export default function MemberView({ club_id }: MemberViewProps) {
   const [errorMessage, setErrorMessage] = useState('')
   const [members, setMembers] = useState<Member[]>([])
-  const [memberOpen, setMemberOpen] = useState<boolean>(false)
-  const [officerOpen, setOfficerOpen] = useState<boolean>(false)
+  const [memberOpen, setMemberOpen] = useState(false)
+  const [officerOpen, setOfficerOpen] = useState(false)
+  const [disableAddingMember, setDisableAddingMember] = useState(false)
   const { state } = useUser()
 
-  const createMember = (member: MemberRequest) => {
-    members.push({
-      name: member.name,
-      email: member.email,
-      club_id: member.club_id,
-      tag_ids: [],
-      expiration: (member.expiration ? member.expiration : undefined),
-      member_id: "0"
-    })
+  const createMember = async (member: MemberRequest) => {
+    setDisableAddingMember(true)
+
+    const [err, res] = await to(_createMember(member))
+    if (err) {
+      console.log(err)
+      setErrorMessage('Something went wrong.')
+    } else if (res) {
+      setMembers([...members, res.data.member])
+    }
+
+    setDisableAddingMember(false)
   }
 
   const createOfficer = (member: Member) => {
@@ -54,7 +58,8 @@ export default function MemberView({ club_id }: MemberViewProps) {
   return (
     <Box className='min-w-full flex-auto'>
       <AddMemberModal open={memberOpen} setOpen={setMemberOpen} createMember={createMember}
-        errorMessage={errorMessage} setErrorMessage={setErrorMessage} club_id={club_id}/>
+        errorMessage={errorMessage} setErrorMessage={setErrorMessage} club_id={club_id}
+        disableAddingMember={disableAddingMember}/>
       <ClavaNavbar currentRoute="Members"/>
       <Box className='m-4 mb-16'>
         <Grid container spacing={2}>
@@ -74,10 +79,10 @@ export default function MemberView({ club_id }: MemberViewProps) {
               <Button variant="contained" color="secondary">Add Officer</Button>
             </Box>
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12} md={6}>
             <MemberDisplay title={"All Members"} members={members} setMembers={setMembers}/>
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12} md={6}>
             <MemberDisplay title={"All Officers"} members={[]} setMembers={setMembers}/>
           </Grid>
         </Grid>
