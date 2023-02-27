@@ -42,7 +42,7 @@ function ClavaNavbar({currentRoute} : ClavaNavbarProps) {
   };
 
   return (
-    <AppBar position="absolute">
+    <AppBar position="sticky">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           {/* === START OF TITLE FOR LARGE WINDOW SIZE === */}

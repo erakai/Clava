@@ -6,6 +6,7 @@ const MemberSchema = new Schema<IMember>({
     type: SchemaTypes.String,
     required: true,
   },
+  email: SchemaTypes.String,
   expiration: SchemaTypes.Date,
   club_id: SchemaTypes.ObjectId,
   tag_ids: [SchemaTypes.ObjectId]

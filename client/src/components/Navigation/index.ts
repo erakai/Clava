@@ -1,3 +1,4 @@
 import ClavaNavbar from './ClavaNavbar'
+import ScrollTop from './ScrollTop'
 
-export default ClavaNavbar
+export { ClavaNavbar, ScrollTop }

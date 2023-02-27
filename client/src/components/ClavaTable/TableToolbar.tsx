@@ -1,15 +1,23 @@
 import { alpha } from '@mui/material/styles'
 import { Delete, FilterList } from '@mui/icons-material'
-import { IconButton, Toolbar, Tooltip, Typography } from "@mui/material"
+import { Box, Collapse, Grid, IconButton, TextField, Toolbar, Tooltip, Typography } from "@mui/material"
+import { Dispatch, useState } from 'react'
+import EditIcon from '@mui/icons-material/Edit';
 
-type ToolbarProps = {
+type ToolbarProps<T> = {
   tableName: string,
   numSelected: number,
-  onFilter: () => void,
+  searchString: string,
+  setSearchString: Dispatch<React.SetStateAction<string>>
   onDelete: () => void
+  onEdit?: () => void | undefined
 }
 
-export default function TableToolbar ({tableName, numSelected, onFilter, onDelete}: ToolbarProps) {
+export default function TableToolbar<T>({
+  tableName, numSelected, searchString, setSearchString, onDelete, onEdit}: ToolbarProps<T>)
+{
+  const [filtering, setFiltering] = useState(false)
+
   return (
     <Toolbar sx={{
         pl: { sm: 2},
@@ -30,6 +38,13 @@ export default function TableToolbar ({tableName, numSelected, onFilter, onDelet
           {tableName}
         </Typography>
       )}
+      {(onEdit && numSelected == 1) ? (
+        <Tooltip title="Edit">
+          <IconButton onClick={onEdit}>
+            <EditIcon />
+          </IconButton>
+        </Tooltip>
+      ) : <></> }
       {numSelected > 0 ? (
         <Tooltip title="Delete">
           <IconButton onClick={onDelete}>
@@ -37,11 +52,21 @@ export default function TableToolbar ({tableName, numSelected, onFilter, onDelet
           </IconButton>
         </Tooltip>
       ) : (
-        <Tooltip title="Filter">
-          <IconButton onClick={onFilter}>
-            <FilterList />
-          </IconButton>
-        </Tooltip>
+        <Grid container spacing={2} direction="row" alignItems={"right"} justifyContent={"right"}>
+          <Grid item xs={10}>
+            <Collapse in={filtering} orientation="vertical" className='w-full'>
+                <TextField size="small" label="Search" fullWidth
+                  value={searchString} onChange={(e) => setSearchString(e.target.value)}></TextField>
+            </Collapse> 
+          </Grid>
+          <Grid item xs={2}>
+            <Tooltip title="Filter">
+              <IconButton onClick={() => setFiltering(!filtering)}>
+                <FilterList />
+              </IconButton>
+            </Tooltip>
+          </Grid>
+        </Grid>
       )}
 
     </Toolbar>
