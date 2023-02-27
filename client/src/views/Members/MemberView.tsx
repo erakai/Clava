@@ -4,29 +4,9 @@ import { ClavaNavbar, ScrollTop } from "../../components/Navigation"
 import { Box, Button, Fab, Grid, Typography } from "@mui/material"
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import AddMemberModal from "./AddMemberModal"
-
-
-const tempMembers: Member[] = [
-  {
-    member_id: "63f553996a2ef9da8a85e69c",
-    name: "Kai Tinkess",
-    email: "ktinkess@gmail.com",
-    expiration: Date.parse("1995-12-17T08:24:00.000Z"),
-    club_id: "5e1a0651741b255ddda996c4",
-    tag_ids: [],
-  },
-]
-
-for (let i = 0; i < 100; i++) {
-  tempMembers.push({
-    member_id: "63f553cb1484c7c696f5e35e",
-    name: "Alex Hunton",
-    email: "ahunton@gmail.com",
-    expiration: Date.parse("1997-12-17T08:24:00.000Z"),
-    club_id: "5e1a0651741b255ddda996c4",
-    tag_ids: [],
-  })
-}
+import useUser from "../../hooks/useUser";
+import { getMembers } from "../../api/memberApi";
+import to from "await-to-js";
 
 type MemberViewProps = {
   club_id: string
@@ -37,6 +17,7 @@ export default function MemberView({ club_id }: MemberViewProps) {
   const [members, setMembers] = useState<Member[]>([])
   const [memberOpen, setMemberOpen] = useState<boolean>(false)
   const [officerOpen, setOfficerOpen] = useState<boolean>(false)
+  const { state } = useUser()
 
   const createMember = (member: MemberRequest) => {
     members.push({
@@ -54,12 +35,21 @@ export default function MemberView({ club_id }: MemberViewProps) {
   }
 
   useEffect(() => {
-    setMembers(tempMembers)
+    const fetch = async () => {
+      const [err, res] = await to(getMembers(club_id))
+      if (err) {
+        console.log(err)
+        return
+      }
 
-    return () => {
-      setMembers([])
+      const retrieved = res.data.members
+      if (retrieved) {
+        setMembers(retrieved)
+      }
     }
-  }, [])
+
+    fetch()
+  }, [state])
 
   return (
     <Box className='min-w-full flex-auto'>

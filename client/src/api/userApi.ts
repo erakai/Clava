@@ -13,7 +13,7 @@ const UserInstance = axios.create({
 /* Very important - embeds tokens! */
 intercepts(UserInstance)
 
-export const _register = ({ email, password, name }: UserRequest) => {
+export const _register = ({ email, password,name }: UserRequest) => {
   if (!name) {
     return UserInstance.post<AuthResponse>('/register', { email, password })
   } 

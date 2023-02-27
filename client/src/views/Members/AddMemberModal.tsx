@@ -3,6 +3,7 @@ import { DatePicker } from "@mui/x-date-pickers"
 import moment, { Moment } from "moment"
 import { Dispatch, useState } from "react"
 import { ArrowBack } from "@mui/icons-material"
+import useEmailVerify from "../../hooks/useEmailVerify"
 
 type AddMemberProps = {
   createMember: (member: MemberRequest) => void
@@ -29,6 +30,7 @@ const style = {
 export default function AddMemberModal({
   createMember, open, setOpen, errorMessage, setErrorMessage, club_id
 }: AddMemberProps) {
+  const emailVerify = useEmailVerify()
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [date, setDate] = useState<Moment | null>(null)
@@ -45,6 +47,11 @@ export default function AddMemberModal({
   }
 
   const handleAdd = () => {
+    if (!emailVerify(email)) {
+      setErrorMessage('Invalid email.')
+      return
+    }
+
     let newMember: MemberRequest = {
       name, email, club_id
     }
@@ -72,7 +79,12 @@ export default function AddMemberModal({
               </Grid>
             </Grid>
           </Grid>
-          <Typography color="error" variant="subtitle1">{errorMessage}</Typography>
+          {(errorMessage != '') ?
+            <Grid item>
+              <Box textAlign="center">
+                <Typography color="error" variant="subtitle1">{errorMessage}</Typography>
+              </Box>
+            </Grid> : <></>}
           <Grid item>
             <TextField className="w-[100%]" size="small" value={name}
               label="Name" variant="outlined" type="text" required
@@ -81,7 +93,8 @@ export default function AddMemberModal({
           <Grid item>
             <TextField className="w-[100%]" size="small" value={email} required
               label="Email" variant="outlined" type="email" id="email-text-field"
-              onChange={(e) => { setEmail(e.target.value); setErrorMessage('')}}/>
+              onChange={(e) => { setEmail(e.target.value); setErrorMessage('')}}
+              error={email != '' && !emailVerify(email)}/>
           </Grid>
           <Grid item>
             <Grid container direction="row" spacing={1}>

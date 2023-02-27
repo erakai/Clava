@@ -38,7 +38,7 @@ const useUser = () => {
     return res
   }, [dispatch, navigate])
 
-  return { user, logout, loading, checkStatus }
+  return { user, logout, loading, checkStatus, state }
 }
 
 export default useUser

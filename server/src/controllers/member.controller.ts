@@ -2,7 +2,7 @@ import type { Request, Response } from 'express'
 import Member from 'models/member.model'
 
 export const getMembers = async (req: Request, res: Response) => {
-  let { club_id } = req.body
+  let { club_id } = req.query
   if (!club_id) {
     return res.status(500).json({error: 'no club id'})
   }

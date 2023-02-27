@@ -3,13 +3,14 @@ import { useEffect, useState } from "react"
 import { useDispatch } from "react-redux"
 import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
-import store from "store"
+import store from "../../store"
 import { getUser, login, register } from "../../store/user/userThunk"
 import { UserState, userStateSelector } from "../../store/user/userSlice"
 import LoginContainer from "./LoginContainer"
 import RegisterContainer from "./RegisterContainer"
 import ResetRequestContainer from "./ResetRequestContainer"
 import { Container } from "@mui/material"
+import useEmailVerify from "../../hooks/useEmailVerify"
 
 const pageAfter = '/members'
 
@@ -19,6 +20,7 @@ function Login() {
   const { state } = useSelector(userStateSelector)
   const navigate = useNavigate()
   const dispatch = useDispatch<typeof store.dispatch>()
+  const emailVerify = useEmailVerify()
 
   useEffect(() => {
     if (state != UserState.NONE) return
@@ -33,6 +35,11 @@ function Login() {
   }, [dispatch, navigate])
 
   const onLogin = async (req: UserRequest ) => {
+    if (!emailVerify(req.email)) {
+      setErrorMessage('Invalid email.')
+      return
+    }
+
     const [err] = await to(dispatch(login(req)).unwrap())
 
     if (err) {
@@ -44,6 +51,11 @@ function Login() {
   }
 
   const onRegister = async (req: UserRequest) => {
+    if (!emailVerify(req.email)) {
+      setErrorMessage('Invalid email.')
+      return
+    }
+
     const [err] = await to(dispatch(register(req)).unwrap())
 
     if (err && err.name == 'UserExistsError') {

@@ -32,6 +32,14 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(cookieParser(process.env.SESSION_SECRET as string))
 
+// print every request received
+app.use((req, _, next) => {
+  console.log(req.method, 'request received at ' + req.path + 
+    '\n\tBody:', JSON.stringify(req.body) + 
+    '\n\tParams:', req.query)
+  next()
+})
+
 // https://www.npmjs.com/package/cors
 app.use(cors({
   credentials: true,
@@ -62,6 +70,7 @@ mongoose.connection.once('open', () => {
   console.log('Server connected to mongodb at', process.env.MONGO_URL)
   app.listen(port, () => {
     console.log('Server initialized and listening on port', port)
+    console.log()
   })
 })
 
