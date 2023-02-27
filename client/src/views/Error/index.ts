@@ -1,3 +1,3 @@
-import _404View from './404View'
+import UrlNotFound from './UrlNotFound'
 
-export default _404View;
+export default UrlNotFound

@@ -31,6 +31,7 @@ module.exports = {
     'no-use-before-define': 0,
     '@typescript-eslint/no-use-before-define': 0,
     'no-shadow': 0,
+    eqeqeq: 0,
     '@typescript-eslint/no-shadow': [
       2,
       {

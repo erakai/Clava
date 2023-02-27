@@ -1,6 +1,6 @@
-import { Typography } from '@mui/material';
+import { Typography } from '@mui/material'
 
-export default function _404View() {
+export default function UrlNotFound() {
   return (
     <div className="p-2 items-center">
       <Typography variant="h2">404: Page Not Found! Sorry :(</Typography>
