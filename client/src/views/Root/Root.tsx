@@ -6,6 +6,7 @@ import Test from "../Main/Test"
 import ClubPage from '../ClubPage'
 import MemberView from "../Members"
 import Reset from "../Reset"
+import ResetRequest from "../ResetRequest/ResetRequest";
 
 function Root() {
   return (
@@ -16,7 +17,8 @@ function Root() {
         <Route path="/test" element={<Test />} />
         <Route path="/clubs" element={<ClubPage />} />
         <Route path="/members" element={<MemberView />} />
-        <Route path="/reset" element={<Reset />} /> 
+        <Route path="/reset" element={<Reset />} />
+        <Route path="/resetrequest" element={<ResetRequest />} />
       </Routes>
     </BrowserRouter>
   )

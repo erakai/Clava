@@ -8,7 +8,6 @@ import { getUser, login, register } from "../../store/user/userThunk"
 import { UserState, userStateSelector } from "../../store/user/userSlice"
 import LoginContainer from "./LoginContainer"
 import RegisterContainer from "./RegisterContainer"
-import ResetRequestContainer from "./ResetRequestContainer"
 import { Container } from "@mui/material"
 
 function Login() {
@@ -61,8 +60,6 @@ function Login() {
         return <RegisterContainer onRegister={onRegister} 
           switchToLogin={switchToLogin} errorMessage={errorMessage} 
           setErrorMessage={setErrorMessage}/>
-      case 'reset':
-        return <ResetRequestContainer switchToLogin={switchToLogin}/>
       default:
         return <LoginContainer onLogin={onLogin} switchToReset={switchToReset}
           switchToRegister={switchToRegister} errorMessage={errorMessage}

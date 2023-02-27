@@ -56,7 +56,7 @@ function LoginContainer({ onLogin, switchToRegister, switchToReset,
             onClick={(e) => {onLogin({email, password})}}>Login</Button>
         </Box>
         <Stack className="w-[100%] content-center pl-1">
-          <Button onClick={switchToReset} variant="text">Forgot password?</Button>
+          <Button component={Link} to="/resetrequest" variant="text">Forgot password?</Button>
           <Divider className="pb-5 pt-3">OR</Divider>
           <Box
               className="flex w-[95%] items-center justify-center">

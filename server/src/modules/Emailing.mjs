@@ -43,3 +43,11 @@ function send_email(recipient, recipient_name, template_id) {
     });
 }
 
+/*
+ * send_password_reset(recipient, recipient_name)
+ * recipient = email address of recipient
+ * recipient_name = first name of recipient
+ */
+function send_password_reset(recipient, recipient_name) {
+    send_email(recipient, recipient_name, PASSWORD_RESET)
+}

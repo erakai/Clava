@@ -4,13 +4,9 @@ import {ArrowBack} from "@mui/icons-material"
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 
-type ResetProps = {
-    switchToLogin: () => void
-}
-
-function ResetRequestContainer({switchToLogin}: ResetProps) {
+function ResetRequest() {
     return (
-        <Box className="flex w-screen h-screen items-center justify-center"
+        <Box className="flex w-screen h-screen items-center justify-center" sx={{bgcolor: "secondary.main"}}
         >
             <Stack
                 spacing={7} bgcolor="white" color="secondary"
@@ -19,7 +15,7 @@ function ResetRequestContainer({switchToLogin}: ResetProps) {
             >
                     <Stack spacing={1} className="flex w-full items-center">
                         <Stack className="flex-row w-full items-center" direction="row">
-                            <IconButton onClick={switchToLogin}>
+                            <IconButton component={Link} to="/">
                                 <ArrowBack color="action"></ArrowBack>
                             </IconButton>
                             <Typography variant="h5" component="h1">Password Reset</Typography>
@@ -38,11 +34,10 @@ function ResetRequestContainer({switchToLogin}: ResetProps) {
                             If an account associated with the provided email exists, you will receive a password reset link in your inbox.
                         </div>
                     </Popup>
-
                 </Stack>
             </Stack>
         </Box>
     )
 }
 
-export default ResetRequestContainer
+export default ResetRequest
