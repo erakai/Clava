@@ -1,8 +1,10 @@
-import dotenv from 'dotenv'
 import { CssBaseline, ThemeProvider, createTheme } from '@mui/material'
 import { Provider } from 'react-redux'
 import Root from './views/Root'
 import store from './store' 
+import { LocalizationProvider } from '@mui/x-date-pickers'
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
+import type {} from '@mui/x-date-pickers/themeAugmentation';
 
 function App() {
   // Set up MUI theme
@@ -28,8 +30,10 @@ function App() {
   return (
     <Provider store={store}>
       <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <Root />
+        <LocalizationProvider dateAdapter={AdapterMoment}>
+          <CssBaseline />
+          <Root />
+        </LocalizationProvider>
       </ThemeProvider>
     </Provider>
   )

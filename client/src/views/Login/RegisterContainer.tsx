@@ -2,6 +2,7 @@ import { Box, TextField, Stack, Typography, Button, IconButton } from "@mui/mate
 import { Link } from "react-router-dom"
 import {ArrowBack} from "@mui/icons-material"
 import { Dispatch, useState } from "react"
+import useEmailVerify from "../../hooks/useEmailVerify"
 
 type LoginProps = {
   onRegister: (req: UserRequest) => void,
@@ -16,6 +17,7 @@ function RegisterContainer({ onRegister, switchToLogin,
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [passConfirm, setPassConfirm] = useState('')
+  const emailVerify = useEmailVerify()
 
   const registerWrapper = () => {
     if (password !== passConfirm) {
@@ -30,13 +32,17 @@ function RegisterContainer({ onRegister, switchToLogin,
     <Box className="Register flex w-screen h-screen items-center justify-center">
       <Stack 
         spacing={2} bgcolor="white" color="secondary"
-        className="items-center m-8 p-8 w-96 rounded-lg">
-        <Box className="flex w-full items-center">
-          <IconButton component={Link} to="/">
+        className="items-center m-8 p-8 w-96 rounded-lg"
+        sx={{ borderRadius: '2%' }}>
+        <Stack 
+          spacing={1}
+          className="flex-row w-full items-center" 
+          direction="row">
+          <IconButton onClick={switchToLogin}>
             <ArrowBack color="action" />
           </IconButton>
           <Typography variant="h5" component="h1">Register</Typography>
-        </Box>
+        </Stack>
         <TextField
           className="w-full"
           id="name-text-field"
@@ -52,7 +58,7 @@ function RegisterContainer({ onRegister, switchToLogin,
           id="email-text-field"
           label="Email"
           variant="outlined"
-          type="email" value={email}
+          type="email" value={email} error={email != '' && !emailVerify(email)}
           onChange={(e) => {
             setEmail(e.target.value.trim())
             setErrorMessage('')

@@ -1,5 +1,5 @@
 import { Box, Paper, Table, TableBody, TableCell, TableContainer, TablePagination, TableRow } from "@mui/material";
-import { ChangeEvent, useState, MouseEvent } from "react";
+import { ChangeEvent, useState, MouseEvent, Dispatch } from "react";
 import TableHeader, { HeaderCell } from "./TableHeader";
 import TableToolbar from "./TableToolbar";
 
@@ -42,15 +42,19 @@ type ClavaTableProps<T> = {
   data: T[]
   headerCells: HeaderCell<T>[]
   onDelete: (deleted: T[]) => void,
+  searchString: string,
+  setSearchString: Dispatch<React.SetStateAction<string>>,
   RowDisplay: (r: RowDisplayProps<T>) => React.ReactNode,
   rowsPerPageOptions?: number[],
   defaultRowsPerPage?: number,
   dense?: boolean,
+  onEdit?: (mem: T) => void
 }
 
 
 export default function ClavaTable<T>({defaultOrder, tableName, 
-  data, onDelete, headerCells, RowDisplay, dense, rowsPerPageOptions,
+  data, onDelete, searchString, setSearchString,
+  headerCells, RowDisplay, dense, rowsPerPageOptions, onEdit,
   defaultRowsPerPage}: ClavaTableProps<T>) {
   const [order, setOrder] = useState(-1)
   const [orderBy, setOrderBy] = useState<keyof T>(defaultOrder)
@@ -99,10 +103,6 @@ export default function ClavaTable<T>({defaultOrder, tableName,
     setPage(0)
   }
 
-  const onFilter = () => {
-    console.log('Filter clicked.')
-  }
-
   const onDeleteWrapper = () => {
     onDelete(selected)
     setSelected([]) 
@@ -114,8 +114,9 @@ export default function ClavaTable<T>({defaultOrder, tableName,
   return (
     <Box className='w-full items-center'>
       <Paper className='w-full mb-2' elevation={3}>
-        <TableToolbar numSelected={selected.length} tableName={tableName}
-          onFilter={onFilter} onDelete={onDeleteWrapper}/>
+        <TableToolbar<T> numSelected={selected.length} tableName={tableName}
+          searchString={searchString} setSearchString={setSearchString} onDelete={onDeleteWrapper}
+          onEdit={(onEdit ? (() => {onEdit(selected[0])}) : undefined)}/>
         <TableContainer>
           <Table className='min-w-max' size={dense ? 'small' : 'medium'}>
             <TableHeader numSelected={selected.length}

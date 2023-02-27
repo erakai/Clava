@@ -1,5 +1,5 @@
 import { createAction, createSlice } from "@reduxjs/toolkit"
-import { StoreState } from "store"
+import { StoreState } from "../../store"
 import { login, logout, register, getUser } from "./userThunk"
 
 export enum UserState {

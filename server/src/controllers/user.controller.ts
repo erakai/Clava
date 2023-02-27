@@ -125,7 +125,7 @@ export const logout = async (req: Request, res: Response) => {
   const tokenIndex = user.refreshTokens.indexOf(refreshToken)
   
   if (tokenIndex == -1) {
-    return res.status(401).send('Unauthorized')
+    return res.status(401).send('Invalid Refresh Token')
   }
 
   user.refreshTokens.splice(tokenIndex, 1)
@@ -133,6 +133,11 @@ export const logout = async (req: Request, res: Response) => {
     if (err) {
       return res.status(500).json({err})
     }
+
+    res.cookie('refreshToken', 'none', {
+      httpOnly: true,
+      maxAge: 1000
+    })
     res.status(200).send({success: true})
   })
 }

@@ -15,7 +15,15 @@ interface UserRequest {
 interface Member {
   member_id: string,
   name: string,
-  expiration: number,
+  email: string,
+  expiration?: number,
   club_id: string,
   tag_ids: Array<number> 
+}
+
+interface MemberRequest {
+  name: string,
+  email: string,
+  expiration?: number,
+  club_id: string,
 }
