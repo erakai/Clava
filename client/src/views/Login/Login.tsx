@@ -1,16 +1,15 @@
-import { Container } from '@mui/material'
-import to from 'await-to-js'
-import { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate, useParams } from 'react-router-dom'
-
-import LoginContainer from './LoginContainer'
-import RegisterContainer from './RegisterContainer'
-import useEmailVerify from '../../hooks/useEmailVerify'
-import { UserState, userStateSelector } from '../../store/user/userSlice'
-import { getUser, login, register } from '../../store/user/userThunk'
-
-import type store from '../../store'
+import to from "await-to-js"
+import { useEffect, useState } from "react"
+import { useDispatch } from "react-redux"
+import { useSelector } from "react-redux"
+import { useNavigate, useParams } from "react-router-dom"
+import store from "../../store"
+import { getUser, login, register } from "../../store/user/userThunk"
+import { UserState, userStateSelector } from "../../store/user/userSlice"
+import LoginContainer from "./LoginContainer"
+import RegisterContainer from "./RegisterContainer"
+import { Container } from "@mui/material"
+import useEmailVerify from "../../hooks/useEmailVerify"
 
 const pageAfter = '/bookclub/members'
 
