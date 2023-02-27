@@ -22,6 +22,9 @@ export const getRoles = async (req: Request, res: Response) => {
   for(let i=0; i<role_ids.length; i++) {
       
     const role = await Role.findById(role_ids[i])
+
+    if(!role) return res.status(401).send('Unauthorized')
+
     roles.push(role)
 
   }

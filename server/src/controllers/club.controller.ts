@@ -22,6 +22,9 @@ export const getClubs = async (req: Request, res: Response) => {
   for(let i=0; i<club_ids.length; i++) {
     
     const club: IClub = await Club.findById(club_ids[i])
+
+    if(!club) return res.status(401).send('Unauthorized')
+
     clubs.push(club)
 
   }
