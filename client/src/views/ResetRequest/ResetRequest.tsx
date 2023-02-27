@@ -10,7 +10,7 @@ function ResetRequest() {
       >
         <Stack
             spacing={7} bgcolor="white" color="secondary"
-            className="items-center m-8 p-8 pb-20 max-w-[30%]"
+            className="items-center m-8 p-8 pb-20 max-w-md"
             sx={{ borderRadius: '2%', borderColor: 'grey.500', bgcolor: 'white' }}
         >
           <Stack spacing={1} className="flex w-full items-center">
