@@ -2,6 +2,7 @@ import { Divider, Box, TextField, Stack, Typography, Button, IconButton, Contain
 import { Link } from "react-router-dom"
 import {ArrowBack} from "@mui/icons-material"
 import { Dispatch, useState } from "react"
+import useEmailVerify from "../../hooks/useEmailVerify"
 
 type LoginProps = {
   onLogin: (req: UserRequest) => void,
@@ -13,6 +14,7 @@ type LoginProps = {
 
 function LoginContainer({ onLogin, switchToRegister, switchToReset, 
   errorMessage, setErrorMessage }: LoginProps) {
+  const emailVerify = useEmailVerify()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
@@ -33,7 +35,7 @@ function LoginContainer({ onLogin, switchToRegister, switchToReset,
           id="email-text-field"
           label="Email"
           variant="outlined"
-          type="email" value={email} error={Boolean(errorMessage)} helperText={errorMessage}
+          type="email" value={email} error={email != '' && !emailVerify(email)}
           onChange={(e) => {
             setEmail(e.target.value.trim()) 
             setErrorMessage('')
@@ -42,7 +44,7 @@ function LoginContainer({ onLogin, switchToRegister, switchToReset,
           className="w-full"
           id="password-text-field"
           label="Password"
-          variant="outlined" error={Boolean(errorMessage)} helperText={errorMessage}
+          variant="outlined"
           type="password" value={password} onChange={(e) => {
             setPassword(e.target.value.trim())
             setErrorMessage('')

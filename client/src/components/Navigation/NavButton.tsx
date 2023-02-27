@@ -52,7 +52,6 @@ type NavButtonProps = {
 
 
 function NavButton({title, isSelected}: NavButtonProps) {
-	console.log(title)
 	const buttonParams : ButtonParams = getButtonParams(title);
 
 	return (
