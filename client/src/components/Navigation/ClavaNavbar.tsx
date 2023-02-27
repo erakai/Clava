@@ -15,14 +15,15 @@ import MenuItem from '@mui/material/MenuItem';
 import NavButton from './NavButton';
 
 const pages = ['Members', 'Events', 'Documents', 'Finances'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const settings = ['Profile', 'Logout'];
 
 type ClavaNavbarProps = {
   currentRoute : string
   clubId : string
+  clubName : string
 }
 
-function ClavaNavbar({currentRoute, clubId} : ClavaNavbarProps) {
+function ClavaNavbar({currentRoute, clubId, clubName} : ClavaNavbarProps) {
   // menu operations for transformations when window size is changed
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
@@ -62,7 +63,7 @@ function ClavaNavbar({currentRoute, clubId} : ClavaNavbarProps) {
               textDecoration: 'none',
             }}
           >
-            Clava
+            {clubName}
           </Typography>
           {/* === END OF TITLE FOR LARGE WINDOW SIZE === */}
           {/* === START OF NAVIGATION MENU FOR SMALL WINDOW SIZE === */}

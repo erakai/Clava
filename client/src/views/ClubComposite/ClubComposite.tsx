@@ -29,7 +29,7 @@ export default function ClubCompositie() {
 
   return (
     <div className="p-2 items-center">
-      <ClavaNavbar currentRoute={clubRoute || "null" } clubId={clubId || "null"}/>
+      <ClavaNavbar currentRoute={clubRoute || "null" } clubId={clubId || "null"} clubName={"Bookclub!"} />
       {getRoute()}
     </div>
   )
