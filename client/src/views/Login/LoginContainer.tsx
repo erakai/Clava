@@ -35,7 +35,7 @@ function LoginContainer({ onLogin, switchToRegister, switchToReset,
           variant="outlined"
           type="email" value={email} error={Boolean(errorMessage)} helperText={errorMessage}
           onChange={(e) => {
-            setEmail(e.target.value.trim()) 
+            setEmail(e.target.value.trim())
             setErrorMessage('')
           }}/>
         <TextField

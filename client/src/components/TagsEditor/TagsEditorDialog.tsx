@@ -1,6 +1,6 @@
-import { Box, Button, Chip, Dialog, DialogActions, DialogContent, DialogTitle, Stack } from '@mui/material'
-import AddIcon from '@mui/icons-material/Add';
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, TextField } from '@mui/material'
 import * as React from 'react';
+import CreateTagDialog from './CreateTagDialog';
 import TagChip from './TagChip';
 
 const pages = ['Members', 'Events', 'Documents', 'Finances'];
@@ -19,9 +19,7 @@ function TagsEditorPopup() {
     setOpen(false)
   }
 
-  const handleNewTagClick = () => {
-    // open dialog to create a new tag
-  }
+
 
   return (
     <Box>
@@ -36,11 +34,11 @@ function TagsEditorPopup() {
         </DialogTitle>
         <DialogContent>
           <Stack
-            direction="row" spacing={1}
-            className="w-96">
+            className="flex w-96"
+            spacing={1}>
             <TagChip />
             <TagChip />
-            <Chip label="Add new" variant="outlined" icon={ <AddIcon /> } onClick={handleNewTagClick}/>
+            <CreateTagDialog />
           </Stack>
         </DialogContent>
         <DialogActions>

@@ -13,7 +13,7 @@ function TagChip() {
   
   return (
     <Chip 
-      className="m-1"
+      className="w-min"
       label="one tag"
       onClick={open}/>  
   )

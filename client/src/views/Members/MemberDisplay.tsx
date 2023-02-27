@@ -2,7 +2,7 @@ import { ClavaTable, HeaderCell } from "../../components/ClavaTable"
 import { Box } from '@mui/material'
 import { useState } from "react"
 import MemberRow from "./MemberRow"
-import TagsEditorPopup from "../../components/TagsEditorDialog"
+import TagsEditorPopup from "../../components/TagsEditor"
 
 const headerCells: HeaderCell<Member>[] = [
   {
