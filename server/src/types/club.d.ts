@@ -1,7 +1,6 @@
 import { Document } from "mongoose"
 
 interface IClub extends Document {
-  club_id: number,
   name: string,
   description: string,
   tag_ids: Array<number>,
