@@ -1,8 +1,7 @@
 import axios from 'axios'
-import { Token } from './config';
+import { AuthResponse, Token } from './config';
 import { intercepts } from './config';
 
-export type AuthResponse = { user: User; token: Token }
 
 const UserInstance = axios.create({
   baseURL: `http://localhost:8080/users`,
@@ -10,8 +9,6 @@ const UserInstance = axios.create({
   withCredentials: true,
 })
 
-/* Very important - embeds tokens! */
-intercepts(UserInstance)
 
 export const _register = ({ email, password,name }: UserRequest) => {
   if (!name) {
@@ -31,3 +28,6 @@ export const _logout = () =>
 
 export const getRefreshToken = () => 
   UserInstance.post<AuthResponse>('/refresh')
+
+/* Very important - embeds tokens! */
+intercepts(UserInstance, getRefreshToken)

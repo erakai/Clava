@@ -76,28 +76,34 @@ function LoginContainer({
             setErrorMessage('')
           }}
         />
-        <Button
-          className="w-full"
-          color="secondary"
-          variant="contained"
-          onClick={(e) => {
-            onLogin({ email, password })
-          }}
-        >
-          Login
-        </Button>
-        <Button className="w-full" onClick={switchToReset} variant="text">
-          Forgot password?
-        </Button>
-        <Divider className="pb-4 w-full">OR</Divider>
-        <Button
-          className="w-full"
-          color="secondary"
-          onClick={switchToRegister}
-          variant="contained"
-        >
-          Sign Up
-        </Button>
+        <Box className="flex w-[95%] items-center justify-center">
+          <Button
+            color="secondary"
+            variant="contained"
+            className="mx-4 w-[100%]"
+            onClick={(e) => {
+              onLogin({ email, password })
+            }}
+          >
+            Login
+          </Button>
+        </Box>
+        <Stack className="w-[100%] content-center pl-1">
+          <Button component={Link} to="/resetrequest" variant="text">
+            Forgot password?
+          </Button>
+          <Divider className="pb-5 pt-3">OR</Divider>
+          <Box className="flex w-[95%] items-center justify-center">
+            <Button
+              color="secondary"
+              onClick={switchToRegister}
+              variant="contained"
+              className="mx-4 w-[100%]"
+            >
+              Sign Up
+            </Button>
+          </Box>
+        </Stack>
       </Stack>
     </Box>
   )

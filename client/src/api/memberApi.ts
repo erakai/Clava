@@ -1,5 +1,6 @@
 import axios from "axios"
 import { intercepts } from "./config"
+import { getRefreshToken } from "./userApi"
 
 type GetMembersResponse = { members: Member[] }
 type CreateMemberResponse = { member: Member }
@@ -10,7 +11,7 @@ const MemberInstance = axios.create({
   withCredentials: true,
 })
 
-intercepts(MemberInstance)
+intercepts(MemberInstance, getRefreshToken)
 
 export const getMembers = (club_id: string) => {
   return MemberInstance.get<GetMembersResponse>('/', { params: { club_id: club_id }})

@@ -7,6 +7,7 @@ import Login from '../Login'
 import Main from '../Main'
 import Test from '../Main/Test'
 import Reset from '../Reset'
+import ResetRequest from "../ResetRequest";
 
 function Root() {
   return (
@@ -16,7 +17,9 @@ function Root() {
         <Route path="/login" element={<Login />} />
         <Route path="/test" element={<Test />} />
         <Route path="/clubs" element={<ClubPage />} />
-        <Route path="/1reset" element={<Reset />} />
+        <Route path="/reset" element={<Reset />} />
+        <Route path="/resetrequest" element={<ResetRequest />} />
+
         {/* TODO: Add Regex for clubId, clubRoute */}
         <Route path="/:clubId/:clubRoute" element={<ClubComposite />} />
         <Route path="*" element={<UrlNotFound />} />

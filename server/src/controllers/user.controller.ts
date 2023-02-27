@@ -4,6 +4,7 @@ import type { Request, Response } from 'express'
 import jwt, { JwtPayload } from 'jsonwebtoken'
 import User from 'models/user.model'
 import { IUser } from 'types/user'
+// import send_password_reset from 'modules/Emailing.mjs'
 
 // again i followed https://www.codingdeft.com/posts/react-authentication-mern-node-passport-express-mongo/
 // very closely for the below approach
@@ -34,6 +35,21 @@ export const register = async (req: Request, res: Response) => {
       res.cookie("refreshToken", refreshToken, COOKIE_OPTIONS)
       return res.json({user, token})
     })
+}
+
+// email validation check should be done client-side
+export const resetrequest = async (req: Request, res: Response) => {
+  let { email } = req.body
+  User.findOne({ email : email },
+      async (err, user) => {
+        if (err) {
+          //No user found --> no account associated with given email
+          return res.status(200).send({err})
+        }
+        const link = process.env.CLIENT_URL + "/reset/_id"
+        // send_password_reset(email, user.name, link)
+        return res.status(200)
+      })
 }
 
 // on login we want to give them their token and refresh token
@@ -140,4 +156,5 @@ export const logout = async (req: Request, res: Response) => {
     })
     res.status(200).send({success: true})
   })
+
 }

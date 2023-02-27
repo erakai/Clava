@@ -1,4 +1,3 @@
-import MemberRow from "./MemberRow"
 import TagsEditorPopup from "../../components/TagsEditor"
 import { ClavaTable, HeaderCell, RowDisplayProps } from "../../components/ClavaTable"
 import { useState } from "react"
