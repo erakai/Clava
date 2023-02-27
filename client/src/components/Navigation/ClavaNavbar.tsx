@@ -15,13 +15,15 @@ import MenuItem from '@mui/material/MenuItem';
 import NavButton from './NavButton';
 
 const pages = ['Members', 'Events', 'Documents', 'Finances'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const settings = ['Profile', 'Logout'];
 
 type ClavaNavbarProps = {
   currentRoute : string
+  clubId : string
+  clubName : string
 }
 
-function ClavaNavbar({currentRoute} : ClavaNavbarProps) {
+function ClavaNavbar({currentRoute, clubId, clubName} : ClavaNavbarProps) {
   // menu operations for transformations when window size is changed
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
@@ -61,7 +63,7 @@ function ClavaNavbar({currentRoute} : ClavaNavbarProps) {
               textDecoration: 'none',
             }}
           >
-            Clava
+            {clubName}
           </Typography>
           {/* === END OF TITLE FOR LARGE WINDOW SIZE === */}
           {/* === START OF NAVIGATION MENU FOR SMALL WINDOW SIZE === */}
@@ -129,7 +131,11 @@ function ClavaNavbar({currentRoute} : ClavaNavbarProps) {
             sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}
           >
             {pages.map((page) => (
-              <NavButton key={page} title={page as any} isSelected={currentRoute==page.toLowerCase()} />
+              <NavButton 
+                key={page} title={page as any} 
+                isSelected={page.toLowerCase() === currentRoute.toLowerCase()} 
+                clubId={clubId}
+              />
             ))}
           </Box>
           {/* === END OF MENU ITEMS AS BUTTONS === */}
@@ -137,7 +143,7 @@ function ClavaNavbar({currentRoute} : ClavaNavbarProps) {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                <Avatar alt="Remy Sharp" src="" />
               </IconButton>
             </Tooltip>
             <Menu
@@ -167,6 +173,7 @@ function ClavaNavbar({currentRoute} : ClavaNavbarProps) {
         </Toolbar>
       </Container>
     </AppBar>
+
   );
 }
 

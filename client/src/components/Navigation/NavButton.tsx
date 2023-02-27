@@ -8,14 +8,15 @@ import CalendarTodayIcon from '@mui/icons-material/CalendarToday'; // Events
 import InsertDriveFileOutlinedIcon from '@mui/icons-material/InsertDriveFileOutlined'; // Documents
 import PaidOutlinedIcon from '@mui/icons-material/PaidOutlined'; // Finances
 
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 import { ReactNode } from 'react';
 
 type ButtonParams = {
 	name: 'Members' | 'Events' | 'Documents' | 'Finances';
 	icon?: ReactNode;
 	onClick? : () => any;
-	url?: string
+	route?: string
 }
 
 function getButtonParams(title : string) : ButtonParams {
@@ -23,22 +24,22 @@ function getButtonParams(title : string) : ButtonParams {
 	switch (title) {
 		case 'Members': {
 			buttonParams.icon = <GroupsIcon />;
-			buttonParams.url = "/members"
+			buttonParams.route = "/members"
 			break;
 		} 
 		case 'Events' : {
 			buttonParams.icon = <CalendarTodayIcon />;
-			buttonParams.url = "/";
+			buttonParams.route = "/events";
 			break;
 		}
 		case 'Documents' : {
 			buttonParams.icon = <InsertDriveFileOutlinedIcon />;
-			buttonParams.url = "/";
+			buttonParams.route = "/documents";
 			break;
 		} 
 		case 'Finances' : {
 			buttonParams.icon = <PaidOutlinedIcon />;
-			buttonParams.url = "/";
+			buttonParams.route = "/finances";
 			break;
 		}  
 	}
@@ -48,18 +49,25 @@ function getButtonParams(title : string) : ButtonParams {
 type NavButtonProps = {
 	title: 'Members' | 'Events' | 'Documents' | 'Finances';
 	isSelected: boolean;
+	clubId : string;
 }
 
 
-function NavButton({title, isSelected}: NavButtonProps) {
+function NavButton({title, isSelected, clubId}: NavButtonProps) {
+	const navigate = useNavigate();
 	const buttonParams : ButtonParams = getButtonParams(title);
+
+	const onLinkChange = (): void => {
+		navigate('/' + clubId + '/' + title.toLowerCase());
+	}
 
 	return (
 		<Tooltip title={title}>
 			<Avatar sx={{ bgcolor: "secondary.main", mx:1, width:48, height:48 }}>
 				<IconButton
 					disabled={isSelected}
-			        key={title as string}	
+			        key={title as string}
+			        onClick={onLinkChange}	
 			        sx={{ color: 'white', display: 'block', width:48, height:48 }}
 			      >
 		            {buttonParams.icon}

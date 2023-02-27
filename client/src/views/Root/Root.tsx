@@ -1,22 +1,25 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom"
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
-import Main from '../Main'
-import Login from '../Login'
-import Test from "../Main/Test"
+import ClubComposite from '../ClubComposite'
 import ClubPage from '../ClubPage'
-import MemberView from "../Members"
-import Reset from "../Reset"
+import UrlNotFound from '../Error/UrlNotFound'
+import Login from '../Login'
+import Main from '../Main'
+import Test from '../Main/Test'
+import Reset from '../Reset'
 
 function Root() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Main />} />
-        <Route path="/login/" element={<Login />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/test" element={<Test />} />
         <Route path="/clubs" element={<ClubPage />} />
-        <Route path="/members" element={<MemberView club_id={'5e1a0651741b255ddda996c4'}/>} />
-        <Route path="/reset" element={<Reset />} /> 
-        <Route path="/test" element={<Test />} /> 
+        <Route path="/1reset" element={<Reset />} />
+        {/* TODO: Add Regex for clubId, clubRoute */}
+        <Route path="/:clubId/:clubRoute" element={<ClubComposite />} />
+        <Route path="*" element={<UrlNotFound />} />
       </Routes>
     </BrowserRouter>
   )
