@@ -3,6 +3,7 @@ import type { Request, Response } from 'express'
 import Club from 'models/club.model'
 import User from 'models/user.model'
 import { IUser } from 'types/user'
+import { IClub } from 'types/club'
 
 export const getClubs = async (req: Request, res: Response) => {
   let { user_id } = req.body
@@ -19,15 +20,13 @@ export const getClubs = async (req: Request, res: Response) => {
   const clubs = []
 
   for(let i=0; i<club_ids.length; i++) {
-    Club.find({ 
-      club_id: club_ids[i]
-    }, async (err, club) => {
-        if (err) {
-          return res.status(500).send({err})
-        }
-  
-        clubs.push(club)
-    })
+    
+    const club: IClub = await Club.findById(club_ids[i])
+
+    if(!club) return res.status(401).send('Unauthorized')
+
+    clubs.push(club)
+
   }
 
   return res.status(200).json({clubs})

@@ -16,14 +16,15 @@
  */
 
 /* Imports */
-import emailjs from '@emailjs/browser'
+// import emailjs from '@emailjs/browser'
 
 /* Global Variables */
-const PUBLIC_KEY = "oTVFGSO5ppBTUbShJ"
-const SERVICE_ID = "service_mvw9mrg"
+// const PUBLIC_KEY = 'oTVFGSO5ppBTUbShJ'
+// const SERVICE_ID = 'service_mvw9mrg'
 
 /* Template IDs */
-const PASSWORD_RESET = "template_zn08jxd"
+
+// const PASSWORD_RESET = 'template_zn08jxd'
 
 /*
  * send_email(recipient, recipient_name, template_id)
@@ -31,17 +32,20 @@ const PASSWORD_RESET = "template_zn08jxd"
  * recipient_name = first name of recipient
  * template_id = template ID
  */
-function send_email(recipient, recipient_name, template_id) {
-    var template_params = {
-        recipient: recipient,
-        recipient_name: recipient_name
-    }
-    emailjs.send(SERVICE_ID, template_id, template_params, PUBLIC_KEY).then(function(response) {
-        console.log('SUCCESS!', response.status, response.text);
-    }, function(error) {
-        console.log('FAILED...', error);
-    });
-}
+// function sendEmail(recipient, recipient_name, template_id) {
+//   const templateParams = {
+//     recipient,
+//     recipient_name,
+//   }
+//   emailjs.send(SERVICE_ID, template_id, templateParams, PUBLIC_KEY).then(
+//     function (response) {
+//       console.log('SUCCESS!', response.status, response.text)
+//     },
+//     function (error) {
+//       console.log('FAILED...', error)
+//     }
+//   )
+// }
 
 /*
  * send_email(recipient, recipient_name, link, template_id)
@@ -50,18 +54,21 @@ function send_email(recipient, recipient_name, template_id) {
  * template_id = template ID
  * link = URL to be sent
  */
-function send_email(recipient, recipient_name, link, template_id) {
-    var template_params = {
-        recipient: recipient,
-        recipient_name: recipient_name,
-        link: link
-    }
-    emailjs.send(SERVICE_ID, template_id, template_params, PUBLIC_KEY).then(function(response) {
-        console.log('SUCCESS!', response.status, response.text);
-    }, function(error) {
-        console.log('FAILED...', error);
-    });
-}
+// function sendEmailWithLink(recipient, recipient_name, link, template_id) {
+//   const templateParams = {
+//     recipient,
+//     recipient_name,
+//     link,
+//   }
+//   emailjs.send(SERVICE_ID, template_id, templateParams, PUBLIC_KEY).then(
+//     function (response) {
+//       console.log('SUCCESS!', response.status, response.text)
+//     },
+//     function (error) {
+//       console.log('FAILED...', error)
+//     }
+//   )
+// }
 
 /*
  * send_password_reset(recipient, recipient_name)
@@ -69,6 +76,6 @@ function send_email(recipient, recipient_name, link, template_id) {
  * recipient_name = first name of recipient
  * link = unique password reset link
  */
-function send_password_reset(recipient, recipient_name, link) {
-    send_email(recipient, recipient_name, link, PASSWORD_RESET)
-}
+// function sendPasswordReset(recipient, recipient_name, link) {
+//   sendEmail(recipient, recipient_name, link, PASSWORD_RESET)
+// }

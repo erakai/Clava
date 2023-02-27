@@ -8,7 +8,7 @@ type ClubProps = {
 
 export default function ClubCard({name, description} : ClubProps) {
     return (
-        <Card sx={{ maxWidth: 345 }}>
+        <Card className="flex-auto max-w-xs">
             <CardActionArea>
                 <CardMedia
                     component="img"

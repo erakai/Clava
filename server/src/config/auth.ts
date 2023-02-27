@@ -33,7 +33,7 @@ export const verifyUser = (req: Request, res: Response, next: NextFunction) => {
   const { signedCookies = {} } = req
   const { refreshToken } = signedCookies
   if (!refreshToken) {
-    res.status(401).send('Unauthorized')
+    res.status(401).send('Unauthorized – check cookies are unabled.')
   } else {
     passport.authenticate('jwt', { session: false })(req, res, next)
   }
