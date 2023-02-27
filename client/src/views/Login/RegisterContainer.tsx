@@ -32,7 +32,7 @@ function RegisterContainer({ onRegister, switchToLogin,
     <Box className="Register flex w-screen h-screen items-center justify-center">
       <Stack 
         spacing={2} bgcolor="white" color="secondary"
-        className="items-center m-8 p-8 max-w-md"
+        className="items-center m-8 p-8 w-96 rounded-lg"
         sx={{ borderRadius: '2%' }}>
         <Stack 
           spacing={1}
@@ -43,9 +43,8 @@ function RegisterContainer({ onRegister, switchToLogin,
           </IconButton>
           <Typography variant="h5" component="h1">Register</Typography>
         </Stack>
-        <Typography color="error" variant="subtitle1">{errorMessage}</Typography>
         <TextField
-          className="w-[85%]"
+          className="w-full"
           id="name-text-field"
           label="Name"
           variant="outlined"
@@ -55,7 +54,7 @@ function RegisterContainer({ onRegister, switchToLogin,
             setErrorMessage('')
           }}/>
         <TextField
-          className="w-[85%]"
+          className="w-full"
           id="email-text-field"
           label="Email"
           variant="outlined"
@@ -65,7 +64,7 @@ function RegisterContainer({ onRegister, switchToLogin,
             setErrorMessage('')
           }}/>
         <TextField
-          className="w-[85%]"
+          className="w-full"
           id="password-text-field"
           label="Password"
           variant="outlined"
@@ -75,7 +74,7 @@ function RegisterContainer({ onRegister, switchToLogin,
             setErrorMessage('')
           }}/>
         <TextField
-          className="w-[85%]"
+          className="w-full"
           id="confirm-password-text-field"
           label="Confirm Password"
           variant="outlined"
@@ -84,10 +83,9 @@ function RegisterContainer({ onRegister, switchToLogin,
             setPassConfirm(e.target.value.trim())
             setErrorMessage('')
           }}/>
-        <Box className="flex w-[85%]">
-          <Button color="secondary" onClick={switchToLogin} variant="text">I have a Clava account</Button>
-          <Button color="secondary" onClick={registerWrapper} variant="contained" className="items-end">Register</Button>
-        </Box>
+        <Typography color="error" variant="subtitle1">{errorMessage}</Typography>
+        <Button className="w-full items-end" color="secondary" onClick={registerWrapper} variant="contained">Register</Button>
+        <Button className="w-full" color="secondary" onClick={switchToLogin} variant="text">I have a Clava account</Button>
       </Stack>
     </Box>
   )
