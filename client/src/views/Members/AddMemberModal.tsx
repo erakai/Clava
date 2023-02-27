@@ -1,12 +1,16 @@
-import { Box, Button, Grid, Modal, TextField, Typography } from "@mui/material"
+import { Box, Button, Grid, IconButton, Modal, Stack, TextField, Typography } from "@mui/material"
 import { DatePicker } from "@mui/x-date-pickers"
-import { Moment } from "moment"
+import moment, { Moment } from "moment"
 import { Dispatch, useState } from "react"
+import { ArrowBack } from "@mui/icons-material"
 
 type AddMemberProps = {
-  createMember: (member: Member) => void
+  createMember: (member: MemberRequest) => void
   open: boolean,
   setOpen: Dispatch<React.SetStateAction<boolean>>
+  errorMessage: string
+  setErrorMessage: Dispatch<React.SetStateAction<string>>
+  club_id: string
 }
 
 const style = {
@@ -23,39 +27,88 @@ const style = {
 }
 
 export default function AddMemberModal({
-  createMember, open, setOpen
+  createMember, open, setOpen, errorMessage, setErrorMessage, club_id
 }: AddMemberProps) {
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
   const [date, setDate] = useState<Moment | null>(null)
 
+  const clearFields = () => {
+    setName('')
+    setEmail('')
+    setDate(null)
+  }
+
+  const close = () => {
+    clearFields()
+    setOpen(false)
+  }
+
+  const handleAdd = () => {
+    let newMember: MemberRequest = {
+      name, email, club_id
+    }
+    if (date) newMember.expiration = date?.toDate().valueOf()
+
+    createMember(newMember)
+    clearFields()
+  }
+
   return (
-    <Modal open={open} onClose={() => setOpen(false)}>
+    <Modal open={open} onClose={close}>
       <Box sx={style}>
         <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="center">
           <Grid item>
-            <Box textAlign={"center"}>
-              <Typography className='' variant="h6" fontWeight={"bold"}>New Member</Typography>
-            </Box>
-          </Grid>   
+            <Grid container direction="row">
+              <Grid item xs={1}>
+                <IconButton size="small" onClick={close}>
+                  <ArrowBack color="action" />
+                </IconButton>
+              </Grid>
+              <Grid item xs={10}>
+                <Box textAlign="center" className='h-[100%] flex-col justify-content-center'>
+                    <Typography className='' variant="h6" fontWeight={"bold"}>New Member</Typography>
+                </Box>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Typography color="error" variant="subtitle1">{errorMessage}</Typography>
           <Grid item>
-            <TextField className="w-[100%]" size="small" id="email-text-field" 
-              label="Name" variant="outlined" type="text" />
+            <TextField className="w-[100%]" size="small" value={name}
+              label="Name" variant="outlined" type="text" required
+              onChange={(e) => { setName(e.target.value); setErrorMessage('')}}/>
+          </Grid>
+          <Grid item>
+            <TextField className="w-[100%]" size="small" value={email} required
+              label="Email" variant="outlined" type="email" id="email-text-field"
+              onChange={(e) => { setEmail(e.target.value); setErrorMessage('')}}/>
           </Grid>
           <Grid item>
             <Grid container direction="row" spacing={1}>
               <Grid item xs={6}>
                 <DatePicker label="Member Until" renderInput={(params) => <TextField size="small" {...params} />} 
-                  value={date} onChange={(newDate) => { setDate(newDate) }}/>
+                  value={date} onChange={(newDate) => { setDate(newDate); setErrorMessage('') }}/>
               </Grid>
               <Grid item xs={3}>
-                <Button color="secondary" variant="contained" className='w-[100%]'>6m</Button>
+                <Button color="secondary" variant="contained" className='w-[100%]'
+                  onClick={() => {
+                    let newDate = moment().add(6, 'month')
+                    setDate(newDate)
+                    setErrorMessage('')
+                  }}>6m</Button>
               </Grid>
               <Grid item xs={3}>
-                <Button color="secondary" variant="contained" className='w-[100%]'>12m</Button>
+                <Button color="secondary" variant="contained" className='w-[100%]'
+                  onClick={() => {
+                    let newDate = moment().add(1, 'year')
+                    setDate(newDate)
+                    setErrorMessage('')
+                  }}>12m</Button>
               </Grid>
             </Grid>
           </Grid>
           <Grid item>
-            <Button color="secondary" variant="contained" className="w-[100%]">Add</Button>
+            <Button color="secondary" variant="contained" className="w-[100%]" onClick={handleAdd}>Add Member</Button>
           </Grid>
         </Grid> 
       </Box>

@@ -10,6 +10,7 @@ const tempMembers: Member[] = [
   {
     member_id: "63f553996a2ef9da8a85e69c",
     name: "Kai Tinkess",
+    email: "ktinkess@gmail.com",
     expiration: Date.parse("1995-12-17T08:24:00.000Z"),
     club_id: "5e1a0651741b255ddda996c4",
     tag_ids: [],
@@ -20,19 +21,32 @@ for (let i = 0; i < 100; i++) {
   tempMembers.push({
     member_id: "63f553cb1484c7c696f5e35e",
     name: "Alex Hunton",
+    email: "ahunton@gmail.com",
     expiration: Date.parse("1997-12-17T08:24:00.000Z"),
     club_id: "5e1a0651741b255ddda996c4",
     tag_ids: [],
   })
 }
 
-export default function MemberView() {
+type MemberViewProps = {
+  club_id: string
+}
+
+export default function MemberView({ club_id }: MemberViewProps) {
+  const [errorMessage, setErrorMessage] = useState('')
   const [members, setMembers] = useState<Member[]>([])
   const [memberOpen, setMemberOpen] = useState<boolean>(false)
   const [officerOpen, setOfficerOpen] = useState<boolean>(false)
 
-  const createMember = (member: Member) => {
-    members.push(member)
+  const createMember = (member: MemberRequest) => {
+    members.push({
+      name: member.name,
+      email: member.email,
+      club_id: member.club_id,
+      tag_ids: [],
+      expiration: (member.expiration ? member.expiration : undefined),
+      member_id: "0"
+    })
   }
 
   const createOfficer = (member: Member) => {
@@ -49,7 +63,8 @@ export default function MemberView() {
 
   return (
     <Box className='min-w-full flex-auto'>
-      <AddMemberModal open={memberOpen} setOpen={setMemberOpen} createMember={createMember}/>
+      <AddMemberModal open={memberOpen} setOpen={setMemberOpen} createMember={createMember}
+        errorMessage={errorMessage} setErrorMessage={setErrorMessage} club_id={club_id}/>
       <ClavaNavbar currentRoute="Members"/>
       <Box className='m-4 mb-16'>
         <Grid container spacing={2}>
@@ -73,7 +88,7 @@ export default function MemberView() {
             <MemberDisplay title={"All Members"} members={members} setMembers={setMembers}/>
           </Grid>
           <Grid item xs={6}>
-            <MemberDisplay title={"All Officers"} members={members} setMembers={setMembers}/>
+            <MemberDisplay title={"All Officers"} members={[]} setMembers={setMembers}/>
           </Grid>
         </Grid>
       </Box>
