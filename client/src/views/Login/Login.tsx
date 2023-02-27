@@ -2,14 +2,17 @@ import to from "await-to-js"
 import { useEffect, useState } from "react"
 import { useDispatch } from "react-redux"
 import { useSelector } from "react-redux"
-import { useNavigate } from "react-router-dom"
-import store from "store"
+import { useNavigate, useParams } from "react-router-dom"
+import store from "../../store"
 import { getUser, login, register } from "../../store/user/userThunk"
 import { UserState, userStateSelector } from "../../store/user/userSlice"
 import LoginContainer from "./LoginContainer"
 import RegisterContainer from "./RegisterContainer"
 import ResetRequestContainer from "./ResetRequestContainer"
 import { Container } from "@mui/material"
+import useEmailVerify from "../../hooks/useEmailVerify"
+
+const pageAfter = '/members'
 
 function Login() {
   const [page, setPage] = useState<string>('login')
@@ -17,37 +20,51 @@ function Login() {
   const { state } = useSelector(userStateSelector)
   const navigate = useNavigate()
   const dispatch = useDispatch<typeof store.dispatch>()
+  const emailVerify = useEmailVerify()
 
   useEffect(() => {
-    if (state !== UserState.NONE) return
+    if (state != UserState.NONE) return
 
     ;(async () => {
       const [_, res] = await to(dispatch(getUser()).unwrap())
 
       if (res) {
-        navigate('/test')
+        navigate(pageAfter)
       }
     })()
-  }, [dispatch, navigate, state])
+  }, [dispatch, navigate])
 
   const onLogin = async (req: UserRequest ) => {
+    if (!emailVerify(req.email)) {
+      setErrorMessage('Invalid email.')
+      return
+    }
+
     const [err] = await to(dispatch(login(req)).unwrap())
 
     if (err) {
       setErrorMessage('Invalid login.')
       return
     }
+
+    navigate(pageAfter)
   }
 
   const onRegister = async (req: UserRequest) => {
-    const [err] = await to(dispatch(register(req)).unwrap())
+    if (!emailVerify(req.email)) {
+      setErrorMessage('Invalid email.')
+      return
+    }
+
+    const [error] = await to(dispatch(register(req)).unwrap())
+    const err = (error as any).err
 
     if (err && err.name == 'UserExistsError') {
       setErrorMessage('A user with that email already exists.')
     } else if (err) {
       setErrorMessage('Invalid register.')
     } else {
-      navigate('/test')
+      navigate(pageAfter)
     }
   }
 

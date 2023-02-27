@@ -55,7 +55,6 @@ type NavButtonProps = {
 
 function NavButton({title, isSelected, clubId}: NavButtonProps) {
 	const navigate = useNavigate();
-
 	const buttonParams : ButtonParams = getButtonParams(title);
 
 	const onLinkChange = (): void => {

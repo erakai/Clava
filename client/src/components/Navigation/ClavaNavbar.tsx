@@ -44,7 +44,7 @@ function ClavaNavbar({currentRoute, clubId, clubName} : ClavaNavbarProps) {
   };
 
   return (
-    <AppBar position="absolute">
+    <AppBar position="sticky">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           {/* === START OF TITLE FOR LARGE WINDOW SIZE === */}
