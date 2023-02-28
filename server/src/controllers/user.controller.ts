@@ -42,11 +42,12 @@ export const register = async (req: Request, res: Response) => {
 export const resetrequest = async (req: Request, res: Response) => {
   let { email } = req.body
   User.findOne({ email : email },
-      async (err, user) => {
+      async (err, user: IUser) => {
         if (err) {
           //No user found --> no account associated with given email
           return res.status(200).send({err})
         }
+        console.log(user.name)
         const link = process.env.CLIENT_URL + "/reset/_id"
         console.log("WORKS!")
         const parameters = {
@@ -55,7 +56,7 @@ export const resetrequest = async (req: Request, res: Response) => {
           link: link
         }
         sendResetRequestEmail(email, user.name, link)
-        return res.status(200)
+        return res.status(200).send("OK")
       })
 }
 
