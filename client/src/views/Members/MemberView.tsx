@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react'
 import AddMemberModal from './AddMemberModal'
 import MemberDisplay from './MemberDisplay'
 import { createMember as _createMember, getMembers } from '../../api/memberApi'
+import { createTag as _createTag, getTags } from '../../api/memberApi'
 import { ClavaNavbar, ScrollTop } from '../../components/Navigation'
 import useUser from '../../hooks/useUser'
 import TagsEditor from '../../components/TagsEditor'
@@ -18,9 +19,11 @@ export default function MemberView({ club_id }: MemberViewProps) {
   const [errorMessage, setErrorMessage] = useState('')
   const [members, setMembers] = useState<Member[]>([])
   const [memberOpen, setMemberOpen] = useState(false)
+  const [tags, setTags] = useState<Tag[]>([])
   const [officerOpen, setOfficerOpen] = useState(false)
   const [disableAddingMember, setDisableAddingMember] = useState(false)
   const { state } = useUser()
+
 
   const createMember = async (member: MemberRequest) => {
     setDisableAddingMember(true)
@@ -34,6 +37,21 @@ export default function MemberView({ club_id }: MemberViewProps) {
     }
 
     setDisableAddingMember(false)
+  }
+
+  const createTag = async (tag: TagRequest) => {
+    //setDisableAddingMember(true)
+    console.log(tag)
+    const [err, res] = await to(_createTag(tag))
+    if (err) {
+      console.log("errrrr")
+      console.log(err)
+      setErrorMessage('Something went wrong.')
+    } else if (res) {
+      setTags([...tags, res.data.tag])
+    }
+
+    //setDisableAddingMember(false)
   }
 
   const createOfficer = (member: Member) => {
@@ -79,7 +97,7 @@ export default function MemberView({ club_id }: MemberViewProps) {
               <Button variant="contained" color="secondary" onClick={() => setMemberOpen(true)}>
                 Add Member
               </Button>
-              <TagsEditor/>
+              <TagsEditor createTag={createTag} club_id={club_id}/>
             </Box>
           </Grid>
           <Grid item xs={4}>
@@ -97,8 +115,7 @@ export default function MemberView({ club_id }: MemberViewProps) {
               display="flex"
               justifyContent="right"
               alignItems="right"
-              height="100%"
-            >
+              height="100%">
               <Button variant="contained" color="secondary">
                 Add Officer
               </Button>

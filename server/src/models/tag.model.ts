@@ -7,7 +7,10 @@ const TagSchema = new Schema<ITag>({
     type: SchemaTypes.String,
     required: true,
   },
-  color: SchemaTypes.String
+  color: {
+    type: SchemaTypes.String,
+    default: "#000000"
+  }
 })
 
 const Tag = model('tag', TagSchema) as Model<ITag>

@@ -10,7 +10,7 @@ export const getTags = async (req: Request, res: Response) => {
   }
 
   const club: IClub = await Club.findById(club_id)
-
+  console.log("hellur")
   if (!club) {
     return res.status(401).send('Unauthorized')
   }
@@ -31,16 +31,18 @@ export const getTags = async (req: Request, res: Response) => {
 }
 
 export const createTag = async (req: Request, res: Response) => {
-  let { club_id, tag_name, tag_color, } = req.body
+  let { name, color, club_id, } = req.body
 
   if (!club_id) {
     return res.status(500).json({error: 'no club id provided'})
   }
 
-  if (!tag_name || !tag_color) {
+  
+  if (!name || !color) {
+    console.log("no color sadge")
     return res.status(500).json({error: 'no tag name or tag color provided'})
   }
-
+  
   // verify that the club exists
 
   Club.find({
@@ -55,11 +57,13 @@ export const createTag = async (req: Request, res: Response) => {
 
   // add the new tag to the club
   Tag.create({
-    tag_name, tag_color, club_id
+    name, color, club_id
   }, async (err, tag) => {
     if (err) {
+      console.log("some error happened fuck")
       return res.status(500).send({err})
     }
+    console.log("tag is being returned!")
     return res.status(200).json({tag})
   })
 

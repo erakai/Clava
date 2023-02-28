@@ -6,11 +6,12 @@ import TagChip from './TagChip';
 const pages = ['Members', 'Events', 'Documents', 'Finances'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
-type TagsEditorPopup = {
-  tag: string
+type TagsEditorProps = {
+  createTag: (tag: TagRequest) => void
+  club_id: string
 }
 
-function TagsEditorPopup() {
+function TagsEditorPopup({createTag, club_id}: TagsEditorProps) {
   const [isOpen, setOpen] = React.useState(false)
   const open = () => {
     setOpen(true)
@@ -18,8 +19,6 @@ function TagsEditorPopup() {
   const close = () => {
     setOpen(false)
   }
-
-
 
   return (
     <Box>
@@ -38,7 +37,7 @@ function TagsEditorPopup() {
             spacing={1}>
             <TagChip />
             <TagChip />
-            <CreateTagDialog />
+            <CreateTagDialog createTag={createTag} club_id={club_id} />
           </Stack>
         </DialogContent>
         <DialogActions>

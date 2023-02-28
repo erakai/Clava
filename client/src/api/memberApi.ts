@@ -29,5 +29,9 @@ export const createMember = ({ name, email, expiration, club_id }: MemberRequest
 }
 
 export const getTags = (club_id: string) => {
-  return MemberInstance.get<GetTagsResponse>('/', { params: { club_id: club_id } })
+  return MemberInstance.get<GetTagsResponse>('/tags/', { params: { club_id: club_id } })
+}
+
+export const createTag = ({ name, color, club_id }: TagRequest) => {
+  return MemberInstance.post<CreateTagResponse>('/tags/', { name, color, club_id })
 }
