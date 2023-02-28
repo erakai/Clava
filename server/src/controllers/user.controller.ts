@@ -4,7 +4,8 @@ import type { Request, Response } from 'express'
 import jwt, { JwtPayload } from 'jsonwebtoken'
 import User from 'models/user.model'
 import { IUser } from 'types/user'
-// import send_password_reset from 'modules/Emailing.mjs'
+import { sendResetRequestEmail } from "modules/Emailing"
+
 
 // again i followed https://www.codingdeft.com/posts/react-authentication-mern-node-passport-express-mongo/
 // very closely for the below approach
@@ -47,7 +48,13 @@ export const resetrequest = async (req: Request, res: Response) => {
           return res.status(200).send({err})
         }
         const link = process.env.CLIENT_URL + "/reset/_id"
-        // send_password_reset(email, user.name, link)
+        console.log("WORKS!")
+        const parameters = {
+          recipient: email,
+          recipient_name: user.name,
+          link: link
+        }
+        sendResetRequestEmail(email, user.name, link)
         return res.status(200)
       })
 }
