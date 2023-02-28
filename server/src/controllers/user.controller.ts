@@ -94,6 +94,7 @@ export const refresh = async (req: Request, res: Response) => {
     payload = jwt.verify(refreshToken, process.env.REFRESH_SECRET) as JwtPayload
   } catch (err) {
     res.status(500).json({err})
+    return
   }
 
   const userId = payload._id

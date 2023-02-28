@@ -8,6 +8,7 @@ import MemberDisplay from './MemberDisplay'
 import { createMember as _createMember, getMembers } from '../../api/memberApi'
 import { ClavaNavbar, ScrollTop } from '../../components/Navigation'
 import useUser from '../../hooks/useUser'
+import TagsEditor from '../../components/TagsEditor'
 
 type MemberViewProps = {
   club_id: string
@@ -74,12 +75,11 @@ export default function MemberView({ club_id }: MemberViewProps) {
               display="flex"
               justifyContent="left"
               alignItems="left"
-              height="100%"
-              onClick={() => setMemberOpen(true)}
-            >
-              <Button variant="contained" color="secondary">
+              height="100%">
+              <Button variant="contained" color="secondary" onClick={() => setMemberOpen(true)}>
                 Add Member
               </Button>
+              <TagsEditor/>
             </Box>
           </Grid>
           <Grid item xs={4}>

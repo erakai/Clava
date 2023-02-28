@@ -27,3 +27,16 @@ interface MemberRequest {
   expiration?: number,
   club_id: string,
 }
+
+interface Tag {
+  tag_id: number,
+  name: string,
+  color: string,
+  club_id: string,
+}
+
+interface TagRequest {
+  name: string,
+  color: string,
+  club_id: string,
+}

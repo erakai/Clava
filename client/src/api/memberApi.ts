@@ -5,6 +5,10 @@ import { getRefreshToken } from "./userApi"
 type GetMembersResponse = { members: Member[] }
 type CreateMemberResponse = { member: Member }
 
+// for tags
+type GetTagsResponse = { tag: Tag[] }
+type CreateTagResponse = { tag: Tag }
+
 const MemberInstance = axios.create({
   baseURL: `http://localhost:8080/members`,
   timeout: 1000,
@@ -22,4 +26,8 @@ export const createMember = ({ name, email, expiration, club_id }: MemberRequest
     return MemberInstance.post<CreateMemberResponse>('/', { name, email, expiration, club_id })
   }
   return MemberInstance.post<CreateMemberResponse>('/', { name, email, club_id })
+}
+
+export const getTags = (club_id: string) => {
+  return MemberInstance.get<GetTagsResponse>('/', { params: { club_id: club_id } })
 }
