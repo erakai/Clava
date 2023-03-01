@@ -9,10 +9,11 @@ const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 type TagsEditorProps = {
   createTag: (tag: TagRequest) => void
   tags: Tag[]
+  setTags: React.Dispatch<React.SetStateAction<Tag[]>>
   club_id: string
 }
 
-function TagsEditorPopup({createTag, club_id, tags}: TagsEditorProps) {
+function TagsEditorDialog({createTag, club_id, tags}: TagsEditorProps) {
   const [isOpen, setOpen] = React.useState(false)
   const open = () => {
     setOpen(true)
@@ -37,7 +38,7 @@ function TagsEditorPopup({createTag, club_id, tags}: TagsEditorProps) {
             className="flex w-96"
             spacing={1}>
             {tags.map(tag => (
-              <TagChip name={tag.name} color={tag.color} />
+              <TagChip name={tag.name} color={tag.color} key={tag.name}/>
             ))}
             <CreateTagDialog createTag={createTag} club_id={club_id} />
           </Stack>
@@ -50,4 +51,4 @@ function TagsEditorPopup({createTag, club_id, tags}: TagsEditorProps) {
   )
 }
 
-export default TagsEditorPopup
+export default TagsEditorDialog

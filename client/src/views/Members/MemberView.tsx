@@ -40,7 +40,6 @@ export default function MemberView({ club_id }: MemberViewProps) {
   }
 
   const createTag = async (tag: TagRequest) => {
-    console.log(tag)
     const [err, res] = await to(_createTag(tag))
     if (err) {
       console.log(err)
@@ -54,7 +53,7 @@ export default function MemberView({ club_id }: MemberViewProps) {
   }
 
   useEffect(() => {
-    const fetch = async () => {
+    const fetchMembers = async () => {
       const [err, res] = await to(getMembers(club_id))
       if (err) {
         console.log(err)
@@ -67,7 +66,21 @@ export default function MemberView({ club_id }: MemberViewProps) {
       }
     }
 
-    fetch()
+    const fetchTags = async () => {
+      const [err, res] = await to(getTags(club_id))
+      if (err) {
+        console.log(err)
+        return
+      }
+
+      const retrieved = res.data.tags
+      if (retrieved) {
+        setTags(retrieved)
+      }
+    }
+
+    fetchMembers()
+    fetchTags()
   }, [state])
 
   return (
@@ -92,7 +105,7 @@ export default function MemberView({ club_id }: MemberViewProps) {
               <Button variant="contained" color="secondary" onClick={() => setMemberOpen(true)}>
                 Add Member
               </Button>
-              <TagsEditor createTag={createTag} club_id={club_id} tags={tags}/>
+              <TagsEditor createTag={createTag} club_id={club_id} tags={tags} setTags={setTags} />
             </Box>
           </Grid>
           <Grid item xs={4}>

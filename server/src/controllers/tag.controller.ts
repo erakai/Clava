@@ -4,20 +4,20 @@ import Club from 'models/club.model'
 import { IClub } from 'types/club'
 
 export const getTags = async (req: Request, res: Response) => {
-  let { club_id } = req.body
+  //console.log("REQ:" + req.query)
+  let { club_id } = req.query
+  console.log("CLUB ID: " + club_id)
   if (!club_id) {
+    console.log("NONEXISTENT CLUB")
     return res.status(500).json({error: 'no club id'})
   }
 
-  const club: IClub = await Club.findById(club_id)
-  console.log("hellur")
-  if (!club) {
-    return res.status(401).send('Unauthorized')
-  }
+  // const club: IClub = await Club.findById(club_id)
+  // if (!club) {
+  //   return res.status(401).send('Unauthorized')
+  // }
 
-  const tag_ids = club.tag_ids
-
-  const tags = []
+  console.log("trying to get tags")
 
   Tag.find({
     club_id: club_id
