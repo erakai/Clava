@@ -12,6 +12,10 @@ interface UserRequest {
   name?: string
 }
 
+interface UserResetRequest {
+  email: string
+}
+
 interface Member {
   member_id: string,
   name: string,

@@ -49,19 +49,32 @@ export const resetrequest = async (req: Request, res: Response) => {
         }
 
         if (!user) {
-          return res.status(404).send("NO USER FOUND!")
+          return res.status(404).send("NO USER FOUND")
         }
 
         console.log(user.name)
-        const link = process.env.CLIENT_URL + "/reset/_id"
-        console.log("WORKS!")
+        const link = process.env.CLIENT_URL + "/reset/" + user._id
         const parameters = {
           recipient: email,
           recipient_name: user.name,
           link: link
         }
         sendResetRequestEmail(email, user.name, link)
-        return res.status(200).send("OK")
+        return res.status(200).send("RESET EMAIL SENT")
+      })
+}
+
+// All validation and verifications check should already be done client-side
+export const reset = async (req: Request, res: Response) => {
+  let { new_password, id } = req.body
+  User.findByIdAndUpdate(
+      { _id: id },
+      { password: new_password },
+      async (err, result) => {
+        if (err) {
+          return res.status(500).send({err})
+        }
+        return res.send({result})
       })
 }
 

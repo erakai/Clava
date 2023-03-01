@@ -1,10 +1,23 @@
 import { Box, TextField, Stack, Typography, Button, IconButton } from "@mui/material"
 import { Link } from "react-router-dom"
-import {ArrowBack} from "@mui/icons-material"
-import Popup from 'reactjs-popup';
+import { ArrowBack } from "@mui/icons-material"
+import { Popup } from 'reactjs-popup';
+import { _resetRequest } from '../../api/userApi'
 import 'reactjs-popup/dist/index.css';
+import to from 'await-to-js'
+import React from "react";
 
 function ResetRequest() {
+  const [email, setEmail] = React.useState('')
+
+  const sendResetRequest = async (req: UserResetRequest) => {
+    try {
+      await to(_resetRequest(req))
+    } catch (err) {
+      console.log(err)
+      }
+    }
+
   return (
       <Box className="flex w-screen h-screen items-center justify-center" sx={{bgcolor: "secondary.main"}}
       >
@@ -28,12 +41,17 @@ function ResetRequest() {
                 id="email-text-field"
                 label="Email"
                 variant="outlined"
-                type="email"/>
-            <Popup trigger={<Button className="w-80" variant="contained" color="secondary">Request Reset</Button>} modal>
-              <div className="modal">
-                If an account associated with the provided email exists, you will receive a password reset link in your inbox.
-              </div>
-            </Popup>
+                type="email"
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value.trim())
+                }}
+            />
+            <Button className="w-80" variant="contained" color="secondary"
+              onClick={(e) => {
+                _resetRequest({email}).then(r => {console.log("ERROR")})}
+              }
+            >Request Reset</Button>
           </Stack>
         </Stack>
       </Box>
