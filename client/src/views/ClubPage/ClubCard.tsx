@@ -4,7 +4,7 @@ import PlaceHolder from '../../assets/placeholder.png'
 type ClubProps = {
     name: string,
     description: string
- }
+}
 
 export default function ClubCard({name, description} : ClubProps) {
     return (

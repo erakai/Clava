@@ -10,3 +10,8 @@ interface Club {
   officer_ids: Array<number>,
   event_ids: Array<number>,
 }
+
+interface ClubRequest {
+  name: string,
+  description: string
+}

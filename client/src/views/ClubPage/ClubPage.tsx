@@ -1,5 +1,7 @@
 import { Box, Stack, Card, CardContent, CardMedia, CardActionArea, CardActions, Typography, Button } from '@mui/material'
 import ClubCard from './ClubCard'
+import axios from 'axios'
+import { getClubs, createClub } from '../../api/clubApi'
 
 const clubs : Club[] = [
   {
@@ -65,6 +67,7 @@ const clubs : Club[] = [
     event_ids: []
   },
 ]
+
 
 const listClubs = clubs.map((club) =>
   <ClubCard name={club.name} description={club.description}></ClubCard>
