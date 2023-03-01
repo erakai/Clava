@@ -11,22 +11,24 @@ type ClubPageProps = {
 
 function ClubPage({user_id} : ClubPageProps) {
 
-  const [clubs, setClubs] = useState<Club[]>([])
+  console.log('he')
 
-  const fetch = async () => {
-    const [err, res] = await to(getClubs(user_id))
-    if (err) {
-      console.log(err)
-      return
-    }
+  // const [clubs, setClubs] = useState<Club[]>([])
 
-    const retrieved = res.data.clubs
-    if (retrieved) {
-      setClubs(retrieved)
-    }
-  }
+  // const fetch = async () => {
+  //   const [err, res] = await to(getClubs(user_id))
+  //   if (err) {
+  //     console.log(err)
+  //     return
+  //   }
 
-  fetch()
+  //   const retrieved = res.data.clubs
+  //   if (retrieved) {
+  //     setClubs(retrieved)
+  //   }
+  // }
+
+  // fetch()
 
   return (
     <Box className="ClubPage w-screen">
@@ -36,7 +38,7 @@ function ClubPage({user_id} : ClubPageProps) {
         <p>These are the clubs you are in</p>
 
         <Box className="ClubDisplayArea flex flex-wrap">
-            {clubs.map((club) => <ClubCard name={club.name} description={club.description}></ClubCard>)}
+            {/* {clubs.map((club) => <ClubCard name={club.name} description={club.description}></ClubCard>)} */}
         </Box>
 
       </Stack>
