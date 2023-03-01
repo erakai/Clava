@@ -16,7 +16,7 @@ function Root() {
         <Route path="/" element={<Main />} />
         <Route path="/login" element={<Login />} />
         <Route path="/test" element={<Test />} />
-        <Route path="/clubs" element={<ClubPage />} />
+        <Route path="/clubs" element={<ClubPage user_id="63fee191ee06d3d05489d873"/>} />
         <Route path="/reset" element={<Reset />} />
         <Route path="/resetrequest" element={<ResetRequest />} />
 

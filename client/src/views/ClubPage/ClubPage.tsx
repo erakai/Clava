@@ -1,79 +1,33 @@
 import { Box, Stack, Card, CardContent, CardMedia, CardActionArea, CardActions, Typography, Button } from '@mui/material'
 import ClubCard from './ClubCard'
 import axios from 'axios'
+import to from 'await-to-js'
 import { getClubs, createClub } from '../../api/clubApi'
+import { useEffect, useState } from 'react'
 
-const clubs : Club[] = [
-  {
-    club_id: 12345,
-    name: "Book Club",
-    description: "I love books",
-    tag_ids: [],
-    role_ids: [],
-    tran_ids: [],
-    reim_ids: [],
-    member_ids: [],
-    officer_ids: [],
-    event_ids: []
-  },
+type ClubPageProps = {
+  user_id: string,
+}
 
-  {
-    club_id: 12346,
-    name: "Coding Club",
-    description: "I love React",
-    tag_ids: [],
-    role_ids: [],
-    tran_ids: [],
-    reim_ids: [],
-    member_ids: [],
-    officer_ids: [],
-    event_ids: []
-  },
+function ClubPage({user_id} : ClubPageProps) {
 
-  {
-    club_id: 12346,
-    name: "Coding Club",
-    description: "I love React",
-    tag_ids: [],
-    role_ids: [],
-    tran_ids: [],
-    reim_ids: [],
-    member_ids: [],
-    officer_ids: [],
-    event_ids: []
-  },
-  {
-    club_id: 12346,
-    name: "Coding Club",
-    description: "I love React",
-    tag_ids: [],
-    role_ids: [],
-    tran_ids: [],
-    reim_ids: [],
-    member_ids: [],
-    officer_ids: [],
-    event_ids: []
-  },
-  {
-    club_id: 12346,
-    name: "Coding Club",
-    description: "I love React",
-    tag_ids: [],
-    role_ids: [],
-    tran_ids: [],
-    reim_ids: [],
-    member_ids: [],
-    officer_ids: [],
-    event_ids: []
-  },
-]
+  const [clubs, setClubs] = useState<Club[]>([])
 
+  const fetch = async () => {
+    const [err, res] = await to(getClubs(user_id))
+    if (err) {
+      console.log(err)
+      return
+    }
 
-const listClubs = clubs.map((club) =>
-  <ClubCard name={club.name} description={club.description}></ClubCard>
-)
+    const retrieved = res.data.clubs
+    if (retrieved) {
+      setClubs(retrieved)
+    }
+  }
 
-function ClubPage() {
+  fetch()
+
   return (
     <Box className="ClubPage w-screen">
       <Stack className="justify-center" spacing={2}>
@@ -82,7 +36,7 @@ function ClubPage() {
         <p>These are the clubs you are in</p>
 
         <Box className="ClubDisplayArea flex flex-wrap">
-            {listClubs}
+            {clubs.map((club) => <ClubCard name={club.name} description={club.description}></ClubCard>)}
         </Box>
 
       </Stack>
