@@ -4,7 +4,7 @@ import AddIcon from '@mui/icons-material/Add';
 import to from "await-to-js"
 
 type CreateTagProps = {
-  createTag: (tag: TagRequest) => void
+  createTag: (tag: CreateTagRequest) => void
   club_id: string
 }
 
@@ -22,7 +22,7 @@ function CreateTagDialog({createTag, club_id}: CreateTagProps) {
   }
 
   const handleCreate = () => {
-    let newTag: TagRequest = {
+    let newTag: CreateTagRequest = {
       name, color, club_id
     }
     createTag(newTag)
@@ -44,7 +44,8 @@ function CreateTagDialog({createTag, club_id}: CreateTagProps) {
         Create New Tag
       </DialogTitle>
       <DialogContent>
-        <Stack>
+        <Stack
+          spacing={1}>
           <TextField label="Tag Name" variant="standard" size="small" 
           onChange={(e) => {
             setName(e.target.value.trim())

@@ -1,4 +1,5 @@
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, TextField } from '@mui/material'
+import { Container } from '@mui/system';
 import * as React from 'react';
 import CreateTagDialog from './CreateTagDialog';
 import TagChip from './TagChip';
@@ -7,7 +8,7 @@ const pages = ['Members', 'Events', 'Documents', 'Finances'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 type TagsEditorProps = {
-  createTag: (tag: TagRequest) => void
+  createTag: (tag: CreateTagRequest) => void
   tags: Tag[]
   setTags: React.Dispatch<React.SetStateAction<Tag[]>>
   club_id: string
@@ -30,18 +31,15 @@ function TagsEditorDialog({createTag, club_id, tags}: TagsEditorProps) {
       <Dialog 
         open={isOpen}
         onClose={close}>
-        <DialogTitle>
-          Edit Tags
-        </DialogTitle>
+        <DialogTitle>Tags</DialogTitle>
         <DialogContent>
-          <Stack
-            className="flex w-96"
-            spacing={1}>
+          <Box
+            className="w-96 space-y-2 space-x-1">
             {tags.map(tag => (
-              <TagChip name={tag.name} color={tag.color} key={tag.name}/>
+              <TagChip name={tag.name} color={tag.color} club_id={club_id} key={tag.name}/>
             ))}
             <CreateTagDialog createTag={createTag} club_id={club_id} />
-          </Stack>
+          </Box>
         </DialogContent>
         <DialogActions>
           <Button onClick={close}>Done</Button>

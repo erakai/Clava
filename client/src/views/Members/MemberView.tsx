@@ -39,7 +39,7 @@ export default function MemberView({ club_id }: MemberViewProps) {
     setDisableAddingMember(false)
   }
 
-  const createTag = async (tag: TagRequest) => {
+  const createTag = async (tag: CreateTagRequest) => {
     const [err, res] = await to(_createTag(tag))
     if (err) {
       console.log(err)

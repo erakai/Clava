@@ -35,8 +35,19 @@ interface Tag {
   club_id: string,
 }
 
-interface TagRequest {
+interface CreateTagRequest {
   name: string,
   color: string,
+  club_id: string,
+}
+
+interface EditTagRequest {
+  newName: string,
+  newColor: string,
+  club_id: string,
+}
+
+interface DeleteTagRequest {
+  name: string,
   club_id: string,
 }
