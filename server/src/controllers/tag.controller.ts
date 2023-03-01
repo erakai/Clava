@@ -39,7 +39,6 @@ export const createTag = async (req: Request, res: Response) => {
 
   
   if (!name || !color) {
-    console.log("no color sadge")
     return res.status(500).json({error: 'no tag name or tag color provided'})
   }
   
@@ -60,7 +59,7 @@ export const createTag = async (req: Request, res: Response) => {
     name, color, club_id
   }, async (err, tag) => {
     if (err) {
-      console.log("some error happened fuck")
+      console.log("some error happened")
       return res.status(500).send({err})
     }
     console.log("tag is being returned!")

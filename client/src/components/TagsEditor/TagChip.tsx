@@ -1,7 +1,12 @@
 import { Chip } from "@mui/material/"
 import React from "react"
 
-function TagChip() {
+type TagChipProps = {
+  name: string
+  color: string
+}
+
+function TagChip({ name, color }: TagChipProps) {
   
   const [isEditing, setEditing] = React.useState(false)
   const open = () => {
@@ -14,7 +19,7 @@ function TagChip() {
   return (
     <Chip 
       className="w-min"
-      label="one tag"
+      label={name}
       onClick={open}/>  
   )
 }

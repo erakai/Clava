@@ -40,18 +40,13 @@ export default function MemberView({ club_id }: MemberViewProps) {
   }
 
   const createTag = async (tag: TagRequest) => {
-    //setDisableAddingMember(true)
     console.log(tag)
     const [err, res] = await to(_createTag(tag))
     if (err) {
-      console.log("errrrr")
       console.log(err)
-      setErrorMessage('Something went wrong.')
     } else if (res) {
       setTags([...tags, res.data.tag])
     }
-
-    //setDisableAddingMember(false)
   }
 
   const createOfficer = (member: Member) => {
@@ -97,7 +92,7 @@ export default function MemberView({ club_id }: MemberViewProps) {
               <Button variant="contained" color="secondary" onClick={() => setMemberOpen(true)}>
                 Add Member
               </Button>
-              <TagsEditor createTag={createTag} club_id={club_id}/>
+              <TagsEditor createTag={createTag} club_id={club_id} tags={tags}/>
             </Box>
           </Grid>
           <Grid item xs={4}>
@@ -105,8 +100,7 @@ export default function MemberView({ club_id }: MemberViewProps) {
               display="flex"
               justifyContent="center"
               alignItems="center"
-              height="100%"
-            >
+              height="100%">
               <Typography variant="h4">Member Database</Typography>
             </Box>
           </Grid>

@@ -26,6 +26,7 @@ function CreateTagDialog({createTag, club_id}: CreateTagProps) {
       name, color, club_id
     }
     createTag(newTag)
+    setOpenNewTag(false)
   }
 
   return (
