@@ -45,8 +45,13 @@ export const resetrequest = async (req: Request, res: Response) => {
       async (err, user: IUser) => {
         if (err) {
           //No user found --> no account associated with given email
-          return res.status(200).send({err})
+          return res.status(404).send({err})
         }
+
+        if (!user) {
+          return res.status(404).send("NO USER FOUND!")
+        }
+
         console.log(user.name)
         const link = process.env.CLIENT_URL + "/reset/_id"
         console.log("WORKS!")
