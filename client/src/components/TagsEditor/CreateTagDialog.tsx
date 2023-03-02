@@ -19,6 +19,8 @@ function CreateTagDialog({club_id, createTag, hasTagName}: CreateTagProps) {
   const [nameError, setNameError] = React.useState('')
   const [colorError, setColorError] = React.useState('')
   const handleOpen = () => {
+    setNameError("")
+    setColorError("")
     setOpenNewTag(true)
   }
 

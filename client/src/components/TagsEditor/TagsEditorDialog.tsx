@@ -20,6 +20,8 @@ type TagsEditorProps = {
 function TagsEditorDialog({createTag, club_id, tags, setTags}: TagsEditorProps) {
   const [isOpen, setOpen] = React.useState(false)
   const open = () => {
+    setNameError("")
+    setColorError("")
     setOpen(true)
   }
   const close = () => {
