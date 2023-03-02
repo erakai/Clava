@@ -27,3 +27,9 @@ interface MemberRequest {
   expiration?: number,
   club_id: string,
 }
+
+interface MemberUpdateRequest {
+  name: string,
+  email: string,
+  member_id: string
+}

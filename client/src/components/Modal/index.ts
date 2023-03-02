@@ -1,3 +1,4 @@
 import ConfirmationModal from "./ConfirmationModal";
+import FormModal from "./FormModal";
 
-export default ConfirmationModal;
+export { ConfirmationModal, FormModal };
