@@ -1,5 +1,5 @@
 interface Club {
-  club_id: number,
+  _id: string,
   name: string,
   description: string,
   tag_ids: Array<number>,
@@ -14,4 +14,9 @@ interface Club {
 interface ClubRequest {
   name: string,
   description: string
+}
+
+interface ClubToUserRequest {
+  user_id: string,
+  club_id: string
 }

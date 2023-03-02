@@ -3,7 +3,7 @@ import { intercepts } from "./config"
 import { getRefreshToken } from "./userApi"
 
 type GetClubsResponse = { clubs: Club[] }
-type CreateClubResponse = { Club: Club }
+type CreateClubResponse = { club: Club }
 
 const ClubInstance = axios.create({
   baseURL: `http://localhost:8080/clubs`,
@@ -22,4 +22,8 @@ export const createClub = ({ name, description }: ClubRequest) =>  {
     return ClubInstance.post<CreateClubResponse>('/', { name, description })
   }
   return ClubInstance.post<CreateClubResponse>('/', { name })
+}
+
+export const addClubToUser = ({ user_id, club_id }: ClubToUserRequest) =>  {
+  return ClubInstance.put<CreateClubResponse>('/', { user_id, club_id })
 }

@@ -1,53 +1,202 @@
-import { Box, Stack, Card, CardContent, CardMedia, CardActionArea, CardActions, Typography, Button } from '@mui/material'
+import * as React from 'react'
+import { Box, Stack, Typography, AppBar, MenuItem, Menu, Tooltip, Avatar, IconButton, Container, Toolbar, Fab, Button, TextField } from '@mui/material'
+import { Dialog, DialogContent, DialogActions, DialogTitle} from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
 import ClubCard from './ClubCard'
-import axios from 'axios'
 import to from 'await-to-js'
-import { getClubs, createClub } from '../../api/clubApi'
+import { getClubs, createClub as _createClub, addClubToUser } from '../../api/clubApi'
 import { useEffect, useState } from 'react'
 import useUser from '../../hooks/useUser'
+
+const settings = ['Profile', 'Logout'];
 
 type ClubPageProps = {
   user_id: string,
 }
 
+
 function ClubPage({user_id} : ClubPageProps) {
 
-  console.log('he')
-
+  const [errorMessage, setErrorMessage] = useState('')
   const [clubs, setClubs] = useState<Club[]>([])
+  const [name, setName] = useState('')
+  const [description, setDescription] = useState('')
+  const [disableAddingClub, setDisableAddingClub] = useState(false)
   const { state } = useUser()
 
+  // Gets clubs and listens for new clubs added to the DB
   useEffect(() => {
+    const fetch = async () => {
+      const [err, res] = await to(getClubs(user_id))
+      if (err) {
+        console.log(err)
+        return
+      }
 
-  const fetch = async () => {
-    const [err, res] = await to(getClubs(user_id))
+      const retrieved = res.data.clubs
+      if (retrieved) {
+        setClubs(retrieved)
+      }
+    }
+    fetch()
+  }, [state])
+
+  // Creates a club and displays
+  const createClub = async (club: ClubRequest) => {
+    setDisableAddingClub(true)
+
+    const [err, res] = await to(_createClub(club))
     if (err) {
       console.log(err)
-      return
+      setErrorMessage('Something went wrong.')
+    } else if (res) {
+      setClubs([...clubs, res.data.club])
+      let club_id = res.data.club._id
+      let clubToUserRequest : ClubToUserRequest = {
+        user_id, club_id
+      }
+      addClubToUser( clubToUserRequest )
     }
 
-    const retrieved = res.data.clubs
-    if (retrieved) {
-      setClubs(retrieved)
-    }
+    setDisableAddingClub(false)
+  
   }
 
-  fetch()
+  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+  const [open, setCreateClubOpen] = React.useState(false);
 
-  }, [state])
+  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElUser(event.currentTarget)
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null)
+  };
+
+  const handleClickOpen = () => {
+    setCreateClubOpen(true)
+  };
+
+  const handleClose = () => {
+    setCreateClubOpen(false)
+  };
+
+  const handleCloseAndClubCreate = () => {
+    setCreateClubOpen(false) 
+    let clubRequest : ClubRequest = {
+      name, description
+    }
+    createClub(clubRequest)
+  };
 
   return (
     <Box className="ClubPage w-screen">
-      <Stack className="justify-center" spacing={2}>
 
-        <Typography variant="h1">Clubs</Typography>
-        <p>These are the clubs you are in</p>
+      <AppBar sx={{backgroundColor: 'primary.light'}}>
+        <Container maxWidth="xl">
+          <Toolbar disableGutters>
+            <Typography
+            variant="h6"
+            noWrap
+            sx={{
+              mr: 2,
+              display: { xs: 'none', md: 'flex' },
+              fontFamily: 'monospace',
+              fontWeight: 700,
+              letterSpacing: '.3rem',
+              color: 'inherit',
+              textDecoration: 'none',
+            }}
+          >
+            Clubs
+          </Typography>
+          <Box
+            justifyContent="center"
+            alignItems="center"
+            sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}
+          />
+          <Box sx={{ flexGrow: 0 }}>
+              <Tooltip title="Open settings">
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <Avatar alt="Remy Sharp" src="" />
+                </IconButton>
+              </Tooltip>
+              <Menu
+                sx={{ mt: '45px' }}
+                id="menu-appbar"
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
+              >
+                {settings.map((setting) => (
+                  <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                    <Typography textAlign="center">{setting}</Typography>
+                  </MenuItem>
+                ))}
+              </Menu>
+            </Box>
+          </Toolbar>
+        </Container>
+      </AppBar>
 
+      <Stack className="justify-center mt-24" spacing={2}>
+ 
         <Box className="ClubDisplayArea flex flex-wrap">
             {clubs.map((club) => <ClubCard name={club.name} description={club.description}></ClubCard>)}
         </Box>
 
       </Stack>
+
+      <Fab onClick={handleClickOpen} color='primary' sx={{
+        position: 'absolute',
+        bottom: 64,
+        right: 64,
+      }}>
+        <AddIcon/>
+      </Fab>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Create Club"}
+        </DialogTitle>
+        <DialogContent>
+          <Stack spacing={2}>
+            <TextField
+              required
+              id="club-name"
+              label="Club Name"
+              variant="standard"
+              onChange={(e) => { setName(e.target.value); setErrorMessage('')}}
+            />
+            <TextField
+              required
+              id="club-description"
+              label="Club Description"
+              variant="standard"
+              onChange={(e) => { setDescription(e.target.value); setErrorMessage('')}}
+            />
+          </Stack>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button disabled={disableAddingClub} onClick={handleCloseAndClubCreate} variant="contained" autoFocus>
+            Create
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   )
 }
