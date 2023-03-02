@@ -133,6 +133,7 @@ export default function MemberView({ club_id }: MemberViewProps) {
               title="All Members"
               members={members}
               setMembers={setMembers}
+              club_id={club_id}
             />
           </Grid>
           <Grid item xs={12} md={6}>
@@ -140,6 +141,7 @@ export default function MemberView({ club_id }: MemberViewProps) {
               title="All Officers"
               members={[]}
               setMembers={setMembers}
+              club_id={club_id}
             />
           </Grid>
         </Grid>

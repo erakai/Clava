@@ -4,6 +4,8 @@ import { getRefreshToken } from "./userApi"
 
 type GetMembersResponse = { members: Member[] }
 type CreateMemberResponse = { member: Member }
+type DeleteMemberResponse = {}
+type UpdateMemberResponse = {}
 
 // for tags
 type GetTagsResponse = { tags: Tag[] }
@@ -29,6 +31,15 @@ export const createMember = ({ name, email, expiration, club_id }: MemberRequest
   }
   return MemberInstance.post<CreateMemberResponse>('/', { name, email, club_id })
 }
+
+export const deleteMembers = (member_ids: string[]) => {
+  return MemberInstance.delete<DeleteMemberResponse>('/', { data : { member_ids } })
+}
+
+export const updateMember = ({name, email, member_id} : MemberUpdateRequest) => {
+  return MemberInstance.put<UpdateMemberResponse>('/', { name, email, member_id })
+}
+
 
 export const getTags = (club_id: string) => {
   return MemberInstance.get<GetTagsResponse>('/tags/', { params: { club_id: club_id }})

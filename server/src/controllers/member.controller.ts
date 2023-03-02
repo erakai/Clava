@@ -52,5 +52,43 @@ export const createMember = async (req: Request, res: Response) => {
       })
     }
   })
+}
 
+export const deleteMembers = async (req: Request, res: Response) => {
+  let { member_ids } = req.body
+
+  if (member_ids.length == 0) {
+    return res.status(500).json({error: 'no member_ids provided'})
+  }
+
+  // attempts to delete all given, does nothing if invalid id exists
+  await Member.deleteMany({'_id':{'$in':member_ids}})
+    .then(result => {
+      if (result.deletedCount == 0) {
+        return res.status(500).json({error: "found none member_ids provided"})
+      }
+      res.status(200).json({})
+    })
+    .catch(err => {
+      return res.status(500).json({error: err})
+    })
+}
+
+export const updateMembers = async (req: Request, res: Response) => {
+  let { member_id, name, email } = req.body
+
+  if (!member_id) {
+    return res.status(500).json({error: 'no member_id provided'})
+  }
+
+  Member.findByIdAndUpdate(member_id, 
+    {"name" : name, "email" : email},
+    async (err, result) => {
+      if (err) {
+        res.status(500).json({error : err})
+      }
+      return res.status(200).json({result: result})
+    }
+  )
+  
 }

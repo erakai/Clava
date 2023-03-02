@@ -3,6 +3,9 @@ import { ClavaTable, HeaderCell, RowDisplayProps } from "../../components/ClavaT
 import { useState } from "react"
 import { Checkbox, TableCell, TableRow } from "@mui/material"
 
+import to from 'await-to-js'
+import { deleteMembers, updateMember } from '../../api/memberApi'
+
 const headerCells: HeaderCell<Member>[] = [
   {
     id: 'name',
@@ -48,23 +51,41 @@ type DisplayProps = {
   members: Member[]
   setMembers: React.Dispatch<React.SetStateAction<Member[]>>
   title: string
+  club_id: string
 }
 
-export default function MemberDisplay({ members, setMembers, title }: DisplayProps) {
+export default function MemberDisplay({ members, setMembers, title, club_id }: DisplayProps) {
   const [searchString, setSearchString] = useState('')
   const [dense, setDense] = useState(false)
 
-  const onDelete = (deleted: Member[]) => {
-    let newMembers = members.filter(m => {
-      return deleted.indexOf(m) == -1
-    })
-    setMembers(newMembers)
-
-    console.log('Implement backend deleting.')
+  const onDelete = async (deleted: Member[]) => { 
+    const member_ids : string[] = deleted.map((member : Member) => member._id)
+    const [err, res] = await to(deleteMembers(member_ids))
+    if (err) {
+      console.log(err)
+    } else if (res) {
+      // removal on table
+      let newMembers = members.filter(m => {
+        return deleted.indexOf(m) == -1
+      })
+      setMembers(newMembers)
+    }
   }
 
-  const onEdit = (mem: Member) => {
-    console.log('Implement editing.') 
+  const onEdit = async (edited: Member) => {
+    const memberRequest : MemberUpdateRequest = {
+      'name' : edited.name,
+      'email' : edited.email,
+      'member_id' : edited._id
+    }
+    const [err, res] = await to(updateMember(memberRequest))
+    if (err) {
+      console.log(err)
+    } else if (res) {
+      const i = members.indexOf(edited)
+      members[i] = edited
+      setMembers(members)
+    }
   }
 
   const filteredMembers = members.filter(member => {
@@ -82,6 +103,8 @@ export default function MemberDisplay({ members, setMembers, title }: DisplayPro
     <ClavaTable<Member> defaultOrder="name" tableName={title}
       data={filteredMembers} headerCells={headerCells} onDelete={onDelete}
       RowDisplay={MemberRow} dense={dense} searchString={searchString} setSearchString={setSearchString}
-      rowsPerPageOptions={[5, 10, 30, 100]} defaultRowsPerPage={10} onEdit={onEdit}/>
+      rowsPerPageOptions={[5, 10, 30, 100]} defaultRowsPerPage={10}
+      onEdit={onEdit} 
+    />
   )
 }
