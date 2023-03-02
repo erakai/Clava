@@ -1,54 +1,97 @@
 import React from "react";
-import { Box, Chip, Dialog, DialogTitle, DialogContent, TextField, DialogActions, Button } from "@mui/material"
+import { Box, Stack, Chip, Dialog, DialogTitle, DialogContent, TextField, DialogActions, Button } from "@mui/material"
 import AddIcon from '@mui/icons-material/Add';
 import to from "await-to-js"
+import { setEngine } from "crypto";
 
-function CreateTagDialog() {
+type CreateTagProps = {
+  club_id: string
+  createTag: (tag: CreateTagRequest) => void
+  hasTagName: (name: string, _id?: string) => boolean
+}
+
+function CreateTagDialog({club_id, createTag, hasTagName}: CreateTagProps) {
 
   const [isOpenNewTag, setOpenNewTag] = React.useState(false)
-  const [tagName, setTagName] = React.useState('')
-  const handleNewTagOpen = () => {
+  const [name, setName] = React.useState('')
+  const [color, setColor] = React.useState('')
+
+  const [nameError, setNameError] = React.useState('')
+  const [colorError, setColorError] = React.useState('')
+
+  const handleOpen = () => {
+    setNameError("")
+    setColorError("")
     setOpenNewTag(true)
   }
 
-  const handleNewTagClose = () => {
+  const handleCancel = () => {
     setOpenNewTag(false)
   }
 
-  //const dispatch = useDispatch<typeof store.dispatch>()
-  // const onCreateNewTag = async (req: UserRequest) => {
-  //   // create new tag 
-  //   // const [err] = await to(dispatch())
-  //   setOpenNewTag(false)
-  // }
-
-  // const onCreateNewTag = async (req: UserRequest ) => {
-  //   const [err] = await to(dispatch(login(req)).unwrap())
-  
-  //   if (err) {
-  //     setErrorMessage('Invalid login.')
-  //     return
-  //   }
-  // }
+  const handleCreate = () => {
+    let badInput = false
+    if (!name) {
+      setNameError("Tag name is required")
+      badInput = true
+    }
+    if (!color) {
+      setColorError("Tag color is required")
+      badInput = true
+    }
+    if (!badInput && hasTagName(name)) {
+      setNameError("Tag name needs to be unique")
+      badInput = true
+    }
+    if (badInput) {
+      return
+    }
+    
+    let newTag: CreateTagRequest = {
+      name, color, club_id
+    }
+    createTag(newTag)
+    setName("")
+    setColor("")
+    setOpenNewTag(false)
+  }
 
   return (
     <Box>
-      <Chip className="w-min" label="Add new" variant="outlined" icon={ <AddIcon /> } onClick={handleNewTagOpen}/>
+      <Chip 
+        className="w-min" 
+        label="Add new" 
+        variant="outlined" 
+        icon={ <AddIcon /> } 
+        onClick={handleOpen}/>
       <Dialog
         open={isOpenNewTag}
-        onClose={handleNewTagClose}>
+        onClose={handleCancel}>
       <DialogTitle>
         Create New Tag
       </DialogTitle>
       <DialogContent>
-        <TextField label="Tag Name" variant="standard" size="small" 
-        onChange={(e) => {
-          setTagName(e.target.value.trim())
-        }}/>
+        <Stack
+          spacing={1}>
+          <TextField label="Tag Name" variant="standard" size="small" 
+            error={nameError != ""} 
+            helperText={nameError}
+            onChange={(e) => {
+            setName(e.target.value.trim())
+            setNameError("")
+          }}/>
+          <TextField label="Tag Color" variant="standard" size="small" 
+            error={colorError != ""} 
+            helperText={colorError}
+            onChange={(e) => {
+            setColor(e.target.value.trim())
+            setColorError("")
+          }}/>
+        </Stack>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleNewTagClose}>Cancel</Button>
-        {/* <Button onClick={}>Create</Button> */}
+        <Button onClick={handleCancel}>Cancel</Button>
+        <Button onClick={handleCreate} variant="contained">Create</Button>
       </DialogActions>
       </Dialog>
     </Box>

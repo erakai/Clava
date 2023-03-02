@@ -5,14 +5,11 @@ import { Dispatch, useState } from "react"
 import CloseIcon from '@mui/icons-material/Close';
 import useEmailVerify from "../../hooks/useEmailVerify"
 
-type AddMemberProps = {
-  createMember: (member: MemberRequest) => void
+type EditMemberProps = {
+  onEdit: (member: Member) => void
   open: boolean,
   setOpen: Dispatch<React.SetStateAction<boolean>>
-  errorMessage: string
-  setErrorMessage: Dispatch<React.SetStateAction<string>>
-  club_id: string
-  disableAddingMember: boolean
+  memberSelected: Member
 }
 
 const style = {
@@ -28,13 +25,21 @@ const style = {
   color: "primary"
 }
 
-export default function AddMemberModal({
-  createMember, open, setOpen, errorMessage, setErrorMessage, club_id, disableAddingMember
-}: AddMemberProps) {
+export default function EditMemberModal({
+  onEdit, open, setOpen, memberSelected
+}: EditMemberProps) {
   const emailVerify = useEmailVerify()
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [date, setDate] = useState<Moment | null>(null)
+  const [name, setName] = useState(memberSelected.name)
+  const [email, setEmail] = useState(memberSelected.email)
+  const [date, setDate] = useState<Moment | null>(() => {
+    if (memberSelected.expiration && Date.parse(memberSelected.expiration as unknown as string).valueOf() != 0) {
+      return moment(memberSelected.expiration) 
+    }
+    return null
+    }
+  )
+
+  const [errorMessage, setErrorMessage] = useState('')
 
   const clearFields = () => {
     setName('')
@@ -43,12 +48,13 @@ export default function AddMemberModal({
   }
 
   const close = () => {
+    setErrorMessage('')
     clearFields()
     setOpen(false)
   }
 
-  const handleAdd = () => {
-    if (!name || !email) {
+  const handleEdit = () => {
+    if (!name && !email) {
       setErrorMessage('Please enter both name and email.')
       return
     }
@@ -63,13 +69,13 @@ export default function AddMemberModal({
       return
     }
 
-    let newMember: MemberRequest = {
-      name, email, club_id
-    }
-    if (date) newMember.expiration = date?.toDate().valueOf()
+    let updatedMember: Member = memberSelected
+    updatedMember.name = name
+    updatedMember.email = email
+    if (date) updatedMember.expiration = date?.toDate().valueOf()
 
-    createMember(newMember)
-    clearFields()
+    onEdit(updatedMember)
+    close()
   }
 
   return (
@@ -85,7 +91,7 @@ export default function AddMemberModal({
               </Grid>
               <Grid item xs={10}>
                 <Box textAlign="center" className='h-[100%] flex-col justify-content-center'>
-                    <Typography className='' variant="h6" fontWeight={"bold"}>New Member</Typography>
+                    <Typography className='' variant="h6" fontWeight={"bold"}>Edit Member</Typography>
                 </Box>
               </Grid>
             </Grid>
@@ -133,7 +139,7 @@ export default function AddMemberModal({
           </Grid>
           <Grid item>
             <Button color="secondary" variant="contained" className="w-[100%]" 
-              onClick={handleAdd} disabled={disableAddingMember}>Add Member</Button>
+              onClick={handleEdit}>Update Member</Button>
           </Grid>
         </Grid> 
       </Box>

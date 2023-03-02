@@ -3,12 +3,12 @@ import to from 'await-to-js'
 import { AxiosError } from 'axios'
 
 import {
-  AuthResponse,
   _getUser,
   _login,
   _logout,
   _register,
 } from '../../api/userApi'
+import { AuthResponse } from '../../api/config'
 import { errorT } from './userSlice'
 
 type Error = {
