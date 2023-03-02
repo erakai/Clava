@@ -33,3 +33,26 @@ interface MemberUpdateRequest {
   email: string,
   member_id: string
 }
+
+interface Tag {
+  _id: string,
+  name: string,
+  color: string,
+  club_id: string,
+}
+
+interface CreateTagRequest {
+  name: string,
+  color: string,
+  club_id: string,
+}
+
+interface EditTagRequest {
+  newName: string,
+  newColor: string,
+  _id: string,
+}
+
+interface DeleteTagRequest {
+  _id: string,
+}

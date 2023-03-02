@@ -19,6 +19,7 @@ export const getMembers = async (req: Request, res: Response) => {
 }
 
 export const createMember = async (req: Request, res: Response) => {
+  console.log("got to create member backend")
   let { name, email, club_id, expiration } = req.body
   if (!expiration) {
     expiration = new Date(0) // default is Jan 1 1970
