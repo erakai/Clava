@@ -26,6 +26,11 @@ function TagsEditorDialog({createTag, club_id, tags, setTags}: TagsEditorProps) 
     setOpen(false)
   }
 
+  const hasTagName = (name: string): boolean => {
+    let tagNames = tags.map(tag => tag.name);
+    return tagNames.includes(name)
+  }
+
   const deleteTag = async (delTagReq: DeleteTagRequest, tag: Tag) => {
     const [err, res] = await to(_deleteTag(delTagReq))
     if (err) {
@@ -48,7 +53,8 @@ function TagsEditorDialog({createTag, club_id, tags, setTags}: TagsEditorProps) 
         <DialogTitle>Tags</DialogTitle>
         <DialogContent>
           <Box
-            className="w-96 space-y-2 space-x-1">
+            className="flex flex-wrap space-x-1 space-y-2 w-96">
+            <Box/>
             {tags.map(tag => (
               <TagChip 
                 name={tag.name} 
@@ -57,7 +63,7 @@ function TagsEditorDialog({createTag, club_id, tags, setTags}: TagsEditorProps) 
                 key={tag.name} 
                 deleteTag={deleteTag}/>
             ))}
-            <CreateTagDialog createTag={createTag} club_id={club_id} />
+            <CreateTagDialog club_id={club_id} createTag={createTag} hasTagName={hasTagName}/>
           </Box>
         </DialogContent>
         <DialogActions>

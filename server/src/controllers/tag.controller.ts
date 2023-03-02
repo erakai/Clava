@@ -28,7 +28,8 @@ export const createTag = async (req: Request, res: Response) => {
   }
 
   
-  if (!name || !color) {
+  if (name == "" || color == "") {
+    console.log("no tag or color")
     return res.status(500).json({error: 'no tag name or tag color provided'})
   }
   
@@ -38,21 +39,21 @@ export const createTag = async (req: Request, res: Response) => {
     club_id: club_id
   }, async (err) => {
     if (err) {
+      console.log("no club")
       return res.status(500).send({err})
     }
   })
 
-  // TODO: verify that tag is unique
-
   // add the new tag to the club
+  
   Tag.create({
     name, color, club_id
   }, async (err, tag) => {
     if (err) {
-      console.log("some error happened")
+      console.log("couldnt make tag")
       return res.status(500).send({err})
     }
-    console.log("tag is being returned!")
+    console.log("made tag")
     return res.status(200).json({tag})
   })
 }

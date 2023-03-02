@@ -4,11 +4,12 @@ import AddIcon from '@mui/icons-material/Add';
 import to from "await-to-js"
 
 type CreateTagProps = {
-  createTag: (tag: CreateTagRequest) => void
   club_id: string
+  createTag: (tag: CreateTagRequest) => void
+  hasTagName: (name: string) => boolean
 }
 
-function CreateTagDialog({createTag, club_id}: CreateTagProps) {
+function CreateTagDialog({club_id, createTag, hasTagName}: CreateTagProps) {
 
   const [isOpenNewTag, setOpenNewTag] = React.useState(false)
   const [name, setName] = React.useState('')
@@ -22,10 +23,24 @@ function CreateTagDialog({createTag, club_id}: CreateTagProps) {
   }
 
   const handleCreate = () => {
+    if (!name) {
+      // set error msg
+      console.log("you need a fucking name")
+      return
+    }
+    if (hasTagName(name)) {
+      // set error msg
+      console.log("tags need unique name")
+      return
+    }
+    console.log("name: " + name)
     let newTag: CreateTagRequest = {
       name, color, club_id
     }
+    console.log(newTag.name)
     createTag(newTag)
+    setName("")
+    setColor("")
     setOpenNewTag(false)
   }
 

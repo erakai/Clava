@@ -39,14 +39,13 @@ function TagChip({ name, color, club_id, deleteTag }: TagChipProps) {
   }
   
   return (
-    <Box
-      className="flex w-auto flex-wrap">
+    <Box>
       <Chip 
         className=""
         label={name}
         onDelete={handleDelete}
         onClick={open}/>
-      <Dialog
+       <Dialog
         open={isEditing}
         onClose={close}>
         <DialogTitle>Edit Tag</DialogTitle>
