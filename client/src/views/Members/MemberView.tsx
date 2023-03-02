@@ -10,19 +10,20 @@ import { createTag as _createTag, getTags } from '../../api/memberApi'
 import { ClavaNavbar, ScrollTop } from '../../components/Navigation'
 import useUser from '../../hooks/useUser'
 import TagsEditor from '../../components/TagsEditor'
+import { UserState } from '../../store/user/userSlice'
 
 type MemberViewProps = {
   club_id: string
+  state: UserState
 }
 
-export default function MemberView({ club_id }: MemberViewProps) {
+export default function MemberView({ club_id, state }: MemberViewProps) {
   const [errorMessage, setErrorMessage] = useState('')
   const [members, setMembers] = useState<Member[]>([])
   const [memberOpen, setMemberOpen] = useState(false)
   const [tags, setTags] = useState<Tag[]>([])
   const [officerOpen, setOfficerOpen] = useState(false)
   const [disableAddingMember, setDisableAddingMember] = useState(false)
-  const { state } = useUser()
 
 
   const createMember = async (member: MemberRequest) => {

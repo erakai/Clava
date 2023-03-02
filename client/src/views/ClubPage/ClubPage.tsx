@@ -10,12 +10,7 @@ import useUser from '../../hooks/useUser'
 
 const settings = ['Profile', 'Logout'];
 
-type ClubPageProps = {
-  user_id: string,
-}
-
-
-function ClubPage({user_id} : ClubPageProps) {
+function ClubPage() {
 
   const [errorMessage, setErrorMessage] = useState('')
   const [clubs, setClubs] = useState<Club[]>([])
@@ -24,38 +19,40 @@ function ClubPage({user_id} : ClubPageProps) {
   const [disableAddingClub, setDisableAddingClub] = useState(false)
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
   const [open, setCreateClubOpen] = React.useState(false);
-  const { state } = useUser()
+  const { user, state, logout } = useUser()
 
   // Gets clubs and listens for new clubs added to the DB
   useEffect(() => {
-    const fetch = async () => {
-      const [err, res] = await to(getClubs(user_id))
-      if (err) {
-        console.log(err)
-        return
-      }
+    if (user) {
+      const fetch = async () => {
+        const [err, res] = await to(getClubs(user._id))
+        if (err) {
+          console.log(err)
+          return
+        }
 
-      const retrieved = res.data.clubs
-      if (retrieved) {
-        setClubs(retrieved)
+        const retrieved = res.data.clubs
+        if (retrieved) {
+          setClubs(retrieved)
+        }
       }
+      fetch()
     }
-    fetch()
-  }, [state])
+  }, [state, user])
 
   // Creates a club and displays
   const createClub = async (club: ClubRequest) => {
     setDisableAddingClub(true)
 
     const [err, res] = await to(_createClub(club))
-    if (err) {
+    if (err || !user) {
       console.log(err)
       setErrorMessage('Something went wrong.')
     } else if (res) {
       setClubs([...clubs, res.data.club])
       let club_id = res.data.club._id
       let clubToUserRequest : ClubToUserRequest = {
-        user_id, club_id
+        user_id: user._id, club_id
       }
       addClubToUser( clubToUserRequest )
     }
@@ -68,8 +65,11 @@ function ClubPage({user_id} : ClubPageProps) {
     setAnchorElUser(event.currentTarget)
   };
 
-  const handleCloseUserMenu = () => {
+  const handleCloseUserMenu = (clicked: string) => {
     setAnchorElUser(null)
+    if (clicked == 'Logout') {
+      logout()
+    }
   };
 
   const handleClickOpen = () => {
@@ -97,7 +97,7 @@ function ClubPage({user_id} : ClubPageProps) {
   return (
     <Box className="ClubPage w-screen">
 
-      <AppBar sx={{backgroundColor: 'primary.light'}}>
+      <AppBar sx={{backgroundColor: 'primary.light'}} position="sticky">
         <Container maxWidth="xl">
           <Toolbar disableGutters>
             <Typography
@@ -143,7 +143,7 @@ function ClubPage({user_id} : ClubPageProps) {
                 onClose={handleCloseUserMenu}
               >
                 {settings.map((setting) => (
-                  <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                  <MenuItem key={setting} onClick={() => handleCloseUserMenu(setting)}>
                     <Typography textAlign="center">{setting}</Typography>
                   </MenuItem>
                 ))}
@@ -153,12 +153,15 @@ function ClubPage({user_id} : ClubPageProps) {
         </Container>
       </AppBar>
 
-      <Stack className="justify-center mt-24" spacing={2}>
- 
+      <Stack className="justify-center" spacing={2}>
         <Box className="ClubDisplayArea flex flex-wrap">
-            {clubs.map((club) => <ClubCard user_id={user_id} club={club} removeClub={removeClub}></ClubCard>)}
+          {clubs.length > 0 && user ?
+            clubs.map((club) => <ClubCard key={club._id} user_id={user._id} club={club} removeClub={removeClub}></ClubCard>)
+            : <Box margin={2}>
+                <Typography variant="h6">You are not currently in any clubs.</Typography>
+              </Box>
+          }
         </Box>
-
       </Stack>
 
       <Fab onClick={handleClickOpen} color='primary' sx={{

@@ -21,9 +21,10 @@ type ClavaNavbarProps = {
   currentRoute : string
   clubId : string
   clubName : string
+  logout: () => Promise<void | undefined>
 }
 
-function ClavaNavbar({currentRoute, clubId, clubName} : ClavaNavbarProps) {
+function ClavaNavbar({currentRoute, clubId, clubName, logout} : ClavaNavbarProps) {
   // menu operations for transformations when window size is changed
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
@@ -42,7 +43,9 @@ function ClavaNavbar({currentRoute, clubId, clubName} : ClavaNavbarProps) {
   const handleCloseUserMenu = (clicked: string) => {
     setAnchorElUser(null);
     if (typeof clicked == 'string') {
-      console.log('Clicked', clicked)
+      if (clicked == 'Logout') {
+        logout()
+      }
     }
   };
 

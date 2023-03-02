@@ -1,5 +1,5 @@
 interface User {
-  user_id: string,
+  _id: string,
   name: string,
   email: string,
   club_ids: Array<number>,

@@ -41,7 +41,7 @@ export default function ClubCard({user_id, club, removeClub} : ClubProps) {
     }
 
     return (
-        <Card className="flex-auto max-w-xs">
+        <Card className="flex-auto max-w-xs m-2">
             <CardActionArea onClick={routeChange}>
                 <CardMedia
                     component="img"
@@ -58,9 +58,9 @@ export default function ClubCard({user_id, club, removeClub} : ClubProps) {
                     </Typography>
                 </CardContent>
             </CardActionArea>
-            <CardActions>
-                <Button onClick={handleClickOpen} size="small" color="primary">
-                    Edit
+            <CardActions className='place-content-center'>
+                <Button onClick={handleClickOpen} size="small" color="error">
+                    Leave
                 </Button>
                 <Dialog
                     open={open}
@@ -69,7 +69,7 @@ export default function ClubCard({user_id, club, removeClub} : ClubProps) {
                     aria-describedby="alert-dialog-description"
                 >
                     <DialogTitle id="alert-dialog-title">
-                    {"Leave Club"}
+                    {"Leave Club? You will require an invite to rejoin."}
                     </DialogTitle>
                 
                     <DialogActions>
