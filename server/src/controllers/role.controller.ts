@@ -6,7 +6,7 @@ import { IClub } from 'types/club'
 import { IRole } from 'types/role'
 
 export const getRoles = async (req: Request, res: Response) => {
-  let { club_id } = req.body
+  let { club_id } = req.query
   if (!club_id) {
     return res.status(500).json({error: 'no club id'})
   }
@@ -32,7 +32,7 @@ export const getRoles = async (req: Request, res: Response) => {
   return res.status(200).json({roles})
 }
 
-export const createClub = async (req: Request, res: Response) => {
+export const createRole = async (req: Request, res: Response) => {
   let { name, color, perms } = req.body
  
 
