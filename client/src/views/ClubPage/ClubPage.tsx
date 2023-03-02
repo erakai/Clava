@@ -22,6 +22,8 @@ function ClubPage({user_id} : ClubPageProps) {
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
   const [disableAddingClub, setDisableAddingClub] = useState(false)
+  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+  const [open, setCreateClubOpen] = React.useState(false);
   const { state } = useUser()
 
   // Gets clubs and listens for new clubs added to the DB
@@ -61,9 +63,6 @@ function ClubPage({user_id} : ClubPageProps) {
     setDisableAddingClub(false)
   
   }
-
-  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
-  const [open, setCreateClubOpen] = React.useState(false);
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget)
@@ -151,7 +150,7 @@ function ClubPage({user_id} : ClubPageProps) {
       <Stack className="justify-center mt-24" spacing={2}>
  
         <Box className="ClubDisplayArea flex flex-wrap">
-            {clubs.map((club) => <ClubCard name={club.name} description={club.description}></ClubCard>)}
+            {clubs.map((club) => <ClubCard user_id={user_id} club={club}></ClubCard>)}
         </Box>
 
       </Stack>

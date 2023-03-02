@@ -27,3 +27,7 @@ export const createClub = ({ name, description }: ClubRequest) =>  {
 export const addClubToUser = ({ user_id, club_id }: ClubToUserRequest) =>  {
   return ClubInstance.put<CreateClubResponse>('/', { user_id, club_id })
 }
+
+export const removeClubFromUser = ({ user_id, club_id }: ClubToUserRequest) =>  {
+  return ClubInstance.put<CreateClubResponse>('/leave', { user_id, club_id })
+}
