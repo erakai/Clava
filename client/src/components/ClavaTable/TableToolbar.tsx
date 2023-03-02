@@ -4,6 +4,8 @@ import { Box, Collapse, Grid, IconButton, TextField, Toolbar, Tooltip, Typograph
 import { Dispatch, useState } from 'react'
 import EditIcon from '@mui/icons-material/Edit';
 
+import ConfirmationModal from '../Modal';
+
 type ToolbarProps<T> = {
   tableName: string,
   numSelected: number,
@@ -17,6 +19,9 @@ export default function TableToolbar<T>({
   tableName, numSelected, searchString, setSearchString, onDelete, onEdit}: ToolbarProps<T>)
 {
   const [filtering, setFiltering] = useState(false)
+  const [deleteModalOpen, setDeleteModalOpen ] = useState(false);
+  const handleDeleteModalOpen = () => setDeleteModalOpen(true);
+  const handleDeleteModalClose = () => setDeleteModalOpen(false);
 
   return (
     <Toolbar sx={{
@@ -46,11 +51,19 @@ export default function TableToolbar<T>({
         </Tooltip>
       ) : <></> }
       {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton onClick={onDelete}>
-            <Delete />
-          </IconButton>
-        </Tooltip>
+        <div>
+          <Tooltip title="Delete">
+            <IconButton onClick={handleDeleteModalOpen}>
+              <Delete />
+            </IconButton>
+          </Tooltip>
+          <ConfirmationModal
+              open={deleteModalOpen}
+              handleClose={handleDeleteModalClose}
+              handleConfirmation={onDelete}
+              question={"Are you sure you want to delete?"}
+          />
+        </div>
       ) : (
         <Grid container spacing={2} direction="row" alignItems={"right"} justifyContent={"right"}>
           <Grid item xs={10}>
