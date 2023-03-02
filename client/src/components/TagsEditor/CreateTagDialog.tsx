@@ -2,6 +2,7 @@ import React from "react";
 import { Box, Stack, Chip, Dialog, DialogTitle, DialogContent, TextField, DialogActions, Button } from "@mui/material"
 import AddIcon from '@mui/icons-material/Add';
 import to from "await-to-js"
+import { setEngine } from "crypto";
 
 type CreateTagProps = {
   club_id: string
@@ -14,6 +15,9 @@ function CreateTagDialog({club_id, createTag, hasTagName}: CreateTagProps) {
   const [isOpenNewTag, setOpenNewTag] = React.useState(false)
   const [name, setName] = React.useState('')
   const [color, setColor] = React.useState('')
+
+  const [nameError, setNameError] = React.useState('')
+  const [colorError, setColorError] = React.useState('')
   const handleOpen = () => {
     setOpenNewTag(true)
   }
@@ -23,22 +27,26 @@ function CreateTagDialog({club_id, createTag, hasTagName}: CreateTagProps) {
   }
 
   const handleCreate = () => {
-    if (!name || !color) {
-      // set error msg
-      console.log("you need a name and color")
-      return
+    let badInput = false
+    if (!name) {
+      setNameError("Tag name is required")
+      badInput = true
     }
-    if (hasTagName(name)) {
-      // set error msg
-      console.log("tags need unique name")
+    if (!color) {
+      setColorError("Tag color is required")
+      badInput = true
+    }
+    if (!badInput && hasTagName(name)) {
+      setNameError("Tag name needs to be unique")
+      badInput = true
+    }
+    if (badInput) {
       return
     }
     
-    console.log("name: " + name)
     let newTag: CreateTagRequest = {
       name, color, club_id
     }
-    console.log(newTag.name)
     createTag(newTag)
     setName("")
     setColor("")
@@ -63,12 +71,18 @@ function CreateTagDialog({club_id, createTag, hasTagName}: CreateTagProps) {
         <Stack
           spacing={1}>
           <TextField label="Tag Name" variant="standard" size="small" 
-          onChange={(e) => {
+            error={nameError != ""} 
+            helperText={nameError}
+            onChange={(e) => {
             setName(e.target.value.trim())
+            setNameError("")
           }}/>
           <TextField label="Tag Color" variant="standard" size="small" 
-          onChange={(e) => {
+            error={colorError != ""} 
+            helperText={colorError}
+            onChange={(e) => {
             setColor(e.target.value.trim())
+            setColorError("")
           }}/>
         </Stack>
       </DialogContent>

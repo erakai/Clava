@@ -18,6 +18,8 @@ function TagChip({ name, color, _id, deleteTag, hasTagName }: TagChipProps) {
   const [isEditing, setEditing] = React.useState(false)
   const [newName, setNewName] = React.useState('')
   const [newColor, setNewColor] = React.useState('')
+  const [nameError, setNameError] = React.useState('')
+  const [colorError, setColorError] = React.useState('')
   const open = () => {
     setNewName(name)
     setNewColor(color)
@@ -37,14 +39,20 @@ function TagChip({ name, color, _id, deleteTag, hasTagName }: TagChipProps) {
   }
 
   const handleEdit = async () => {
-    if (!newName || !newColor) {
-      // set error msg
-      console.log("you need a name and color")
-      return
+    let badInput = false
+    if (!newName) {
+      setNameError("Tag name is required")
+      badInput = true
     }
-    if (hasTagName(newName, _id)) {
-      // set error msg
-      console.log("need unique name")
+    if (!newColor) {
+      setColorError("Tag color is required")
+      badInput = true
+    }
+    if (!badInput && hasTagName(newName, _id)) {
+      setNameError("Tag name needs to be unique")
+      badInput = true
+    }
+    if (badInput) {
       return
     }
     let editTagReq: EditTagRequest = {
@@ -75,12 +83,18 @@ function TagChip({ name, color, _id, deleteTag, hasTagName }: TagChipProps) {
           <Stack
             spacing={1}>
             <TextField label="Tag Name" variant="standard" size="small" defaultValue={currName}
+              error={nameError != ""} 
+              helperText={nameError}
               onChange={(e) => {
                 setNewName(e.target.value.trim())
+                setNameError("")
               }}/>
             <TextField label="Tag Color" variant="standard" size="small" defaultValue={currColor}
+              error={colorError != ""} 
+              helperText={colorError}
               onChange={(e) => {
                 setNewColor(e.target.value.trim())
+                setColorError("")
               }}/>
           </Stack>
         </DialogContent>
