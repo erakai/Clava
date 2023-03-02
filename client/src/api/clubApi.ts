@@ -3,6 +3,7 @@ import { intercepts } from "./config"
 import { getRefreshToken } from "./userApi"
 
 type GetClubsResponse = { clubs: Club[] }
+type GetClubResponse = { club: Club }
 type CreateClubResponse = { club: Club }
 
 const ClubInstance = axios.create({
@@ -15,6 +16,10 @@ intercepts(ClubInstance, getRefreshToken)
 
 export const getClubs = (user_id: string) => {
   return ClubInstance.get<GetClubsResponse>('/', { params: { user_id: user_id }})
+}
+
+export const getClub = (club_id: string) => {
+  return ClubInstance.get<GetClubsResponse>('/id', { params: { club_id }})
 }
 
 export const createClub = ({ name, description }: ClubRequest) =>  {

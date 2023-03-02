@@ -7,14 +7,14 @@ import PlaceHolder from '../../assets/placeholder.png'
 
 type ClubProps = {
     user_id: string,
-    club: Club
+    club: Club,
+    removeClub: (club: Club) => void
 }
 
-export default function ClubCard({user_id, club} : ClubProps) {
+export default function ClubCard({user_id, club, removeClub} : ClubProps) {
 
     const [open, setLeaveClubOpen] = React.useState(false)
     const [disableLeavingClub, setDisableLeavingClub] = React.useState(false)
-
 
     const handleClickOpen = () => {
         setLeaveClubOpen(true)
@@ -31,6 +31,7 @@ export default function ClubCard({user_id, club} : ClubProps) {
             user_id, club_id
         }
         removeClubFromUser(leaveRequest)
+        removeClub(club)
     };
 
     let navigate = useNavigate();

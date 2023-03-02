@@ -88,6 +88,12 @@ function ClubPage({user_id} : ClubPageProps) {
     createClub(clubRequest)
   };
 
+  const removeClub = (club : Club) => {
+    let newClubs = [...clubs]
+    newClubs.splice(newClubs.indexOf(club), 1)
+    setClubs(newClubs)
+  };
+
   return (
     <Box className="ClubPage w-screen">
 
@@ -150,7 +156,7 @@ function ClubPage({user_id} : ClubPageProps) {
       <Stack className="justify-center mt-24" spacing={2}>
  
         <Box className="ClubDisplayArea flex flex-wrap">
-            {clubs.map((club) => <ClubCard user_id={user_id} club={club}></ClubCard>)}
+            {clubs.map((club) => <ClubCard user_id={user_id} club={club} removeClub={removeClub}></ClubCard>)}
         </Box>
 
       </Stack>
