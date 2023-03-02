@@ -1,5 +1,6 @@
 import * as React from 'react'
-import { Card, CardActionArea, CardMedia, CardContent, Typography, CardActions, Button, Dialog, DialogTitle, DialogActions} from '@mui/material'
+import { useNavigate } from 'react-router-dom'
+import { Card, CardActionArea, CardMedia, CardContent, Typography, CardActions, Button, Dialog, DialogTitle, DialogActions, Link} from '@mui/material'
 import to from 'await-to-js'
 import { removeClubFromUser } from '../../api/clubApi'
 import PlaceHolder from '../../assets/placeholder.png'
@@ -32,9 +33,15 @@ export default function ClubCard({user_id, club} : ClubProps) {
         removeClubFromUser(leaveRequest)
     };
 
+    let navigate = useNavigate();
+    const routeChange = () =>{ 
+        let path = `/${club._id}/members`;
+        navigate(path);
+    }
+
     return (
         <Card className="flex-auto max-w-xs">
-            <CardActionArea>
+            <CardActionArea onClick={routeChange}>
                 <CardMedia
                     component="img"
                     height="140"
