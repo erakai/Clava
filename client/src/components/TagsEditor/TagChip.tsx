@@ -21,6 +21,8 @@ function TagChip({ name, color, _id, deleteTag, hasTagName }: TagChipProps) {
   const [nameError, setNameError] = React.useState('')
   const [colorError, setColorError] = React.useState('')
   const open = () => {
+    setNameError("")
+    setColorError("")
     setNewName(name)
     setNewColor(color)
     setEditing(true)
