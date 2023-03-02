@@ -26,8 +26,9 @@ function TagsEditorDialog({createTag, club_id, tags, setTags}: TagsEditorProps) 
     setOpen(false)
   }
 
-  const hasTagName = (name: string): boolean => {
-    let tagNames = tags.map(tag => tag.name);
+  const hasTagName = (name: string, _id: string): boolean => {
+    // make sure that the tag we are possibly editing is not included in check
+    let tagNames = tags.filter(tag => tag._id != _id).map(tag => tag.name);
     return tagNames.includes(name)
   }
 

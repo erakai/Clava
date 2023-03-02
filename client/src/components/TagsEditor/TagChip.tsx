@@ -8,7 +8,7 @@ type TagChipProps = {
   color: string
   _id: string
   deleteTag: (delTagReq: DeleteTagRequest) => void
-  hasTagName: (name: string) => boolean
+  hasTagName: (name: string, _id: string) => boolean
 }
 
 function TagChip({ name, color, _id, deleteTag, hasTagName }: TagChipProps) {
@@ -42,7 +42,7 @@ function TagChip({ name, color, _id, deleteTag, hasTagName }: TagChipProps) {
       console.log("you need a name and color")
       return
     }
-    if (hasTagName(newName)) {
+    if (hasTagName(newName, _id)) {
       // set error msg
       console.log("need unique name")
       return
