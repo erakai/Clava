@@ -1,5 +1,6 @@
 import { Box, Paper, Table, TableBody, TableCell, TableContainer, TablePagination, TableRow } from "@mui/material";
 import { ChangeEvent, useState, MouseEvent, Dispatch } from "react";
+import EditMemberModal from "../../views/Members/EditMemberModal";
 import TableHeader, { HeaderCell } from "./TableHeader";
 import TableToolbar from "./TableToolbar";
 
@@ -7,10 +8,17 @@ import TableToolbar from "./TableToolbar";
 function getComparator<Key extends keyof any>(order: number, orderBy: Key): 
   ((a: any, b: any) => number) {
   return (a, b) => {
-    if (b[orderBy] < a[orderBy]) {
+    let temp1 = a[orderBy]
+    let temp2 = b[orderBy]
+    if (typeof temp1 == 'string') {
+      temp1 = temp1.toLowerCase()
+      temp2 = temp2.toLowerCase()
+    }
+
+    if (temp2 < temp1) {
       return -1 * order;
     }
-    if (b[orderBy] > a[orderBy]) {
+    if (temp2 > temp1) {
       return order;
     }
     return 0
@@ -42,20 +50,20 @@ type ClavaTableProps<T> = {
   data: T[]
   headerCells: HeaderCell<T>[]
   onDelete: (deleted: T[]) => void,
+  onEdit?: (edited: T) => void
   searchString: string,
   setSearchString: Dispatch<React.SetStateAction<string>>,
   RowDisplay: (r: RowDisplayProps<T>) => React.ReactNode,
   rowsPerPageOptions?: number[],
   defaultRowsPerPage?: number,
   dense?: boolean,
-  onEdit?: (mem: T) => void
 }
 
 
 export default function ClavaTable<T>({defaultOrder, tableName, 
   data, onDelete, searchString, setSearchString,
-  headerCells, RowDisplay, dense, rowsPerPageOptions, onEdit,
-  defaultRowsPerPage}: ClavaTableProps<T>) {
+  headerCells, RowDisplay, dense, rowsPerPageOptions,
+  defaultRowsPerPage, onEdit}: ClavaTableProps<T>) {
   const [order, setOrder] = useState(-1)
   const [orderBy, setOrderBy] = useState<keyof T>(defaultOrder)
   const [selected, setSelected] = useState<T[]>([])
@@ -112,40 +120,43 @@ export default function ClavaTable<T>({defaultOrder, tableName,
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0
 
   return (
-    <Box className='w-full items-center'>
-      <Paper className='w-full mb-2' elevation={3}>
-        <TableToolbar<T> numSelected={selected.length} tableName={tableName}
-          searchString={searchString} setSearchString={setSearchString} onDelete={onDeleteWrapper}
-          onEdit={(onEdit ? (() => {onEdit(selected[0])}) : undefined)}/>
-        <TableContainer>
-          <Table className='min-w-max' size={dense ? 'small' : 'medium'}>
-            <TableHeader numSelected={selected.length}
-                       onRequestSort={handleRequestSort}
-                       onSelectAll={handleSelectAll}
-                       order={order} orderBy={orderBy}
-                       rowCount={data.length} headers={headerCells}/>
-            <TableBody>
-              {data.slice().sort(getComparator(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => {
-                  const rowSelected = isSelected(row)
-                  const onClick = (event: MouseEvent) => handleSelect(event, row)
-                  return RowDisplay({rowSelected, onClick, row, key: index })
-                })
-              }
-              {emptyRows > 0 && (
-                <TableRow style={{height: (dense ? 33 : 53) * emptyRows}}>
-                  <TableCell colSpan={headerCells.length + 1}/> 
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <TablePagination rowsPerPageOptions={rowsPerPageOptions || [5, 10, 25]}
-          component="div" count={data.length} rowsPerPage={rowsPerPage}
-          page={page} onPageChange={handleChangePage} 
-          onRowsPerPageChange={handleChangeRowsPerPage}/>
-      </Paper>
+    <Box>
+      <Box className='w-full items-center'>
+        <Paper className='w-full mb-2' elevation={3}>
+          <TableToolbar<T> numSelected={selected.length} tableName={tableName}
+            searchString={searchString} setSearchString={setSearchString} onDelete={onDeleteWrapper}
+            onEdit={onEdit} selected={selected}/>
+          <TableContainer>
+            <Table className='min-w-max' size={dense ? 'small' : 'medium'}>
+              <TableHeader numSelected={selected.length}
+                         onRequestSort={handleRequestSort}
+                         onSelectAll={handleSelectAll}
+                         order={order} orderBy={orderBy}
+                         rowCount={data.length} headers={headerCells}/>
+              <TableBody>
+                {data.slice().sort(getComparator(order, orderBy))
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((row, index) => {
+                    const rowSelected = isSelected(row)
+                    const onClick = (event: MouseEvent) => handleSelect(event, row)
+                    return RowDisplay({rowSelected, onClick, row, key: index })
+                  })
+                }
+                {emptyRows > 0 && (
+                  <TableRow style={{height: (dense ? 33 : 53) * emptyRows}}>
+                    <TableCell colSpan={headerCells.length + 1}/> 
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <TablePagination rowsPerPageOptions={rowsPerPageOptions || [5, 10, 25]}
+            component="div" count={data.length} rowsPerPage={rowsPerPage}
+            page={page} onPageChange={handleChangePage} 
+            onRowsPerPageChange={handleChangeRowsPerPage}/>
+        </Paper>
+      </Box>
+
     </Box>
   )
 }

@@ -13,7 +13,7 @@ interface UserRequest {
 }
 
 interface Member {
-  member_id: string,
+  _id: string,
   name: string,
   email: string,
   expiration?: number,
@@ -26,4 +26,33 @@ interface MemberRequest {
   email: string,
   expiration?: number,
   club_id: string,
+}
+
+interface MemberUpdateRequest {
+  name: string,
+  email: string,
+  member_id: string
+}
+
+interface Tag {
+  _id: string,
+  name: string,
+  color: string,
+  club_id: string,
+}
+
+interface CreateTagRequest {
+  name: string,
+  color: string,
+  club_id: string,
+}
+
+interface EditTagRequest {
+  newName: string,
+  newColor: string,
+  _id: string,
+}
+
+interface DeleteTagRequest {
+  _id: string,
 }

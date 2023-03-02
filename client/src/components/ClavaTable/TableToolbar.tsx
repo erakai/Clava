@@ -1,22 +1,29 @@
 import { alpha } from '@mui/material/styles'
 import { Delete, FilterList } from '@mui/icons-material'
 import { Box, Collapse, Grid, IconButton, TextField, Toolbar, Tooltip, Typography } from "@mui/material"
-import { Dispatch, useState } from 'react'
+import { Dispatch, ReactElement, useState } from 'react'
 import EditIcon from '@mui/icons-material/Edit';
+
+import { ConfirmationModal } from '../Modal';
 
 type ToolbarProps<T> = {
   tableName: string,
   numSelected: number,
   searchString: string,
   setSearchString: Dispatch<React.SetStateAction<string>>
-  onDelete: () => void
-  onEdit?: () => void | undefined
+  onDelete: () => void,
+  selected: T[],
+  onEdit?: (edited: T) => void
 }
 
 export default function TableToolbar<T>({
-  tableName, numSelected, searchString, setSearchString, onDelete, onEdit}: ToolbarProps<T>)
+  tableName, numSelected, searchString, setSearchString, onDelete, onEdit, selected}: ToolbarProps<T>)
 {
   const [filtering, setFiltering] = useState(false)
+
+  const [deleteModalOpen, setDeleteModalOpen ] = useState(false);
+  const handleDeleteModalOpen = () => setDeleteModalOpen(true);
+  const handleDeleteModalClose = () => setDeleteModalOpen(false);
 
   return (
     <Toolbar sx={{
@@ -39,18 +46,28 @@ export default function TableToolbar<T>({
         </Typography>
       )}
       {(onEdit && numSelected == 1) ? (
-        <Tooltip title="Edit">
-          <IconButton onClick={onEdit}>
-            <EditIcon />
-          </IconButton>
-        </Tooltip>
+        <div>
+          <Tooltip title="Edit">
+            <IconButton onClick={() => onEdit(selected[0])}>
+              <EditIcon />
+            </IconButton>
+          </Tooltip>
+        </div>
       ) : <></> }
       {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton onClick={onDelete}>
-            <Delete />
-          </IconButton>
-        </Tooltip>
+        <div>
+          <Tooltip title="Delete">
+            <IconButton onClick={handleDeleteModalOpen}>
+              <Delete />
+            </IconButton>
+          </Tooltip>
+          <ConfirmationModal
+              open={deleteModalOpen}
+              handleClose={handleDeleteModalClose}
+              handleConfirmation={onDelete}
+              question={"Delete? This cannot be undone."}
+          />
+        </div>
       ) : (
         <Grid container spacing={2} direction="row" alignItems={"right"} justifyContent={"right"}>
           <Grid item xs={10}>

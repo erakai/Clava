@@ -4,20 +4,10 @@ import Club from 'models/club.model'
 import { IClub } from 'types/club'
 
 export const getTags = async (req: Request, res: Response) => {
-  let { club_id } = req.body
+  let { club_id } = req.query
   if (!club_id) {
     return res.status(500).json({error: 'no club id'})
   }
-
-  const club: IClub = await Club.findById(club_id)
-
-  if (!club) {
-    return res.status(401).send('Unauthorized')
-  }
-
-  const tag_ids = club.tag_ids
-
-  const tags = []
 
   Tag.find({
     club_id: club_id
@@ -31,37 +21,72 @@ export const getTags = async (req: Request, res: Response) => {
 }
 
 export const createTag = async (req: Request, res: Response) => {
-  let { club_id, tag_name, tag_color, } = req.body
+  let { name, color, club_id, } = req.body
 
   if (!club_id) {
     return res.status(500).json({error: 'no club id provided'})
   }
 
-  if (!tag_name || !tag_color) {
+  
+  if (name == "" || color == "") {
+    console.log("no tag or color")
     return res.status(500).json({error: 'no tag name or tag color provided'})
   }
-
+  
   // verify that the club exists
 
   Club.find({
     club_id: club_id
   }, async (err) => {
     if (err) {
+      console.log("no club")
       return res.status(500).send({err})
     }
   })
 
-  // TODO: verify that tag is unique
-
   // add the new tag to the club
+  
   Tag.create({
-    tag_name, tag_color, club_id
+    name, color, club_id
   }, async (err, tag) => {
     if (err) {
+      console.log("couldnt make tag")
       return res.status(500).send({err})
     }
     return res.status(200).json({tag})
   })
+}
 
-  
+export const deleteTag = async (req: Request, res: Response) => {
+  let { _id, } = req.body
+  if (!_id) {
+    return res.status(500).json({error: 'no tag with _id exists'})
+  }
+
+  Tag.findByIdAndDelete({
+    _id
+  }, async (err, tag) => {
+    if (err) {
+      return res.status(500).send({err})
+    }
+    console.log("success deleting tag\n" + tag)
+    return res.status(200).json({tag})
+  })
+}
+
+export const editTag = async (req: Request, res: Response) => {
+  let { newName, newColor, _id } = req.body
+  if (!newName || !newColor || !_id) {
+    return res.status(500).json({error: 'invalid request format, missing id or newName or newColor'})
+  }
+
+  Tag.findByIdAndUpdate({
+    _id
+  }, {name: newName, color: newColor}, async (err, tag) => {
+    if (err) {
+      return res.status(500).send(err)
+    }
+    console.log("updated tag\n")
+    return res.status(200).json(tag)
+  })
 }

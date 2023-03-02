@@ -6,8 +6,10 @@ import { useEffect, useState } from 'react'
 import AddMemberModal from './AddMemberModal'
 import MemberDisplay from './MemberDisplay'
 import { createMember as _createMember, getMembers } from '../../api/memberApi'
+import { createTag as _createTag, getTags } from '../../api/memberApi'
 import { ClavaNavbar, ScrollTop } from '../../components/Navigation'
 import useUser from '../../hooks/useUser'
+import TagsEditor from '../../components/TagsEditor'
 
 type MemberViewProps = {
   club_id: string
@@ -17,9 +19,11 @@ export default function MemberView({ club_id }: MemberViewProps) {
   const [errorMessage, setErrorMessage] = useState('')
   const [members, setMembers] = useState<Member[]>([])
   const [memberOpen, setMemberOpen] = useState(false)
+  const [tags, setTags] = useState<Tag[]>([])
   const [officerOpen, setOfficerOpen] = useState(false)
   const [disableAddingMember, setDisableAddingMember] = useState(false)
   const { state } = useUser()
+
 
   const createMember = async (member: MemberRequest) => {
     setDisableAddingMember(true)
@@ -35,12 +39,21 @@ export default function MemberView({ club_id }: MemberViewProps) {
     setDisableAddingMember(false)
   }
 
+  const createTag = async (tag: CreateTagRequest) => {
+    const [err, res] = await to(_createTag(tag))
+    if (err) {
+      console.log(err)
+    } else if (res) {
+      setTags([...tags, res.data.tag])
+    }
+  }
+
   const createOfficer = (member: Member) => {
     console.log('Created officer (THIS IS PLACEHOLDER')
   }
 
   useEffect(() => {
-    const fetch = async () => {
+    const fetchMembers = async () => {
       const [err, res] = await to(getMembers(club_id))
       if (err) {
         console.log(err)
@@ -53,7 +66,21 @@ export default function MemberView({ club_id }: MemberViewProps) {
       }
     }
 
-    fetch()
+    const fetchTags = async () => {
+      const [err, res] = await to(getTags(club_id))
+      if (err) {
+        console.log(err)
+        return
+      }
+
+      const retrieved = res.data.tags
+      if (retrieved) {
+        setTags(retrieved)
+      }
+    }
+
+    fetchMembers()
+    fetchTags()
   }, [state])
 
   return (
@@ -70,16 +97,17 @@ export default function MemberView({ club_id }: MemberViewProps) {
       <Box className="m-4 mb-16">
         <Grid container spacing={2}>
           <Grid item xs={4}>
-            <Box
-              display="flex"
-              justifyContent="left"
-              alignItems="left"
-              height="100%"
-              onClick={() => setMemberOpen(true)}
-            >
-              <Button variant="contained" color="secondary">
-                Add Member
-              </Button>
+            <Box display="flex" height="100%">
+              <Grid container spacing={1}>
+                <Grid item xs={12} md={6} lg={3}>
+                  <Button className='h-full' variant="contained" color="secondary" onClick={() => setMemberOpen(true)}>
+                    Add Member
+                  </Button>
+                </Grid> 
+                <Grid item xs={12} md={6} lg={4}>
+                  <TagsEditor createTag={createTag} club_id={club_id} tags={tags} setTags={setTags} />
+                </Grid> 
+              </Grid>
             </Box>
           </Grid>
           <Grid item xs={4}>
@@ -87,8 +115,7 @@ export default function MemberView({ club_id }: MemberViewProps) {
               display="flex"
               justifyContent="center"
               alignItems="center"
-              height="100%"
-            >
+              height="100%">
               <Typography variant="h4">Member Database</Typography>
             </Box>
           </Grid>
@@ -97,8 +124,7 @@ export default function MemberView({ club_id }: MemberViewProps) {
               display="flex"
               justifyContent="right"
               alignItems="right"
-              height="100%"
-            >
+              height="100%">
               <Button variant="contained" color="secondary">
                 Add Officer
               </Button>
@@ -109,6 +135,7 @@ export default function MemberView({ club_id }: MemberViewProps) {
               title="All Members"
               members={members}
               setMembers={setMembers}
+              club_id={club_id}
             />
           </Grid>
           <Grid item xs={12} md={6}>
@@ -116,6 +143,7 @@ export default function MemberView({ club_id }: MemberViewProps) {
               title="All Officers"
               members={[]}
               setMembers={setMembers}
+              club_id={club_id}
             />
           </Grid>
         </Grid>

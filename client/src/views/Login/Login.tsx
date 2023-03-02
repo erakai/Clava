@@ -55,15 +55,19 @@ function Login() {
     }
 
     const [error] = await to(dispatch(register(req)).unwrap())
-    const { err } = error as any
 
-    if (err && err.name == 'UserExistsError') {
-      setErrorMessage('A user with that email already exists.')
-    } else if (err) {
-      setErrorMessage('Invalid register.')
-    } else {
-      navigate(pageAfter)
+    if (error) {
+      const { err } = error as any
+      if (err && err.name == 'UserExistsError') {
+        setErrorMessage('A user with that email already exists.')
+        return
+      } else if (err) {
+        setErrorMessage('Invalid register.')
+        return
+      }
     }
+    navigate(pageAfter)
+
   }
 
   const switchToLogin = () => {
