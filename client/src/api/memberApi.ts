@@ -5,6 +5,7 @@ import { getRefreshToken } from "./userApi"
 type GetMembersResponse = { members: Member[] }
 type CreateMemberResponse = { member: Member }
 type DeleteMemberResponse = {}
+type UpdateMemberResponse = {}
 
 const MemberInstance = axios.create({
   baseURL: `http://localhost:8080/members`,
@@ -27,4 +28,8 @@ export const createMember = ({ name, email, expiration, club_id }: MemberRequest
 
 export const deleteMembers = (member_ids: string[]) => {
   return MemberInstance.delete<DeleteMemberResponse>('/', { data : { member_ids } })
+}
+
+export const updateMember = ({name, email, member_id} : MemberUpdateRequest) => {
+  return MemberInstance.put<UpdateMemberResponse>('/', { name, email, member_id })
 }

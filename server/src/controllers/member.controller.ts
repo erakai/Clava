@@ -71,5 +71,23 @@ export const deleteMembers = async (req: Request, res: Response) => {
     .catch(err => {
       return res.status(500).json({error: err})
     })
+}
 
+export const updateMembers = async (req: Request, res: Response) => {
+  let { member_id, name, email } = req.body
+
+  if (!member_id) {
+    return res.status(500).json({error: 'no member_id provided'})
+  }
+
+  Member.findByIdAndUpdate(member_id, 
+    {"name" : name, "email" : email},
+    async (err, result) => {
+      if (err) {
+        res.status(500).json({error : err})
+      }
+      return res.status(200).json({result: result})
+    }
+  )
+  
 }
