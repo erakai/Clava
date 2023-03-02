@@ -1,8 +1,10 @@
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, TextField } from '@mui/material'
 import { Container } from '@mui/system';
+import { deleteTag as _deleteTag } from '../../api/memberApi';
 import * as React from 'react';
 import CreateTagDialog from './CreateTagDialog';
 import TagChip from './TagChip';
+import to from 'await-to-js';
 
 const pages = ['Members', 'Events', 'Documents', 'Finances'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
@@ -14,13 +16,25 @@ type TagsEditorProps = {
   club_id: string
 }
 
-function TagsEditorDialog({createTag, club_id, tags}: TagsEditorProps) {
+
+function TagsEditorDialog({createTag, club_id, tags, setTags}: TagsEditorProps) {
   const [isOpen, setOpen] = React.useState(false)
   const open = () => {
     setOpen(true)
   }
   const close = () => {
     setOpen(false)
+  }
+
+  const deleteTag = async (delTagReq: DeleteTagRequest, tag: Tag) => {
+    const [err, res] = await to(_deleteTag(delTagReq))
+    if (err) {
+      console.log(err)
+    } else if (res) {
+      let retrieved = res.data.tag
+      setTags((remTags) =>
+      remTags.filter((tag) => tag.name !== retrieved.name))
+    }
   }
 
   return (
@@ -36,7 +50,12 @@ function TagsEditorDialog({createTag, club_id, tags}: TagsEditorProps) {
           <Box
             className="w-96 space-y-2 space-x-1">
             {tags.map(tag => (
-              <TagChip name={tag.name} color={tag.color} club_id={club_id} key={tag.name}/>
+              <TagChip 
+                name={tag.name} 
+                color={tag.color} 
+                club_id={club_id} 
+                key={tag.name} 
+                deleteTag={deleteTag}/>
             ))}
             <CreateTagDialog createTag={createTag} club_id={club_id} />
           </Box>

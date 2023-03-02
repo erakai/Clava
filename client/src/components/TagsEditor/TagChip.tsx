@@ -1,14 +1,14 @@
 import { Chip, Box, Container, Stack, TextField, Dialog, DialogTitle, DialogContent } from "@mui/material/"
-import { deleteTag } from "../../api/memberApi"
 import React from "react"
 
 type TagChipProps = {
   name: string
   color: string
   club_id: string
+  deleteTag: (delTagReq : DeleteTagRequest, tag: Tag) => void
 }
 
-function TagChip({ name, color, club_id }: TagChipProps) {
+function TagChip({ name, color, club_id, deleteTag }: TagChipProps) {
   
   const [isEditing, setEditing] = React.useState(false)
   const [newName, setName] = React.useState('')
@@ -21,11 +21,13 @@ function TagChip({ name, color, club_id }: TagChipProps) {
   }
 
   const handleDelete = () => {
-    console.log("name: " + name, "club_id: " + club_id)
-    let delTag: DeleteTagRequest = {
+    let delTagReq: DeleteTagRequest = {
       name, club_id
     }
-    deleteTag(delTag)
+    let delTag: Tag = {
+     name, color, club_id
+    }
+    deleteTag(delTagReq, delTag)
   }
 
   const handleEdit = () => {
@@ -52,13 +54,13 @@ function TagChip({ name, color, club_id }: TagChipProps) {
           <Stack
             spacing={1}>
             <TextField label="Tag Name" variant="standard" size="small" defaultValue={name}
-            onChange={(e) => {
-              setName(e.target.value.trim())
-            }}/>
+              onChange={(e) => {
+                setName(e.target.value.trim())
+              }}/>
             <TextField label="Tag Color" variant="standard" size="small" defaultValue={color}
-            onChange={(e) => {
-              setColor(e.target.value.trim())
-            }}/>
+              onChange={(e) => {
+                setColor(e.target.value.trim())
+              }}/>
           </Stack>
         </DialogContent>
       </Dialog> 

@@ -78,13 +78,24 @@ export const deleteTag = async (req: Request, res: Response) => {
     }
   })
 
-  Tag.deleteOne({
+  let delTag;
+
+  Tag.findOne({
     name, club_id
-  }, async (err) => {
+  }, async (err, tag) => {
     if (err) {
       return res.status(500).send({err})
     }
-    console.log("success deleting tag")
-    return res.status(200).send("succesfully deleted tag")
+    Tag.deleteOne({
+      name, club_id
+    }, async (err) => {
+      if (err) {
+        return res.status(500).send({err})
+      }
+      console.log("success deleting tag\n" + delTag)
+      return res.status(200).json({tag})
+    })
   })
+
+  
 }

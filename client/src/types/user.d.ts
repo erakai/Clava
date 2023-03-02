@@ -29,7 +29,7 @@ interface MemberRequest {
 }
 
 interface Tag {
-  tag_id: number,
+  // tag_id: number,
   name: string,
   color: string,
   club_id: string,

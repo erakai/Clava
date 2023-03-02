@@ -6,9 +6,9 @@ type GetMembersResponse = { members: Member[] }
 type CreateMemberResponse = { member: Member }
 
 // for tags
-type GetTagsResponse = { tag: Tag[] }
+type GetTagsResponse = { tags: Tag[] }
 type CreateTagResponse = { tag: Tag }
-type DeleteTagResponse = {}
+type DeleteTagResponse = { tag: Tag}
 
 const MemberInstance = axios.create({
   baseURL: `http://localhost:8080/members`,
@@ -38,5 +38,5 @@ export const createTag = ({ name, color, club_id }: CreateTagRequest) => {
 }
 
 export const deleteTag = ({ name, club_id }: DeleteTagRequest) => {
-  return MemberInstance.delete<DeleteTagResponse>('/tags/', {data: { club_id, name }})
+  return MemberInstance.delete<DeleteTagResponse>('/tags/', { data: { club_id, name }})
 }
