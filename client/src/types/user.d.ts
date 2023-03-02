@@ -13,7 +13,7 @@ interface UserRequest {
 }
 
 interface Member {
-  member_id: string,
+  _id: string,
   name: string,
   email: string,
   expiration?: number,

@@ -3,6 +3,9 @@ import { ClavaTable, HeaderCell, RowDisplayProps } from "../../components/ClavaT
 import { useState } from "react"
 import { Checkbox, TableCell, TableRow } from "@mui/material"
 
+import to from 'await-to-js'
+import { deleteMembers } from '../../api/memberApi'
+
 const headerCells: HeaderCell<Member>[] = [
   {
     id: 'name',
@@ -54,13 +57,18 @@ export default function MemberDisplay({ members, setMembers, title }: DisplayPro
   const [searchString, setSearchString] = useState('')
   const [dense, setDense] = useState(false)
 
-  const onDelete = (deleted: Member[]) => {
-    let newMembers = members.filter(m => {
+  const onDelete = async (deleted: Member[]) => { 
+    const member_ids : string[] = deleted.map((member : Member) => member._id)
+    const [err, res] = await to(deleteMembers(member_ids))
+    if (err) {
+      console.log(err)
+    } else if (res) {
+      // removal on table
+      let newMembers = members.filter(m => {
       return deleted.indexOf(m) == -1
-    })
-    setMembers(newMembers)
-
-    console.log('Implement backend deleting.')
+      })
+      setMembers(newMembers)
+    }
   }
 
   const onEdit = (mem: Member) => {
