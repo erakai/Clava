@@ -23,9 +23,9 @@ function CreateTagDialog({club_id, createTag, hasTagName}: CreateTagProps) {
   }
 
   const handleCreate = () => {
-    if (!name) {
+    if (!name || !color) {
       // set error msg
-      console.log("you need a fucking name")
+      console.log("you need a name and color")
       return
     }
     if (hasTagName(name)) {
@@ -33,6 +33,7 @@ function CreateTagDialog({club_id, createTag, hasTagName}: CreateTagProps) {
       console.log("tags need unique name")
       return
     }
+    
     console.log("name: " + name)
     let newTag: CreateTagRequest = {
       name, color, club_id
@@ -73,7 +74,7 @@ function CreateTagDialog({club_id, createTag, hasTagName}: CreateTagProps) {
       </DialogContent>
       <DialogActions>
         <Button onClick={handleCancel}>Cancel</Button>
-        <Button onClick={handleCreate}>Create</Button>
+        <Button onClick={handleCreate} variant="contained">Create</Button>
       </DialogActions>
       </Dialog>
     </Box>

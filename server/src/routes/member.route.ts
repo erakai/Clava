@@ -1,6 +1,6 @@
 import { verifyUser } from "config/auth";
 import { createMember, getMembers } from "controllers/member.controller";
-import { createTag, deleteTag, getTags } from "controllers/tag.controller";
+import { createTag, deleteTag, editTag, getTags } from "controllers/tag.controller";
 import { Router } from "express";
 
 const memberRouter = Router()
@@ -29,6 +29,6 @@ If you need a temp club_id since we don't have clubs working, use:
 memberRouter.get('/tags/', verifyUser, getTags)
 memberRouter.post('/tags/', verifyUser, createTag)
 memberRouter.delete('/tags/', verifyUser, deleteTag)
-// memberRouter.put('/tags/', verifyUser, editTag)
+memberRouter.put('/tags/', verifyUser, editTag)
 
 export default memberRouter

@@ -61,6 +61,7 @@ function TagsEditorDialog({createTag, club_id, tags, setTags}: TagsEditorProps) 
                 color={tag.color} 
                 _id={tag._id} 
                 deleteTag={deleteTag}
+                hasTagName={hasTagName}
                 key={tag._id}/>
             ))}
             <CreateTagDialog club_id={club_id} createTag={createTag} hasTagName={hasTagName}/>

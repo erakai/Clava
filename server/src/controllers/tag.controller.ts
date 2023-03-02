@@ -53,7 +53,6 @@ export const createTag = async (req: Request, res: Response) => {
       console.log("couldnt make tag")
       return res.status(500).send({err})
     }
-    console.log("made tag")
     return res.status(200).json({tag})
   })
 }
@@ -64,31 +63,30 @@ export const deleteTag = async (req: Request, res: Response) => {
     return res.status(500).json({error: 'no tag with _id exists'})
   }
 
-  let delTag;
-
   Tag.findByIdAndDelete({
     _id
   }, async (err, tag) => {
     if (err) {
       return res.status(500).send({err})
     }
-    console.log("success deleting tag\n" + delTag)
+    console.log("success deleting tag\n" + tag)
     return res.status(200).json({tag})
   })
 }
 
-// export const editTag = async (req: Request, res: Response) => {
-//   let { newName, newColor, _id } = req.body
-//   if (!newName || !newColor || !_id) {
-//     return res.status(500).json({error: 'invalid request format, missing id or newName or newColor'})
-//   }
+export const editTag = async (req: Request, res: Response) => {
+  let { newName, newColor, _id } = req.body
+  if (!newName || !newColor || !_id) {
+    return res.status(500).json({error: 'invalid request format, missing id or newName or newColor'})
+  }
 
-//   Tag.findById({
-//     _id
-//   }, async (err, tag) => {
-//     if (err) {
-//       return res.status(500).send(err)
-//     }
-//     Tag.
-//   })
-// }
+  Tag.findByIdAndUpdate({
+    _id
+  }, {name: newName, color: newColor}, async (err, tag) => {
+    if (err) {
+      return res.status(500).send(err)
+    }
+    console.log("updated tag\n")
+    return res.status(200).json(tag)
+  })
+}

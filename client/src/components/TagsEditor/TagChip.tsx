@@ -1,44 +1,62 @@
-import { Chip, Box, Container, Stack, TextField, Dialog, DialogTitle, DialogContent } from "@mui/material/"
+import { Chip, Box, Button, Stack, TextField, Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material/"
+import { editTag as _editTag } from "../../api/memberApi"
 import React from "react"
+import to from "await-to-js"
 
 type TagChipProps = {
   name: string
   color: string
   _id: string
-  deleteTag: (delTagReq : DeleteTagRequest) => void
+  deleteTag: (delTagReq: DeleteTagRequest) => void
+  hasTagName: (name: string) => boolean
 }
 
-function TagChip({ name, color, _id, deleteTag }: TagChipProps) {
+function TagChip({ name, color, _id, deleteTag, hasTagName }: TagChipProps) {
   
+  const [currName, setCurrName] = React.useState(name)
+  const [currColor, setCurrColor] = React.useState(color)
   const [isEditing, setEditing] = React.useState(false)
-  const [newName, setName] = React.useState('')
-  const [newColor, setColor] = React.useState('')
+  const [newName, setNewName] = React.useState('')
+  const [newColor, setNewColor] = React.useState('')
   const open = () => {
+    setNewName(name)
+    setNewColor(color)
     setEditing(true)
   }
   const close = () => {
+    setNewName(name)
+    setNewColor(color)
     setEditing(false)
   }
 
   const handleDelete = () => {
-    // let delTagReq: DeleteTagRequest = {
-    //   name, club_id
-    // }
-    // let delTag: Tag = {
-    //  name, color, club_id
-    // }
-
     let delTagReq: DeleteTagRequest = {
       _id
     }
     deleteTag(delTagReq)
   }
 
-  const handleEdit = () => {
-    let editedTag: EditTagRequest = {
+  const handleEdit = async () => {
+    if (!newName || !newColor) {
+      // set error msg
+      console.log("you need a name and color")
+      return
+    }
+    if (hasTagName(newName)) {
+      // set error msg
+      console.log("need unique name")
+      return
+    }
+    let editTagReq: EditTagRequest = {
       newName, newColor, _id
     }
-    //editTag(editedTag)
+    const [err, res] = await to(_editTag(editTagReq))
+    if (err) {
+      console.log(err)
+    } else if (res) {
+      setCurrName(newName)
+      setCurrColor(newColor)
+    }
     close()
   }
   
@@ -46,7 +64,7 @@ function TagChip({ name, color, _id, deleteTag }: TagChipProps) {
     <Box>
       <Chip 
         className=""
-        label={name}
+        label={currName}
         onDelete={handleDelete}
         onClick={open}/>
        <Dialog
@@ -56,16 +74,20 @@ function TagChip({ name, color, _id, deleteTag }: TagChipProps) {
         <DialogContent>
           <Stack
             spacing={1}>
-            <TextField label="Tag Name" variant="standard" size="small" defaultValue={name}
+            <TextField label="Tag Name" variant="standard" size="small" defaultValue={currName}
               onChange={(e) => {
-                setName(e.target.value.trim())
+                setNewName(e.target.value.trim())
               }}/>
-            <TextField label="Tag Color" variant="standard" size="small" defaultValue={color}
+            <TextField label="Tag Color" variant="standard" size="small" defaultValue={currColor}
               onChange={(e) => {
-                setColor(e.target.value.trim())
+                setNewColor(e.target.value.trim())
               }}/>
           </Stack>
         </DialogContent>
+        <DialogActions>
+          <Button onClick={close}>Cancel</Button>
+          <Button onClick={handleEdit} variant="contained">Done</Button>
+        </DialogActions>
       </Dialog> 
     </Box>
   )
