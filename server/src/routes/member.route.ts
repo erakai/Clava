@@ -11,8 +11,6 @@ Member Routes:
   - /members POST (name, email, club id, ?expiration): creates + returns new member in club
   - /members DELETE ([member_ids]): deletes members
   - /member PUT (member_id, name, email) : updates the member_id with information
-If you need a temp club_id since we don't have clubs working, use:
-  "5e1a0651741b255ddda996c4"
 */
 
 memberRouter.get('/', verifyUser, getMembers)
@@ -24,9 +22,6 @@ memberRouter.put('/', verifyUser, updateMembers)
 Tag Routes:
   - /members/tags GET (club_id): returns all tags of a club 
   - /members/tags POST (tag_name, tag_color, club_id): creates + returns new tag of a club
-
-If you need a temp club_id since we don't have clubs working, use:
-  "5e1a0651741b255ddda996c4"
 */
 
 memberRouter.get('/tags/', verifyUser, getTags)

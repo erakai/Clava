@@ -11,7 +11,7 @@ import RegisterContainer from "./RegisterContainer"
 import { Container } from "@mui/material"
 import useEmailVerify from "../../hooks/useEmailVerify"
 
-const pageAfter = '/bookclub/members'
+const pageAfter = '/clubs'
 
 function Login() {
   const [page, setPage] = useState<string>('login')
