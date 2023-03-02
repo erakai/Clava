@@ -12,10 +12,9 @@ const style = {
   transform: 'translate(-50%, -50%)',
   width: 400,
   bgcolor: 'background.paper',
-  border: '2px solid',
-  borderColor: 'primary.main',
   boxShadow: 24,
   p: 4,
+  textAlign: 'center'
 };
 
 type ConfirmationModalProps = {

@@ -29,9 +29,15 @@ export default function EditMemberModal({
   onEdit, open, setOpen, memberSelected
 }: EditMemberProps) {
   const emailVerify = useEmailVerify()
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [date, setDate] = useState<Moment | null>(null)
+  const [name, setName] = useState(memberSelected.name)
+  const [email, setEmail] = useState(memberSelected.email)
+  const [date, setDate] = useState<Moment | null>(() => {
+    if (memberSelected.expiration && Date.parse(memberSelected.expiration as unknown as string).valueOf() != 0) {
+      return moment(memberSelected.expiration) 
+    }
+    return null
+    }
+  )
 
   const [errorMessage, setErrorMessage] = useState('')
 
@@ -48,6 +54,11 @@ export default function EditMemberModal({
   }
 
   const handleEdit = () => {
+    if (!name && !email) {
+      setErrorMessage('Please enter both name and email.')
+      return
+    }
+
     if (!emailVerify(email)) {
       setErrorMessage('Invalid email.')
       return
@@ -59,8 +70,9 @@ export default function EditMemberModal({
     }
 
     let updatedMember: Member = memberSelected
-    memberSelected.name = name
-    memberSelected.email = email
+    updatedMember.name = name
+    updatedMember.email = email
+    if (date) updatedMember.expiration = date?.toDate().valueOf()
 
     onEdit(updatedMember)
     close()
@@ -127,7 +139,7 @@ export default function EditMemberModal({
           </Grid>
           <Grid item>
             <Button color="secondary" variant="contained" className="w-[100%]" 
-              onClick={handleEdit}>Edit Member</Button>
+              onClick={handleEdit}>Update Member</Button>
           </Grid>
         </Grid> 
       </Box>

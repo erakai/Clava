@@ -1,10 +1,11 @@
 import TagsEditorPopup from "../../components/TagsEditor"
 import { ClavaTable, HeaderCell, RowDisplayProps } from "../../components/ClavaTable"
 import { useState } from "react"
-import { Checkbox, TableCell, TableRow } from "@mui/material"
+import { Box, Checkbox, TableCell, TableRow } from "@mui/material"
 
 import to from 'await-to-js'
 import { deleteMembers, updateMember } from '../../api/memberApi'
+import EditMemberModal from "./EditMemberModal"
 
 const headerCells: HeaderCell<Member>[] = [
   {
@@ -57,6 +58,8 @@ type DisplayProps = {
 export default function MemberDisplay({ members, setMembers, title, club_id }: DisplayProps) {
   const [searchString, setSearchString] = useState('')
   const [dense, setDense] = useState(false)
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [editing, setEditing] = useState<Member>(members[0])
 
   const onDelete = async (deleted: Member[]) => { 
     const member_ids : string[] = deleted.map((member : Member) => member._id)
@@ -88,6 +91,11 @@ export default function MemberDisplay({ members, setMembers, title, club_id }: D
     }
   }
 
+  const onEditClicked = (edited: Member) => {
+    setEditing(edited)
+    setEditModalOpen(true)
+  }
+
   const filteredMembers = members.filter(member => {
     if (member.expiration) {
       if (new Date(member.expiration).toLocaleDateString().toLowerCase().includes(searchString)) {
@@ -100,11 +108,21 @@ export default function MemberDisplay({ members, setMembers, title, club_id }: D
   })
 
   return (
-    <ClavaTable<Member> defaultOrder="name" tableName={title}
-      data={filteredMembers} headerCells={headerCells} onDelete={onDelete}
-      RowDisplay={MemberRow} dense={dense} searchString={searchString} setSearchString={setSearchString}
-      rowsPerPageOptions={[5, 10, 30, 100]} defaultRowsPerPage={10}
-      onEdit={onEdit} 
-    />
+    <Box>
+        <ClavaTable<Member> defaultOrder="name" tableName={title}
+          data={filteredMembers} headerCells={headerCells} onDelete={onDelete}
+          RowDisplay={MemberRow} dense={dense} searchString={searchString} setSearchString={setSearchString}
+          rowsPerPageOptions={[5, 10, 30, 100]} defaultRowsPerPage={10}
+          onEdit={onEditClicked} 
+        />
+        {editModalOpen && 
+          <EditMemberModal 
+            onEdit={onEdit}
+            open={editModalOpen}
+            setOpen={setEditModalOpen}
+            memberSelected={editing}
+          />
+        }
+    </Box>
   )
 }

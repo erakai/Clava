@@ -97,15 +97,17 @@ export default function MemberView({ club_id }: MemberViewProps) {
       <Box className="m-4 mb-16">
         <Grid container spacing={2}>
           <Grid item xs={4}>
-            <Box
-              display="flex"
-              justifyContent="left"
-              alignItems="left"
-              height="100%">
-              <Button variant="contained" color="secondary" onClick={() => setMemberOpen(true)}>
-                Add Member
-              </Button>
-              <TagsEditor createTag={createTag} club_id={club_id} tags={tags} setTags={setTags} />
+            <Box display="flex" height="100%">
+              <Grid container spacing={1}>
+                <Grid item xs={12} md={6} lg={3}>
+                  <Button className='h-full' variant="contained" color="secondary" onClick={() => setMemberOpen(true)}>
+                    Add Member
+                  </Button>
+                </Grid> 
+                <Grid item xs={12} md={6} lg={4}>
+                  <TagsEditor createTag={createTag} club_id={club_id} tags={tags} setTags={setTags} />
+                </Grid> 
+              </Grid>
             </Box>
           </Grid>
           <Grid item xs={4}>

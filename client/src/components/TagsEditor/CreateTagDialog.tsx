@@ -7,7 +7,7 @@ import { setEngine } from "crypto";
 type CreateTagProps = {
   club_id: string
   createTag: (tag: CreateTagRequest) => void
-  hasTagName: (name: string) => boolean
+  hasTagName: (name: string, _id?: string) => boolean
 }
 
 function CreateTagDialog({club_id, createTag, hasTagName}: CreateTagProps) {
@@ -18,6 +18,7 @@ function CreateTagDialog({club_id, createTag, hasTagName}: CreateTagProps) {
 
   const [nameError, setNameError] = React.useState('')
   const [colorError, setColorError] = React.useState('')
+
   const handleOpen = () => {
     setNameError("")
     setColorError("")

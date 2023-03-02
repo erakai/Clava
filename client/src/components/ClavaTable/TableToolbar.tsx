@@ -11,12 +11,13 @@ type ToolbarProps<T> = {
   numSelected: number,
   searchString: string,
   setSearchString: Dispatch<React.SetStateAction<string>>
-  onDelete: () => void
-  handleEditModalOpen?: () => void
+  onDelete: () => void,
+  selected: T[],
+  onEdit?: (edited: T) => void
 }
 
 export default function TableToolbar<T>({
-  tableName, numSelected, searchString, setSearchString, onDelete, handleEditModalOpen}: ToolbarProps<T>)
+  tableName, numSelected, searchString, setSearchString, onDelete, onEdit, selected}: ToolbarProps<T>)
 {
   const [filtering, setFiltering] = useState(false)
 
@@ -44,10 +45,10 @@ export default function TableToolbar<T>({
           {tableName}
         </Typography>
       )}
-      {(handleEditModalOpen && numSelected == 1) ? (
+      {(onEdit && numSelected == 1) ? (
         <div>
           <Tooltip title="Edit">
-            <IconButton onClick={handleEditModalOpen}>
+            <IconButton onClick={() => onEdit(selected[0])}>
               <EditIcon />
             </IconButton>
           </Tooltip>
@@ -64,7 +65,7 @@ export default function TableToolbar<T>({
               open={deleteModalOpen}
               handleClose={handleDeleteModalClose}
               handleConfirmation={onDelete}
-              question={"Are you sure you want to delete?"}
+              question={"Delete? This cannot be undone."}
           />
         </div>
       ) : (

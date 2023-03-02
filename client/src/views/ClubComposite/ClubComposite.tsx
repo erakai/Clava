@@ -32,7 +32,7 @@ export default function ClubCompositie() {
   }
 
   return (
-    <div className="p-2 items-center">
+    <div className="items-center">
       <ClavaNavbar
         currentRoute={clubRoute || 'null'}
         clubId={clubId || 'null'}

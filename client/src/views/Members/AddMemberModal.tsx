@@ -48,6 +48,11 @@ export default function AddMemberModal({
   }
 
   const handleAdd = () => {
+    if (!name || !email) {
+      setErrorMessage('Please enter both name and email.')
+      return
+    }
+
     if (!emailVerify(email)) {
       setErrorMessage('Invalid email.')
       return

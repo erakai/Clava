@@ -11,7 +11,6 @@ import cookieParser from 'cookie-parser';
 import { JwtStrategy } from 'config/jwt';
 
 dotenv.config()
-console.log(process.env.PORT)
 
 const app = express()
 const port = process.env.PORT || 8000;
@@ -65,6 +64,7 @@ passport.deserializeUser(User.deserializeUser())
 app.use(rootRouter)
 
 // connect to MongoDB server
+mongoose.set('strictQuery', true)
 mongoose.connect(process.env.MONGO_URL)
 mongoose.connection.once('open', () => {
   console.log('Server connected to mongodb at', process.env.MONGO_URL)
