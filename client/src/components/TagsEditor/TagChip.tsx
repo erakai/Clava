@@ -4,11 +4,11 @@ import React from "react"
 type TagChipProps = {
   name: string
   color: string
-  club_id: string
-  deleteTag: (delTagReq : DeleteTagRequest, tag: Tag) => void
+  _id: string
+  deleteTag: (delTagReq : DeleteTagRequest) => void
 }
 
-function TagChip({ name, color, club_id, deleteTag }: TagChipProps) {
+function TagChip({ name, color, _id, deleteTag }: TagChipProps) {
   
   const [isEditing, setEditing] = React.useState(false)
   const [newName, setName] = React.useState('')
@@ -21,18 +21,22 @@ function TagChip({ name, color, club_id, deleteTag }: TagChipProps) {
   }
 
   const handleDelete = () => {
+    // let delTagReq: DeleteTagRequest = {
+    //   name, club_id
+    // }
+    // let delTag: Tag = {
+    //  name, color, club_id
+    // }
+
     let delTagReq: DeleteTagRequest = {
-      name, club_id
+      _id
     }
-    let delTag: Tag = {
-     name, color, club_id
-    }
-    deleteTag(delTagReq, delTag)
+    deleteTag(delTagReq)
   }
 
   const handleEdit = () => {
     let editedTag: EditTagRequest = {
-      newName, newColor, club_id
+      newName, newColor, _id
     }
     //editTag(editedTag)
     close()

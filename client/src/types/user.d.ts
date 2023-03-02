@@ -29,7 +29,7 @@ interface MemberRequest {
 }
 
 interface Tag {
-  // tag_id: number,
+  _id: string,
   name: string,
   color: string,
   club_id: string,
@@ -44,10 +44,9 @@ interface CreateTagRequest {
 interface EditTagRequest {
   newName: string,
   newColor: string,
-  club_id: string,
+  _id: string,
 }
 
 interface DeleteTagRequest {
-  name: string,
-  club_id: string,
+  _id: string,
 }

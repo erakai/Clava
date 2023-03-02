@@ -59,44 +59,36 @@ export const createTag = async (req: Request, res: Response) => {
 }
 
 export const deleteTag = async (req: Request, res: Response) => {
-  let { name, club_id, } = req.body
-  console.log("name: " + name)
-  if (!club_id) {
-    return res.status(500).json({error: 'no club id provided'})
+  let { _id, } = req.body
+  if (!_id) {
+    return res.status(500).json({error: 'no tag with _id exists'})
   }
-
-  if (!name) {
-    return res.status(500).json({error: 'no tag name provided'})
-  }
-
-  // verify that the club exists
-
-  Club.find({
-    club_id: club_id
-  }, async (err) => {
-    if (err) {
-      return res.status(500).send({err})
-    }
-  })
 
   let delTag;
 
-  Tag.findOne({
-    name, club_id
+  Tag.findByIdAndDelete({
+    _id
   }, async (err, tag) => {
     if (err) {
       return res.status(500).send({err})
     }
-    Tag.deleteOne({
-      name, club_id
-    }, async (err) => {
-      if (err) {
-        return res.status(500).send({err})
-      }
-      console.log("success deleting tag\n" + delTag)
-      return res.status(200).json({tag})
-    })
+    console.log("success deleting tag\n" + delTag)
+    return res.status(200).json({tag})
   })
-
-  
 }
+
+// export const editTag = async (req: Request, res: Response) => {
+//   let { newName, newColor, _id } = req.body
+//   if (!newName || !newColor || !_id) {
+//     return res.status(500).json({error: 'invalid request format, missing id or newName or newColor'})
+//   }
+
+//   Tag.findById({
+//     _id
+//   }, async (err, tag) => {
+//     if (err) {
+//       return res.status(500).send(err)
+//     }
+//     Tag.
+//   })
+// }

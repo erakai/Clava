@@ -31,7 +31,7 @@ function TagsEditorDialog({createTag, club_id, tags, setTags}: TagsEditorProps) 
     return tagNames.includes(name)
   }
 
-  const deleteTag = async (delTagReq: DeleteTagRequest, tag: Tag) => {
+  const deleteTag = async (delTagReq: DeleteTagRequest) => {
     const [err, res] = await to(_deleteTag(delTagReq))
     if (err) {
       console.log(err)
@@ -59,9 +59,9 @@ function TagsEditorDialog({createTag, club_id, tags, setTags}: TagsEditorProps) 
               <TagChip 
                 name={tag.name} 
                 color={tag.color} 
-                club_id={club_id} 
-                key={tag.name} 
-                deleteTag={deleteTag}/>
+                _id={tag._id} 
+                deleteTag={deleteTag}
+                key={tag._id}/>
             ))}
             <CreateTagDialog club_id={club_id} createTag={createTag} hasTagName={hasTagName}/>
           </Box>

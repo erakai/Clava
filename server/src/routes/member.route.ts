@@ -29,5 +29,6 @@ If you need a temp club_id since we don't have clubs working, use:
 memberRouter.get('/tags/', verifyUser, getTags)
 memberRouter.post('/tags/', verifyUser, createTag)
 memberRouter.delete('/tags/', verifyUser, deleteTag)
+// memberRouter.put('/tags/', verifyUser, editTag)
 
 export default memberRouter

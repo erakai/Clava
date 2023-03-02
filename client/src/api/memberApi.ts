@@ -9,6 +9,7 @@ type CreateMemberResponse = { member: Member }
 type GetTagsResponse = { tags: Tag[] }
 type CreateTagResponse = { tag: Tag }
 type DeleteTagResponse = { tag: Tag}
+type EditTagResponse = { tag: Tag}
 
 const MemberInstance = axios.create({
   baseURL: `http://localhost:8080/members`,
@@ -37,6 +38,10 @@ export const createTag = ({ name, color, club_id }: CreateTagRequest) => {
   return MemberInstance.post<CreateTagResponse>('/tags/', { name, color, club_id })
 }
 
-export const deleteTag = ({ name, club_id }: DeleteTagRequest) => {
-  return MemberInstance.delete<DeleteTagResponse>('/tags/', { data: { club_id, name }})
+export const deleteTag = ({ _id }: DeleteTagRequest) => {
+  return MemberInstance.delete<DeleteTagResponse>('/tags/', { data: { _id }})
+}
+
+export const editTag = ({ newName, newColor, _id }: EditTagRequest) => {
+  return MemberInstance.put<EditTagResponse>('/tags/', { data: { newName, newColor, _id }})
 }
