@@ -1,15 +1,26 @@
-import { Box, TextField, Stack, Typography, Button, IconButton } from "@mui/material"
+import {
+  Box,
+  TextField,
+  Stack,
+  Typography,
+  Button,
+  IconButton,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText
+} from "@mui/material"
 import { Link } from "react-router-dom"
 import { ArrowBack } from "@mui/icons-material"
-import { Popup } from 'reactjs-popup';
 import { _resetRequest } from '../../api/userApi'
 import 'reactjs-popup/dist/index.css';
 import to from 'await-to-js'
 import React from "react";
-
+import useEmailVerify from '../../hooks/useEmailVerify'
 function ResetRequest() {
   const [email, setEmail] = React.useState('')
 
+  const emailVerify = useEmailVerify()
   const sendResetRequest = async (req: UserResetRequest) => {
     try {
       await to(_resetRequest(req))
@@ -17,6 +28,14 @@ function ResetRequest() {
       console.log(err)
       }
     }
+
+  const [open, setOpen] = React.useState(false);
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   return (
       <Box className="flex w-screen h-screen items-center justify-center" sx={{bgcolor: "secondary.main"}}
@@ -43,15 +62,34 @@ function ResetRequest() {
                 variant="outlined"
                 type="email"
                 value={email}
+                error={email != '' && !emailVerify(email)}
                 onChange={(e) => {
                   setEmail(e.target.value.trim())
                 }}
             />
             <Button className="w-80" variant="contained" color="secondary"
               onClick={(e) => {
-                _resetRequest({email}).then(r => {console.log("ERROR")})}
+                if (emailVerify(email)) {
+                  handleClickOpen()
+                  _resetRequest({email}).then(r => {console.log("ERROR")})}
+                }
               }
             >Request Reset</Button>
+            <Dialog
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+              <DialogTitle id="alert-dialog-title">
+                {"Reset Request Success"}
+              </DialogTitle>
+              <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                  If an account tied to the entered email address exists, an email containing instructions on how to reset your password will be sent to your inbox.
+                </DialogContentText>
+              </DialogContent>
+            </Dialog>
           </Stack>
         </Stack>
       </Box>
