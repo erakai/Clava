@@ -2,6 +2,8 @@ import { Chip, Box, Button, Stack, TextField, Dialog, DialogTitle, DialogContent
 import { editRole as _editRole } from "../../api/roleApi"
 import React from "react"
 import to from "await-to-js"
+import { CirclePicker } from "@hello-pangea/color-picker";
+
 
 type RoleChipProps = {
   name: string
@@ -93,13 +95,7 @@ function RoleChip({ name, color, _id, deleteRole, hasRoleName }: RoleChipProps) 
                 setNewName(e.target.value.trim())
                 setNameError("")
               }}/>
-            <TextField label="Role Color" variant="standard" size="small" defaultValue={currColor}
-              error={colorError != ""} 
-              helperText={colorError}
-              onChange={(e) => {
-                setNewColor(e.target.value.trim())
-                setColorError("")
-              }}/>
+            <CirclePicker defaultColor={color} onChange={(e) => { setNewColor(e.hex)}}/>
           </Stack>
         </DialogContent>
         <DialogActions>
