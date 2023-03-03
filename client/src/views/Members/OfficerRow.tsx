@@ -1,6 +1,9 @@
 import { Checkbox, TableCell, TableRow } from "@mui/material"
+import to from "await-to-js"
 import { useEffect, useState } from "react"
+import { deleteRoleFromOfficer } from "../../api/roleApi"
 import { RowDisplayProps } from "../../components/ClavaTable"
+import RoleRowDisplay from "./RoleRowDisplay"
 
 interface OfficerRowProps extends RowDisplayProps<Officer> {
   allRoles: Role[]
@@ -29,6 +32,8 @@ export default function OfficerRow(
     const onDeleteRole = async (role: Role) => {
       let newRoles = officerRoles.filter(t => t != role)
       setOfficerRoles(newRoles)
+    
+      const [err, res] = await to(deleteRoleFromOfficer({role_id: role._id, officer_id: row._id}))
     }
 
     const onAddRole = async (role: Role) => {
@@ -48,7 +53,7 @@ export default function OfficerRow(
           </TableCell>
           <TableCell component="th" scope="row" padding="none">{row.name}</TableCell>
           <TableCell align="left" sx={(dense) ? {} : roleRowStyle}>
-            {/* ROLE DISPLAY*/}
+            <RoleRowDisplay dense={dense} roles={officerRoles} allRoles={allRoles} onDelete={onDeleteRole} onAdd={onAddRole} />
           </TableCell>
           <TableCell align="right">
             {(row.expiration) ? 

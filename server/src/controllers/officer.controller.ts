@@ -31,6 +31,7 @@ export const requestAddOfficer = async (req: Request, res: Response) => {
 	}
 
 	// if member already exists, no need to add
+
 	Member.find({
       name: name, email: email
     }, async (err, members) => {
@@ -40,16 +41,13 @@ export const requestAddOfficer = async (req: Request, res: Response) => {
 
       if (members.length == 0) {
       	// add to member 
-		Member.create({
-		  name, email, club_id, expiration
-		}, async (err, member) => {
-		  if (err) {
-		    return res.status(500).send({err})
-		  }
-
-		  return res.status(200).json({member})
-		})
-      }
+				Member.create({
+					name, email, club_id, expiration
+				}, async (err, member) => {
+					if (err) {
+						return res.status(500).send({err})
+					}})
+				}
     })
 
 	Officer.find({
