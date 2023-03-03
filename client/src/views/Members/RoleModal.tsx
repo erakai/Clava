@@ -1,5 +1,6 @@
-import { Box, Button, Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material"
+import { Box, Button, Dialog, DialogTitle, DialogContent, DialogActions, Chip } from "@mui/material"
 import RoleChip from "./RoleChip"
+import AddIcon from '@mui/icons-material/Add';
 import to from "await-to-js"
 import { deleteRole as _deleteRole } from '../../api/roleApi';
 import { Dispatch, useState } from "react"
@@ -46,14 +47,17 @@ export default function RoleModal({
     return roleNames.includes(name)
   }
 
+  const openAddRoleModal = () => {
+    setRoleOpen(true);
+  }
+
   return (
     <Dialog 
       open={open}
       onClose={close}>
       <DialogTitle>Roles</DialogTitle>
       <DialogContent>
-        <Box
-          className="flex flex-wrap space-x-1 space-y-2 w-96">
+        <Box className="flex flex-wrap space-x-1 space-y-2 w-96">
           <Box/>
           {roles.map(role => (
             <RoleChip 
@@ -64,6 +68,11 @@ export default function RoleModal({
               hasRoleName={hasRoleName}
               key={role._id}/>
           ))}
+          <Chip className="w-min" 
+          label="Add new" 
+          variant="outlined" 
+          icon={ <AddIcon /> }
+          onClick={openAddRoleModal}/>
         </Box>
       </DialogContent>
       <DialogActions>
