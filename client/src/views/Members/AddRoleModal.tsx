@@ -4,6 +4,8 @@ import moment, { Moment } from "moment"
 import { Dispatch, useState } from "react"
 import CloseIcon from '@mui/icons-material/Close';
 import useEmailVerify from "../../hooks/useEmailVerify"
+import { CirclePicker } from "@hello-pangea/color-picker";
+
 
 type AddRoleProps = {
   createRole: (role: RoleRequest) => void
@@ -36,7 +38,7 @@ export default function AddRoleModal({
 }: AddRoleProps) {
   const emailVerify = useEmailVerify()
   const [name, setName] = useState('')
-  const [color, setColor] = useState('')
+  const [color, setColor] = useState('#ffc107')
   const [checkedState, setCheckedState] = useState(
     new Array(options.length).fill(false)
   );
@@ -84,16 +86,10 @@ export default function AddRoleModal({
               variant="standard"
               onChange={(e) => { setName(e.target.value); setErrorMessage('')}}
             />
-            <TextField
-              required
-              id="role-color"
-              label="Role Color"
-              variant="standard"
-              onChange={(e) => { setColor(e.target.value); setErrorMessage('')}}
-            />
+            <CirclePicker defaultColor={color} onChange={(e) => { setColor(e.hex); setErrorMessage('')}}/>
             <FormGroup>
               {options.map((option, index) => (
-                  <FormControlLabel control={<Checkbox checked={checkedState[index]} onChange={() => handleOnChange(index)}/>} label={option}/>
+                <FormControlLabel control={<Checkbox checked={checkedState[index]} onChange={() => handleOnChange(index)}/>} label={option}/>
               ))}
             </FormGroup>
 

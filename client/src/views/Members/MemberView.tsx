@@ -21,9 +21,11 @@ import { getOfficers } from '../../api/officerApi'
 type MemberViewProps = {
   club_id: string
   state: UserState
+  user_id: string
+  owner_id: string
 }
 
-export default function MemberView({ club_id, state }: MemberViewProps) {
+export default function MemberView({ club_id, state, user_id, owner_id }: MemberViewProps) {
   const [errorMessage, setErrorMessage] = useState('')
   const [members, setMembers] = useState<Member[]>([])
   const [roles, setRoles] = useState<Role[]>([])
@@ -36,6 +38,9 @@ export default function MemberView({ club_id, state }: MemberViewProps) {
   const [disableAddingMember, setDisableAddingMember] = useState(false)
   const [disableAddingRole, setDisableAddingRole] = useState(false)
 
+  const ownerVisibility = user_id != owner_id
+  console.log(user_id, owner_id)
+  console.log(ownerVisibility)
   const forceUpdate = useForceUpdate()
 
   const createMember = async (member: MemberRequest) => {
@@ -193,9 +198,12 @@ export default function MemberView({ club_id, state }: MemberViewProps) {
             <Box display="flex" height="100%" >
               <Grid container spacing={1} justifyContent="flex-end">
                 <Grid item xs={12} md={6} lg={3}>
+                  <Button className='h-full' disabled={ownerVisibility} variant="contained" color="secondary" onClick={() => setRoleViewOpen(true)}>
+                    Add Role
+                  </Button>
                   <Grid container justifyContent="flex-end" className='h-full'>
-                    <Button className='h-full' variant="contained" color="secondary" onClick={() => setRoleViewOpen(true)}>
-                      Add Role
+                    <Button className='h-full' disabled={ownerVisibility} variant="contained" color="secondary" onClick={() => setRoleViewOpen(true)}>
+                    Add Role
                     </Button>
                   </Grid>
                 </Grid> 
