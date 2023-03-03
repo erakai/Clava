@@ -1,5 +1,5 @@
 import { Chip, Box, Button, Stack, TextField, Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material/"
-import { editTag as _editTag } from "../../api/memberApi"
+import { editRole as _editRole } from "../../api/roleApi"
 import React from "react"
 import to from "await-to-js"
 
@@ -57,16 +57,18 @@ function RoleChip({ name, color, _id, deleteRole, hasRoleName }: RoleChipProps) 
     if (badInput) {
       return
     }
-    // let editRoleReq: EditRoleRequest = {
-    //   newName, newColor, _id
-    // }
-    // const [err, res] = await to(_editTag(editTagReq))
-    // if (err) {
-    //   console.log(err)
-    // } else if (res) {
-    //   setCurrName(newName)
-    //   setCurrColor(newColor)
-    // }
+    let editRoleReq: EditRoleRequest = {
+      newName,
+      newColor,
+      _id: _id
+    }
+    const [err, res] = await to(_editRole(editRoleReq))
+    if (err) {
+      console.log(err)
+    } else if (res) {
+      setCurrName(newName)
+      setCurrColor(newColor)
+    }
     close()
   }
   

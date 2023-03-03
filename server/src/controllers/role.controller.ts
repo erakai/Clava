@@ -87,3 +87,20 @@ export const deleteRole = async (req: Request, res: Response) => {
     return res.status(200).json({role})
   })
 }
+
+export const editRole = async (req: Request, res: Response) => {
+  let { newName, newColor, _id } = req.body
+  if (!newName || !newColor || !_id) {
+    return res.status(500).json({error: 'invalid request format, missing id or newName or newColor'})
+  }
+
+  Role.findByIdAndUpdate({
+    _id
+  }, {name: newName, color: newColor}, async (err, role) => {
+    if (err) {
+      return res.status(500).send(err)
+    }
+    console.log("updated role\n")
+    return res.status(200).json(role)
+  })
+}
