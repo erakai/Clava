@@ -13,6 +13,12 @@ interface RoleRequest {
   club_id: string
 }
 
+interface EditRoleRequest {
+  newName: string,
+  newColor: string,
+  _id: string
+}
+
 interface RoleDeleteRequest {
   _id: string
 }
