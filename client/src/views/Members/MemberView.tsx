@@ -175,7 +175,7 @@ export default function MemberView({ club_id, state }: MemberViewProps) {
             <Box display="flex" height="100%" >
               <Grid container spacing={1} justifyContent="flex-end">
                 <Grid item xs={12} md={6} lg={3}>
-                  <Button className='h-full' variant="contained" color="secondary" onClick={() => setRoleOpen(true)}>
+                  <Button className='h-full' variant="contained" color="secondary" onClick={() => setRoleViewOpen(true)}>
                     Add Role
                   </Button>
                 </Grid> 

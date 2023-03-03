@@ -55,14 +55,14 @@ export const createRole = async (req: Request, res: Response) => {
   if (!perms) {
     perms = []
   }
-  console.log("mom is fat " + club_id)
+
   Role.create({
     name, color, perms, club_id
   }, async (err, role) => {
     if (err) {
       return res.status(500).send({err})
     }
-
+    
     return res.status(200).json({role})
   })
 }
