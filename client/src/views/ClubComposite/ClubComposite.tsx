@@ -42,7 +42,7 @@ export default function ClubCompositie() {
     }
 
     fetchClub()
-  })
+  }, [])
 
   const getRoute = (): JSX.Element => {
     if (!clubId) return <UrlNotFound />
