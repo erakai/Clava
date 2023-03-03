@@ -78,14 +78,13 @@ export function sendResetConfirmationEmail(recipient, recipient_name) {
  * sendOfficerInvitationEmail(recipient, recipient_name, link)
  * recipient = email address of recipient
  * recipient_name = name of recipient
- * club_name = name of club
  * link = unique invite link
  */
-export function sendOfficerInvitationEmail(recipient, recipient_name, club_name, link) {
+export function sendOfficerInvitationEmail(recipient, recipient_name, link) {
   const parameters = {
-    subject: "Invitation to join a Clava",
-    body: "The president of " + club_name + " has invited you to join their Clava.",
-    action: "accept the invitation.",
+    subject: "You've been added to a Clava",
+    body: "The president of a club has invited you to join their Clava.",
+    action: "access the officer dashboard.",
     recipient: recipient,
     recipient_name: recipient_name,
     link: link

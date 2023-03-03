@@ -7,7 +7,9 @@ import AddMemberModal from './AddMemberModal'
 import AddRoleModal from './AddRoleModal'
 import RoleModal from './RoleModal'
 import MemberDisplay from './MemberDisplay'
+import AddOfficerModal from './AddOfficerModal'
 import { createMember as _createMember, getMembers } from '../../api/memberApi'
+import { _sendOfficerInvite } from "../../api/officerApi";
 import { createTag as _createTag, getTags } from '../../api/memberApi'
 import { createRole as _createRole, getRoles } from '../../api/roleApi'
 import { ClavaNavbar, ScrollTop } from '../../components/Navigation'
@@ -57,7 +59,7 @@ export default function MemberView({ club_id, state, user_id, owner_id }: Member
     setDisableAddingMember(false)
   }
   const createRole = async (role: RoleRequest) => {
-    setDisableAddingRole(true)  
+    setDisableAddingRole(true)
     const [err, res] = await to(_createRole(role))
     if (err) {
       console.log(err)
@@ -78,8 +80,14 @@ export default function MemberView({ club_id, state, user_id, owner_id }: Member
     }
   }
 
-  const createOfficer = (member: Member) => {
-    console.log('Created officer (THIS IS PLACEHOLDER')
+  const createOfficer = async (officer: AddOfficerRequest) => {
+    const [err, res] = await to(_sendOfficerInvite(officer))
+    if (err) {
+      console.log(err)
+      setErrorMessage('Something went wrong.')
+    } else if (res) {
+      setMembers([...members, res.data.member])
+    }
   }
 
   useEffect(() => {
@@ -142,6 +150,14 @@ export default function MemberView({ club_id, state, user_id, owner_id }: Member
 
   return (
     <Box className="min-w-full flex-auto">
+      <AddOfficerModal
+          createOfficer={createOfficer}
+          open={officerOpen}
+          setOpen={setOfficerOpen}
+          errorMessage={errorMessage}
+          setErrorMessage={setErrorMessage}
+          club_id={club_id}
+      />
       <AddMemberModal
         open={memberOpen}
         setOpen={setMemberOpen}
@@ -178,10 +194,10 @@ export default function MemberView({ club_id, state, user_id, owner_id }: Member
                   <Button className='h-full' variant="contained" color="secondary" onClick={() => setMemberOpen(true)}>
                     Add Member
                   </Button>
-                </Grid> 
+                </Grid>
                 <Grid item xs={12} md={6} lg={4}>
                   <TagsEditorDialog createTag={createTag} club_id={club_id} tags={tags} setTags={setTags} forceUpdate={forceUpdate}/>
-                </Grid> 
+                </Grid>
               </Grid>
             </Box>
           </Grid>
@@ -203,14 +219,12 @@ export default function MemberView({ club_id, state, user_id, owner_id }: Member
                     Add Role
                     </Button>
                   </Grid>
-                </Grid> 
+                </Grid>
                 <Grid item xs={12} md={6} lg={3}>
-                  <Grid container justifyContent="flex-end" className='h-full'>
-                    <Button className='h-full' disabled={ownerVisibility} variant="contained" color="secondary">
-                      Add Officer
-                    </Button>
-                  </Grid>
-                </Grid> 
+                  <Button className='h-full' variant="contained" color="secondary" onClick={() => setOfficerOpen(true)}>
+                    Add Officer
+                  </Button>
+                </Grid>
               </Grid>
             </Box>
           </Grid>

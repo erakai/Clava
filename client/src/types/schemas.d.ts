@@ -83,6 +83,12 @@ interface Officer {
   role_ids: Array<string> 
 }
 
+interface AddOfficerRequest {
+  name: string,
+  email: string,
+  club_id: string
+}
+
 interface Role {
   _id: string,
   name: string,

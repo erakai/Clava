@@ -15,3 +15,7 @@ intercepts(OfficerInstance, getRefreshToken)
 export const getOfficers = (club_id: string) => {
   return OfficerInstance.get<GetOfficersResponse>('/', { params: { club_id: club_id }})
 }
+
+export const _sendOfficerInvite = ({ name, email, club_id }: AddOfficerRequest) => {
+  return OfficerInstance.post('/', { name, email, club_id })
+}
