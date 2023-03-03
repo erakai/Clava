@@ -82,8 +82,11 @@ function ClubPage() {
 
   const handleCloseAndClubCreate = () => {
     setCreateClubOpen(false) 
+    if (user == null) {
+      return
+    }
     let clubRequest : ClubRequest = {
-      name, description
+      name, description, owner_id: user._id
     }
     createClub(clubRequest)
   };
@@ -165,7 +168,7 @@ function ClubPage() {
       </Stack>
 
       <Fab onClick={handleClickOpen} color='primary' sx={{
-        position: 'absolute',
+        position: 'fixed',
         bottom: 64,
         right: 64,
       }}>

@@ -13,7 +13,8 @@ const ClubSchema = new Schema<IClub>({
   reim_ids: [SchemaTypes.ObjectId],
   member_ids: [SchemaTypes.ObjectId],
   officer_ids: [SchemaTypes.ObjectId],
-  event_ids: [SchemaTypes.ObjectId]
+  event_ids: [SchemaTypes.ObjectId],
+  owner_id: SchemaTypes.ObjectId
 })
 
 const Club = model('club', ClubSchema) as Model<IClub>
