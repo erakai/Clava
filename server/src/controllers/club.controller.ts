@@ -47,7 +47,7 @@ export const getClub = async (req: Request, res: Response) => {
 }
 
 export const createClub = async (req: Request, res: Response) => {
-  let { name, description } = req.body
+  let { name, description, owner_id } = req.body
 
   if (!name) {
     return res.status(500).json({error: 'no name provided'})
@@ -57,8 +57,12 @@ export const createClub = async (req: Request, res: Response) => {
     description = "No description"
   }
 
+  if (!owner_id) {
+    return res.status(500).json({error: 'no club owner'})
+  }
+
   Club.create({
-    name, description
+    name, description, owner_id
   }, async (err, club) => {
     if (err) {
       return res.status(500).send({err})

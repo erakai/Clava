@@ -22,9 +22,9 @@ export const getClub = (club_id: string) => {
   return ClubInstance.get<GetClubResponse>('/id', { params: { club_id }})
 }
 
-export const createClub = ({ name, description }: ClubRequest) =>  {
+export const createClub = ({ name, description, owner_id }: ClubRequest) =>  {
   if (description) {
-    return ClubInstance.post<CreateClubResponse>('/', { name, description })
+    return ClubInstance.post<CreateClubResponse>('/', { name, description, owner_id })
   }
   return ClubInstance.post<CreateClubResponse>('/', { name })
 }
