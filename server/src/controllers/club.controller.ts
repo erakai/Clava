@@ -71,8 +71,6 @@ export const createClub = async (req: Request, res: Response) => {
 export const addClubToUser = async (req: Request, res: Response) => {
   let { user_id, club_id } = req.body
   
-  console.log("im back")
-
   if (!user_id) {
     return res.status(500).json({error: 'no user id provided'})
   }
@@ -96,8 +94,6 @@ export const addClubToUser = async (req: Request, res: Response) => {
 export const removeClubFromUser = async (req: Request, res: Response) => {
   let { user_id, club_id } = req.body
   
-  console.log("im back")
-
   if (!user_id) {
     return res.status(500).json({error: 'no user id provided'})
   }

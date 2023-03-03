@@ -11,6 +11,7 @@ import RegisterContainer from "./RegisterContainer"
 import { Container } from "@mui/material"
 import useEmailVerify from "../../hooks/useEmailVerify"
 
+// TODO: Replace this with a stored value of where the user previously was
 const pageAfter = '/clubs'
 
 function Login() {

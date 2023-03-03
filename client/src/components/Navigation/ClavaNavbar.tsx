@@ -16,7 +16,7 @@ import NavButton from './NavButton';
 import { Stack } from '@mui/material';
 
 const pages = ['Members', 'Events', 'Documents', 'Finances'];
-const settings = ['Profile', 'Logout'];
+const settings = ['Logout'];
 
 type ClavaNavbarProps = {
   currentRoute : string

@@ -2,8 +2,8 @@ interface User {
   _id: string,
   name: string,
   email: string,
-  club_ids: Array<number>,
-  officer_ids: Array<number>
+  club_ids: Array<string>,
+  officer_ids: Array<string>
 }
 
 interface UserRequest {
@@ -27,7 +27,7 @@ interface Member {
   email: string,
   expiration?: number,
   club_id: string,
-  tag_ids: Array<number> 
+  tag_ids: Array<string> 
 }
 
 interface MemberRequest {
@@ -47,7 +47,6 @@ interface Tag {
   _id: string,
   name: string,
   color: string,
-  club_id: string,
 }
 
 interface CreateTagRequest {
@@ -64,4 +63,14 @@ interface EditTagRequest {
 
 interface DeleteTagRequest {
   _id: string,
+}
+
+interface DeleteTagFromMemberRequest {
+  tag_id: string
+  member_id: string
+}
+
+interface AddTagToMemberRequest {
+  tag_id: string
+  member_ids: string[]
 }
