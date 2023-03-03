@@ -74,3 +74,17 @@ interface AddTagToMemberRequest {
   tag_id: string
   member_ids: string[]
 }
+
+interface Officer {
+  _id: string,
+  name: string,
+  expiration?: number,
+  club_id: string,
+  role_ids: Array<string> 
+}
+
+interface Role {
+  _id: string,
+  name: string,
+  color: string,
+}

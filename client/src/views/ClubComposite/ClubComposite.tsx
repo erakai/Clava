@@ -33,7 +33,6 @@ export default function ClubCompositie() {
         }
 
         const retrieved = res.data.club
-        console.log(retrieved)
         if (retrieved) {
           setClubName(retrieved.name)
         }

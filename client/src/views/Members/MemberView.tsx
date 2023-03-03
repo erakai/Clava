@@ -12,6 +12,8 @@ import useUser from '../../hooks/useUser'
 import { TagsEditorDialog } from '../../components/TagsEditor'
 import { UserState } from '../../store/user/userSlice'
 import useForceUpdate from '../../hooks/useForceUpdate'
+import OfficerDisplay from './OfficerDisplay'
+import { getOfficers } from '../../api/officerApi'
 
 type MemberViewProps = {
   club_id: string
@@ -21,8 +23,10 @@ type MemberViewProps = {
 export default function MemberView({ club_id, state }: MemberViewProps) {
   const [errorMessage, setErrorMessage] = useState('')
   const [members, setMembers] = useState<Member[]>([])
+  const [officers, setOfficers] = useState<Officer[]>([])
   const [memberOpen, setMemberOpen] = useState(false)
   const [tags, setTags] = useState<Tag[]>([])
+  const [roles, setRoles] = useState<Role[]>([])
   const [officerOpen, setOfficerOpen] = useState(false)
   const [disableAddingMember, setDisableAddingMember] = useState(false)
   const forceUpdate = useForceUpdate()
@@ -81,8 +85,23 @@ export default function MemberView({ club_id, state }: MemberViewProps) {
       }
     }
 
+    const fetchOfficers = async () => {
+      const [err, res] = await to(getOfficers(club_id))
+      if (err) {
+        console.log(err)
+        return
+      }
+
+      const retrieved = res.data.officers
+      console.log(res.data)
+      if (retrieved) {
+        setOfficers(retrieved)
+      }
+    }
+
     fetchMembers()
     fetchTags()
+    fetchOfficers()
   }, [state])
 
   return (
@@ -144,13 +163,13 @@ export default function MemberView({ club_id, state }: MemberViewProps) {
             />
           </Grid>
           <Grid item xs={12} lg={6}>
-            <MemberDisplay
+            <OfficerDisplay
               title="All Officers"
-              members={[]}
-              setMembers={setMembers}
+              officers={officers}
+              setOfficers={setOfficers}
               club_id={club_id}
               state={state}
-              tags={tags}
+              roles={roles}
               forceUpdate={forceUpdate}
             />
           </Grid>
