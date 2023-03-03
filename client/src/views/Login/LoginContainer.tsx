@@ -51,6 +51,7 @@ function LoginContainer({
             Login
           </Typography>
         </Box>
+        <Typography color="error" variant="subtitle1">{errorMessage}</Typography>
         <TextField
           className="w-full"
           id="email-text-field"
