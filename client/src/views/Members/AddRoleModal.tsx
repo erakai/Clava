@@ -93,7 +93,7 @@ export default function AddRoleModal({
             />
             <FormGroup>
               {options.map((option, index) => (
-                  <FormControlLabel control={<Checkbox checked={checkedState[index]} onChange={() => handleOnChange(index)}/>} label={option}/>
+                <FormControlLabel control={<Checkbox checked={checkedState[index]} onChange={() => handleOnChange(index)}/>} label={option}/>
               ))}
             </FormGroup>
 

@@ -22,6 +22,8 @@ export default function ClubCompositie() {
 
   const [clubName, setClubName] = useState('')
 
+  const [clubOwnerId, setClubOwner] = useState('')
+
   useEffect(() => {
     const fetchClub = async () => {
       if (clubId) {
@@ -35,6 +37,7 @@ export default function ClubCompositie() {
         const retrieved = res.data.club
         if (retrieved) {
           setClubName(retrieved.name)
+          setClubOwner(retrieved.owner_id)
         }
       }
 
@@ -48,7 +51,10 @@ export default function ClubCompositie() {
 
     switch (clubRoute) {
       case 'members':
-        return <MemberView club_id={clubId} state={state} />
+        if (user == null) {
+          return <MemberView club_id={clubId} state={state} user_id={""} owner_id={clubOwnerId} />
+        }
+        return <MemberView club_id={clubId} state={state} user_id={user._id} owner_id={clubOwnerId} />
       case 'events':
         return <EventView />
       case 'documents':
