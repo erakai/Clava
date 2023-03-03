@@ -1,8 +1,9 @@
 import React from "react";
-import { Box, Stack, Chip, Dialog, DialogTitle, DialogContent, TextField, DialogActions, Button } from "@mui/material"
+import { Box, Stack, Chip, Dialog, DialogTitle, DialogContent, TextField, DialogActions, Button, Modal, Popover } from "@mui/material"
 import AddIcon from '@mui/icons-material/Add';
 import to from "await-to-js"
-import { setEngine } from "crypto";
+import { CirclePicker } from "@hello-pangea/color-picker";
+
 
 type CreateTagProps = {
   club_id: string
@@ -13,11 +14,20 @@ type CreateTagProps = {
 function CreateTagDialog({club_id, createTag, hasTagName}: CreateTagProps) {
 
   const [isOpenNewTag, setOpenNewTag] = React.useState(false)
+  const [isChoosingColor, setIsChoosingColor] = React.useState(false)
   const [name, setName] = React.useState('')
-  const [color, setColor] = React.useState('')
+  const [color, setColor] = React.useState('#ffc107')
 
   const [nameError, setNameError] = React.useState('')
   const [colorError, setColorError] = React.useState('')
+
+  const handleColorOpen = () => {
+    setIsChoosingColor(true)
+  }
+
+  const handleColorClose = () => {
+    setIsChoosingColor(true)
+  }
 
   const handleOpen = () => {
     setNameError("")
@@ -72,7 +82,7 @@ function CreateTagDialog({club_id, createTag, hasTagName}: CreateTagProps) {
       </DialogTitle>
       <DialogContent>
         <Stack
-          spacing={1}>
+          spacing={2}>
           <TextField label="Tag Name" variant="standard" size="small" 
             error={nameError != ""} 
             helperText={nameError}
@@ -80,14 +90,9 @@ function CreateTagDialog({club_id, createTag, hasTagName}: CreateTagProps) {
             setName(e.target.value.trim())
             setNameError("")
           }}/>
-          <TextField label="Tag Color" variant="standard" size="small" 
-            error={colorError != ""} 
-            helperText={colorError}
-            onChange={(e) => {
-            setColor(e.target.value.trim())
-            setColorError("")
-          }}/>
+          <CirclePicker defaultColor={color} onChange={(e) => {setColor(e.hex)}} />
         </Stack>
+        
       </DialogContent>
       <DialogActions>
         <Button onClick={handleCancel}>Cancel</Button>
