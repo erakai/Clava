@@ -66,15 +66,16 @@ export const resetrequest = async (req: Request, res: Response) => {
 
 // All validation and verifications check should already be done client-side
 export const reset = async (req: Request, res: Response) => {
-  let { new_password, id } = req.body
-  User.findByIdAndUpdate(
-      { _id: id },
-      { password: new_password },
-      async (err, result) => {
-        if (err) {
-          return res.status(500).send({err})
+  let { user_id, password } = req.body
+  User.findById(user_id,
+      async (err, user: IUser) => {
+        if (err || !user) {
+          return res.status(404).send("NO USER FOUND")
         }
-        return res.send({result})
+        user.setPassword(password, function(){
+          user.save()
+          return res.status(200).send("PASSWORD RESET COMPLETE")
+        })
       })
 }
 

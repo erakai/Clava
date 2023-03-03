@@ -63,6 +63,7 @@ function ResetRequest() {
                 type="email"
                 value={email}
                 error={email != '' && !emailVerify(email)}
+                helperText={(email != '' && !emailVerify(email)) ? "Please enter a valid email" : ""}
                 onChange={(e) => {
                   setEmail(e.target.value.trim())
                 }}
