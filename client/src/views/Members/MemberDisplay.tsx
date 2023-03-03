@@ -1,11 +1,14 @@
-import TagsEditorPopup from "../../components/TagsEditor"
 import { ClavaTable, HeaderCell, RowDisplayProps } from "../../components/ClavaTable"
 import { useState } from "react"
-import { Box, Checkbox, TableCell, TableRow } from "@mui/material"
+import { Box } from "@mui/material"
 
 import to from 'await-to-js'
 import { deleteMembers, updateMember } from '../../api/memberApi'
 import EditMemberModal from "./EditMemberModal"
+import { UserState } from "../../store/user/userSlice"
+import MemberRow from "./MemberRow"
+import MemberToolbarExtension from "./MemberToolbarExtension"
+import { AlternateSelectedToolbarProps } from "../../components/ClavaTable/TableToolbar"
 
 const headerCells: HeaderCell<Member>[] = [
   {
@@ -18,7 +21,13 @@ const headerCells: HeaderCell<Member>[] = [
     id: 'email',
     numeric: false,
     disablePadding: false,
-    label: 'Email'  
+    label: 'Email',
+  },
+  {
+    id: 'tag_ids',
+    numeric: false,
+    disablePadding: false,
+    label: 'Tags'  
   },
   {
     id: 'expiration',
@@ -28,34 +37,17 @@ const headerCells: HeaderCell<Member>[] = [
   }
 ]
 
-function MemberRow(
-  { rowSelected, onClick, row, key}: RowDisplayProps<Member>) {
-    return (
-      <TableRow key={key} hover onClick={onClick} selected={rowSelected}
-        tabIndex={-1}>
-          <TableCell padding="checkbox">
-            <Checkbox color="primary" checked={rowSelected}/>
-          </TableCell>
-          <TableCell component="th" scope="row" padding="none">{row.name}</TableCell>
-          <TableCell align="left">{row.email}</TableCell>
-          <TableCell align="right">
-            {(row.expiration) ? 
-              ((Date.parse(row.expiration as unknown as string).valueOf() != 0) ? 
-              new Date(row.expiration).toLocaleDateString() : 'N/A')
-            : "N/A"}
-          </TableCell>
-      </TableRow>
-    )
-}
-
 type DisplayProps = {
   members: Member[]
   setMembers: React.Dispatch<React.SetStateAction<Member[]>>
   title: string
   club_id: string
+  state: UserState,
+  tags: Tag[]
+  forceUpdate: () => void
 }
 
-export default function MemberDisplay({ members, setMembers, title, club_id }: DisplayProps) {
+export default function MemberDisplay({ members, setMembers, title, club_id, state, tags, forceUpdate }: DisplayProps) {
   const [searchString, setSearchString] = useState('')
   const [dense, setDense] = useState(false)
   const [editModalOpen, setEditModalOpen] = useState(false);
@@ -103,6 +95,16 @@ export default function MemberDisplay({ members, setMembers, title, club_id }: D
       }
     }
 
+    if (member.tag_ids.length > 0) {
+      let found = false
+      tags.forEach(t => {
+        if (member.tag_ids.includes(t._id) && t.name.toLowerCase().includes(searchString)) {
+          found = true
+        }
+      })
+      if (found) return found
+    }
+
     return (member.name.toLowerCase().includes(searchString) ||
             member.email.toLowerCase().includes(searchString))
   })
@@ -111,9 +113,15 @@ export default function MemberDisplay({ members, setMembers, title, club_id }: D
     <Box>
         <ClavaTable<Member> defaultOrder="name" tableName={title}
           data={filteredMembers} headerCells={headerCells} onDelete={onDelete}
-          RowDisplay={MemberRow} dense={dense} searchString={searchString} setSearchString={setSearchString}
+          RowDisplay={({rowSelected, onClick, row}) => 
+            <MemberRow rowSelected={rowSelected} onClick={onClick} row={row} allTags={tags} dense={dense}/>}
+          dense={dense} searchString={searchString} setSearchString={setSearchString}
           rowsPerPageOptions={[5, 10, 30, 100]} defaultRowsPerPage={10}
-          onEdit={onEditClicked} 
+          onEdit={onEditClicked} AlternateSelectedToolbar={
+            ({selected, setSelected}: AlternateSelectedToolbarProps<Member>) =>
+            <MemberToolbarExtension selected={selected} setSelected={setSelected} 
+              allTags={tags} members={members} setMembers={setMembers} forceUpdate={forceUpdate}/>
+          }
         />
         {editModalOpen && 
           <EditMemberModal 

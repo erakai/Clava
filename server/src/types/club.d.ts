@@ -8,4 +8,5 @@ interface IClub extends Document {
   member_ids: Array<number>,
   officer_ids: Array<number>,
   event_ids: Array<number>,
+  owner_id: string,
 }

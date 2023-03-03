@@ -2,7 +2,7 @@ import { Model, model, Schema, SchemaTypes } from "mongoose";
 import { ITag } from "types/tag";
 
 const TagSchema = new Schema<ITag>({
-  tag_id: SchemaTypes.Number,
+  club_id: SchemaTypes.ObjectId,
   name: {
     type: SchemaTypes.String,
     required: true,

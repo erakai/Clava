@@ -1,6 +1,8 @@
+import to from 'await-to-js'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { getClub } from '../../api/clubApi'
 
 import { ClavaNavbar } from '../../components/Navigation'
 import useUser from '../../hooks/useUser'
@@ -17,6 +19,29 @@ export default function ClubCompositie() {
     clubId: string
     clubRoute: string
   }>()
+
+  const [clubName, setClubName] = useState('')
+
+  useEffect(() => {
+    const fetchClub = async () => {
+      if (clubId) {
+        const [err, res] = await to(getClub(clubId))
+        if (err) {
+          console.log(err)
+          setClubName("FAILED TO GET CLUB")
+          return
+        }
+
+        const retrieved = res.data.club
+        if (retrieved) {
+          setClubName(retrieved.name)
+        }
+      }
+
+    }
+
+    fetchClub()
+  }, [])
 
   const getRoute = (): JSX.Element => {
     if (!clubId) return <UrlNotFound />
@@ -40,7 +65,7 @@ export default function ClubCompositie() {
       <ClavaNavbar
         currentRoute={clubRoute || 'null'}
         clubId={clubId || 'null'}
-        clubName="Bookclub!" logout={logout}
+        clubName={clubName} logout={logout}
       />
       {getRoute()}
     </div>

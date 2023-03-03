@@ -7,8 +7,8 @@ function Main() {
   return (
     <Box
       color="primary"
-      className="Main flex w-screen h-screen items-center justify-center text-center"
-      flexDirection="column"
+      className="Main flex w-screen h-screen items-center justify-center text-center" 
+      flexDirection="column" 
     >
       <Typography variant="h3">Clava</Typography>
       <Stack flexDirection="row">

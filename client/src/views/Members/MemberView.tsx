@@ -12,8 +12,11 @@ import { createTag as _createTag, getTags } from '../../api/memberApi'
 import { createRole as _createRole, getRoles } from '../../api/roleApi'
 import { ClavaNavbar, ScrollTop } from '../../components/Navigation'
 import useUser from '../../hooks/useUser'
-import TagsEditor from '../../components/TagsEditor'
+import { TagsEditorDialog } from '../../components/TagsEditor'
 import { UserState } from '../../store/user/userSlice'
+import useForceUpdate from '../../hooks/useForceUpdate'
+import OfficerDisplay from './OfficerDisplay'
+import { getOfficers } from '../../api/officerApi'
 
 type MemberViewProps = {
   club_id: string
@@ -24,14 +27,17 @@ export default function MemberView({ club_id, state }: MemberViewProps) {
   const [errorMessage, setErrorMessage] = useState('')
   const [members, setMembers] = useState<Member[]>([])
   const [roles, setRoles] = useState<Role[]>([])
+  const [officers, setOfficers] = useState<Officer[]>([])
   const [memberOpen, setMemberOpen] = useState(false)
   const [roleOpen, setRoleOpen] = useState(false)
   const [roleViewOpen, setRoleViewOpen] = useState(false)
   const [tags, setTags] = useState<Tag[]>([])
+  const [roles, setRoles] = useState<Role[]>([])
   const [officerOpen, setOfficerOpen] = useState(false)
   const [disableAddingMember, setDisableAddingMember] = useState(false)
   const [disableAddingRole, setDisableAddingRole] = useState(false)
 
+  const forceUpdate = useForceUpdate()
 
   const createMember = async (member: MemberRequest) => {
     setDisableAddingMember(true)
@@ -105,16 +111,29 @@ export default function MemberView({ club_id, state }: MemberViewProps) {
         console.log(err)
         return
       }
-
       const retrieved = res.data.roles
       if (retrieved) {
         setRoles(retrieved)
       }
     }
 
+    const fetchOfficers = async () => {
+      const [err, res] = await to(getOfficers(club_id))
+      if (err) {
+        console.log(err)
+        return
+      }
+      const retrieved = res.data.officers
+      console.log(res.data)
+      if (retrieved) {
+        setOfficers(retrieved)
+      }
+    }
+
     fetchMembers()
     fetchTags()
     fetchRoles()
+    fetchOfficers()
   }, [state])
 
   return (
@@ -157,7 +176,7 @@ export default function MemberView({ club_id, state }: MemberViewProps) {
                   </Button>
                 </Grid> 
                 <Grid item xs={12} md={6} lg={4}>
-                  <TagsEditor createTag={createTag} club_id={club_id} tags={tags} setTags={setTags} />
+                  <TagsEditorDialog createTag={createTag} club_id={club_id} tags={tags} setTags={setTags} forceUpdate={forceUpdate}/>
                 </Grid> 
               </Grid>
             </Box>
@@ -187,20 +206,26 @@ export default function MemberView({ club_id, state }: MemberViewProps) {
               </Grid>
             </Box>
           </Grid>
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} lg={6}>
             <MemberDisplay
               title="All Members"
               members={members}
               setMembers={setMembers}
               club_id={club_id}
+              state={state}
+              tags={tags}
+              forceUpdate={forceUpdate}
             />
           </Grid>
-          <Grid item xs={12} md={6}>
-            <MemberDisplay
+          <Grid item xs={12} lg={6}>
+            <OfficerDisplay
               title="All Officers"
-              members={[]}
-              setMembers={setMembers}
+              officers={officers}
+              setOfficers={setOfficers}
               club_id={club_id}
+              state={state}
+              roles={roles}
+              forceUpdate={forceUpdate}
             />
           </Grid>
         </Grid>

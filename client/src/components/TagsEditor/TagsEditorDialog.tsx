@@ -1,5 +1,4 @@
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, TextField } from '@mui/material'
-import { Container } from '@mui/system';
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material'
 import { deleteTag as _deleteTag } from '../../api/memberApi';
 import * as React from 'react';
 import CreateTagDialog from './CreateTagDialog';
@@ -14,16 +13,18 @@ type TagsEditorProps = {
   tags: Tag[]
   setTags: React.Dispatch<React.SetStateAction<Tag[]>>
   club_id: string
+  forceUpdate: () => void
 }
 
 
-function TagsEditorDialog({createTag, club_id, tags, setTags}: TagsEditorProps) {
+function TagsEditorDialog({createTag, club_id, tags, setTags, forceUpdate}: TagsEditorProps) {
   const [isOpen, setOpen] = React.useState(false)
   const open = () => {
     setOpen(true)
   }
   const close = () => {
     setOpen(false)
+    forceUpdate()
   }
 
   const hasTagName = (name: string, _id?: string): boolean => {
@@ -62,6 +63,8 @@ function TagsEditorDialog({createTag, club_id, tags, setTags}: TagsEditorProps) 
             <Box/>
             {tags.map(tag => (
               <TagChip 
+                tags={tags}
+                setTags={setTags}
                 name={tag.name} 
                 color={tag.color} 
                 _id={tag._id} 
