@@ -4,9 +4,12 @@ import to from 'await-to-js'
 import { useEffect, useState } from 'react'
 
 import AddMemberModal from './AddMemberModal'
+import AddRoleModal from './AddRoleModal'
+import RoleModal from './RoleModal'
 import MemberDisplay from './MemberDisplay'
 import { createMember as _createMember, getMembers } from '../../api/memberApi'
 import { createTag as _createTag, getTags } from '../../api/memberApi'
+import { createRole as _createRole, getRoles } from '../../api/roleApi'
 import { ClavaNavbar, ScrollTop } from '../../components/Navigation'
 import useUser from '../../hooks/useUser'
 import { TagsEditorDialog } from '../../components/TagsEditor'
@@ -23,12 +26,17 @@ type MemberViewProps = {
 export default function MemberView({ club_id, state }: MemberViewProps) {
   const [errorMessage, setErrorMessage] = useState('')
   const [members, setMembers] = useState<Member[]>([])
+  const [roles, setRoles] = useState<Role[]>([])
   const [officers, setOfficers] = useState<Officer[]>([])
   const [memberOpen, setMemberOpen] = useState(false)
+  const [roleOpen, setRoleOpen] = useState(false)
+  const [roleViewOpen, setRoleViewOpen] = useState(false)
   const [tags, setTags] = useState<Tag[]>([])
   const [roles, setRoles] = useState<Role[]>([])
   const [officerOpen, setOfficerOpen] = useState(false)
   const [disableAddingMember, setDisableAddingMember] = useState(false)
+  const [disableAddingRole, setDisableAddingRole] = useState(false)
+
   const forceUpdate = useForceUpdate()
 
   const createMember = async (member: MemberRequest) => {
@@ -43,6 +51,18 @@ export default function MemberView({ club_id, state }: MemberViewProps) {
     }
 
     setDisableAddingMember(false)
+  }
+  const createRole = async (role: RoleRequest) => {
+    setDisableAddingRole(true)  
+    const [err, res] = await to(_createRole(role))
+    if (err) {
+      console.log(err)
+      setErrorMessage('Something went wrong.')
+    } else if (res) {
+      setRoles([...roles, res.data.role])
+    }
+
+    setDisableAddingRole(false)
   }
 
   const createTag = async (tag: CreateTagRequest) => {
@@ -85,13 +105,24 @@ export default function MemberView({ club_id, state }: MemberViewProps) {
       }
     }
 
+    const fetchRoles = async () => {
+      const [err, res] = await to(getRoles(club_id))
+      if (err) {
+        console.log(err)
+        return
+      }
+      const retrieved = res.data.roles
+      if (retrieved) {
+        setRoles(retrieved)
+      }
+    }
+
     const fetchOfficers = async () => {
       const [err, res] = await to(getOfficers(club_id))
       if (err) {
         console.log(err)
         return
       }
-
       const retrieved = res.data.officers
       console.log(res.data)
       if (retrieved) {
@@ -101,6 +132,7 @@ export default function MemberView({ club_id, state }: MemberViewProps) {
 
     fetchMembers()
     fetchTags()
+    fetchRoles()
     fetchOfficers()
   }, [state])
 
@@ -115,6 +147,24 @@ export default function MemberView({ club_id, state }: MemberViewProps) {
         club_id={club_id}
         disableAddingMember={disableAddingMember}
       />
+      <AddRoleModal
+        open={roleOpen}
+        setOpen={setRoleOpen}
+        createRole={createRole}
+        errorMessage={errorMessage}
+        setErrorMessage={setErrorMessage}
+        club_id={club_id}
+        disableAddingRole={disableAddingRole}/>
+
+      <RoleModal
+        open={roleViewOpen}
+        setOpen={setRoleViewOpen}
+        setRoleOpen={setRoleOpen}
+        setRoles={setRoles}
+        errorMessage={errorMessage}
+        setErrorMessage={setErrorMessage}
+        club_id={club_id}
+        roles={roles}/>
       <Box className="m-4 mb-16">
         <Grid container spacing={2}>
           <Grid item xs={4}>
@@ -141,14 +191,19 @@ export default function MemberView({ club_id, state }: MemberViewProps) {
             </Box>
           </Grid>
           <Grid item xs={4}>
-            <Box
-              display="flex"
-              justifyContent="right"
-              alignItems="right"
-              height="100%">
-              <Button variant="contained" color="secondary">
-                Add Officer
-              </Button>
+            <Box display="flex" height="100%" >
+              <Grid container spacing={1} justifyContent="flex-end">
+                <Grid item xs={12} md={6} lg={3}>
+                  <Button className='h-full' variant="contained" color="secondary" onClick={() => setRoleViewOpen(true)}>
+                    Add Role
+                  </Button>
+                </Grid> 
+                <Grid item xs={12} md={6} lg={3}>
+                  <Button className='h-full' variant="contained" color="secondary">
+                    Add Officer
+                  </Button>
+                </Grid> 
+              </Grid>
             </Box>
           </Grid>
           <Grid item xs={12} lg={6}>
