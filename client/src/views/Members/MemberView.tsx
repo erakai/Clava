@@ -9,8 +9,9 @@ import { createMember as _createMember, getMembers } from '../../api/memberApi'
 import { createTag as _createTag, getTags } from '../../api/memberApi'
 import { ClavaNavbar, ScrollTop } from '../../components/Navigation'
 import useUser from '../../hooks/useUser'
-import TagsEditor from '../../components/TagsEditor'
+import { TagsEditorDialog } from '../../components/TagsEditor'
 import { UserState } from '../../store/user/userSlice'
+import useForceUpdate from '../../hooks/useForceUpdate'
 
 type MemberViewProps = {
   club_id: string
@@ -24,7 +25,7 @@ export default function MemberView({ club_id, state }: MemberViewProps) {
   const [tags, setTags] = useState<Tag[]>([])
   const [officerOpen, setOfficerOpen] = useState(false)
   const [disableAddingMember, setDisableAddingMember] = useState(false)
-
+  const forceUpdate = useForceUpdate()
 
   const createMember = async (member: MemberRequest) => {
     setDisableAddingMember(true)
@@ -106,7 +107,7 @@ export default function MemberView({ club_id, state }: MemberViewProps) {
                   </Button>
                 </Grid> 
                 <Grid item xs={12} md={6} lg={4}>
-                  <TagsEditor createTag={createTag} club_id={club_id} tags={tags} setTags={setTags} />
+                  <TagsEditorDialog createTag={createTag} club_id={club_id} tags={tags} setTags={setTags} forceUpdate={forceUpdate}/>
                 </Grid> 
               </Grid>
             </Box>
@@ -131,20 +132,26 @@ export default function MemberView({ club_id, state }: MemberViewProps) {
               </Button>
             </Box>
           </Grid>
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} lg={6}>
             <MemberDisplay
               title="All Members"
               members={members}
               setMembers={setMembers}
               club_id={club_id}
+              state={state}
+              tags={tags}
+              forceUpdate={forceUpdate}
             />
           </Grid>
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} lg={6}>
             <MemberDisplay
               title="All Officers"
               members={[]}
               setMembers={setMembers}
               club_id={club_id}
+              state={state}
+              tags={tags}
+              forceUpdate={forceUpdate}
             />
           </Grid>
         </Grid>

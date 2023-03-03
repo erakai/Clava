@@ -1,8 +1,9 @@
+import { Compress } from "@mui/icons-material";
 import { Box, Paper, Table, TableBody, TableCell, TableContainer, TablePagination, TableRow } from "@mui/material";
 import { ChangeEvent, useState, MouseEvent, Dispatch } from "react";
 import EditMemberModal from "../../views/Members/EditMemberModal";
 import TableHeader, { HeaderCell } from "./TableHeader";
-import TableToolbar from "./TableToolbar";
+import TableToolbar, { AlternateSelectedToolbarProps } from "./TableToolbar";
 
 // order=1 => ascending, order=-1 => descending
 function getComparator<Key extends keyof any>(order: number, orderBy: Key): 
@@ -29,7 +30,6 @@ export type RowDisplayProps<T> = {
   rowSelected: boolean,
   onClick: (e: MouseEvent) => void,
   row: T,
-  key: number,
 }
 
 /*
@@ -53,17 +53,18 @@ type ClavaTableProps<T> = {
   onEdit?: (edited: T) => void
   searchString: string,
   setSearchString: Dispatch<React.SetStateAction<string>>,
-  RowDisplay: (r: RowDisplayProps<T>) => React.ReactNode,
+  RowDisplay: (r: RowDisplayProps<T>) => JSX.Element,
   rowsPerPageOptions?: number[],
   defaultRowsPerPage?: number,
   dense?: boolean,
+  AlternateSelectedToolbar?: (props: AlternateSelectedToolbarProps<T>) => JSX.Element
 }
 
 
 export default function ClavaTable<T>({defaultOrder, tableName, 
   data, onDelete, searchString, setSearchString,
   headerCells, RowDisplay, dense, rowsPerPageOptions,
-  defaultRowsPerPage, onEdit}: ClavaTableProps<T>) {
+  defaultRowsPerPage, onEdit, AlternateSelectedToolbar}: ClavaTableProps<T>) {
   const [order, setOrder] = useState(-1)
   const [orderBy, setOrderBy] = useState<keyof T>(defaultOrder)
   const [selected, setSelected] = useState<T[]>([])
@@ -125,7 +126,7 @@ export default function ClavaTable<T>({defaultOrder, tableName,
         <Paper className='w-full mb-2' elevation={3}>
           <TableToolbar<T> numSelected={selected.length} tableName={tableName}
             searchString={searchString} setSearchString={setSearchString} onDelete={onDeleteWrapper}
-            onEdit={onEdit} selected={selected}/>
+            onEdit={onEdit} selected={selected} setSelected={setSelected} AlternateSelectedToolbar={AlternateSelectedToolbar}/>
           <TableContainer>
             <Table className='min-w-max' size={dense ? 'small' : 'medium'}>
               <TableHeader numSelected={selected.length}
@@ -139,7 +140,9 @@ export default function ClavaTable<T>({defaultOrder, tableName,
                   .map((row, index) => {
                     const rowSelected = isSelected(row)
                     const onClick = (event: MouseEvent) => handleSelect(event, row)
-                    return RowDisplay({rowSelected, onClick, row, key: index })
+                    let comp = <RowDisplay rowSelected={rowSelected} onClick={onClick} row={row} key={index} />
+                    if (comp) return comp
+                    return null
                   })
                 }
                 {emptyRows > 0 && (

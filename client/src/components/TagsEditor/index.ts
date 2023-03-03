@@ -1,3 +1,4 @@
-import TagsEditorPopup from './TagsEditorDialog'
+import TagsEditorDialog from './TagsEditorDialog'
+import TagRowDisplay from './TagRowDisplay'
 
-export default TagsEditorPopup
+export { TagRowDisplay, TagsEditorDialog }

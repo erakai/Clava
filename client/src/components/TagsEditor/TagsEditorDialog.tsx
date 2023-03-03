@@ -14,16 +14,18 @@ type TagsEditorProps = {
   tags: Tag[]
   setTags: React.Dispatch<React.SetStateAction<Tag[]>>
   club_id: string
+  forceUpdate: () => void
 }
 
 
-function TagsEditorDialog({createTag, club_id, tags, setTags}: TagsEditorProps) {
+function TagsEditorDialog({createTag, club_id, tags, setTags, forceUpdate}: TagsEditorProps) {
   const [isOpen, setOpen] = React.useState(false)
   const open = () => {
     setOpen(true)
   }
   const close = () => {
     setOpen(false)
+    forceUpdate()
   }
 
   const hasTagName = (name: string, _id?: string): boolean => {
@@ -62,6 +64,8 @@ function TagsEditorDialog({createTag, club_id, tags, setTags}: TagsEditorProps) 
             <Box/>
             {tags.map(tag => (
               <TagChip 
+                tags={tags}
+                setTags={setTags}
                 name={tag.name} 
                 color={tag.color} 
                 _id={tag._id} 

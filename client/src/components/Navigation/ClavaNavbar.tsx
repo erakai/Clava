@@ -15,7 +15,7 @@ import MenuItem from '@mui/material/MenuItem';
 import NavButton from './NavButton';
 
 const pages = ['Members', 'Events', 'Documents', 'Finances'];
-const settings = ['Profile', 'Logout'];
+const settings = ['Logout'];
 
 type ClavaNavbarProps = {
   currentRoute : string

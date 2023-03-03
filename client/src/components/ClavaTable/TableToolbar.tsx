@@ -6,6 +6,11 @@ import EditIcon from '@mui/icons-material/Edit';
 
 import { ConfirmationModal } from '../Modal';
 
+export type AlternateSelectedToolbarProps<T> = {
+  selected: T[]
+  setSelected: Dispatch<React.SetStateAction<T[]>>
+}
+
 type ToolbarProps<T> = {
   tableName: string,
   numSelected: number,
@@ -13,11 +18,15 @@ type ToolbarProps<T> = {
   setSearchString: Dispatch<React.SetStateAction<string>>
   onDelete: () => void,
   selected: T[],
+  setSelected: Dispatch<React.SetStateAction<T[]>>
   onEdit?: (edited: T) => void
+  AlternateSelectedToolbar?: (props: AlternateSelectedToolbarProps<T>) => JSX.Element
 }
 
 export default function TableToolbar<T>({
-  tableName, numSelected, searchString, setSearchString, onDelete, onEdit, selected}: ToolbarProps<T>)
+  tableName, numSelected, searchString, setSearchString, 
+  onDelete, onEdit, selected, AlternateSelectedToolbar,
+  setSelected}: ToolbarProps<T>)
 {
   const [filtering, setFiltering] = useState(false)
 
@@ -45,32 +54,39 @@ export default function TableToolbar<T>({
           {tableName}
         </Typography>
       )}
-      {(onEdit && numSelected == 1) ? (
-        <div>
-          <Tooltip title="Edit">
-            <IconButton onClick={() => onEdit(selected[0])}>
-              <EditIcon />
-            </IconButton>
-          </Tooltip>
-        </div>
-      ) : <></> }
-      {numSelected > 0 ? (
-        <div>
-          <Tooltip title="Delete">
-            <IconButton onClick={handleDeleteModalOpen}>
-              <Delete />
-            </IconButton>
-          </Tooltip>
-          <ConfirmationModal
-              open={deleteModalOpen}
-              handleClose={handleDeleteModalClose}
-              handleConfirmation={onDelete}
-              question={"Delete? This cannot be undone."}
-          />
-        </div>
+      {(numSelected > 0) ? (
+        <Grid container spacing={2} direction="row" alignItems={"right"} justifyContent={"right"}>
+          {AlternateSelectedToolbar ? 
+            <Grid item xs={6} lg={8}>
+              <AlternateSelectedToolbar selected={selected} setSelected={setSelected}/>
+            </Grid> : <></>
+          }
+          {onEdit && numSelected == 1 ?
+            <Grid item xs={2} lg={1}>
+              <Tooltip title="Edit">
+                <IconButton onClick={() => onEdit(selected[0])}>
+                  <EditIcon />
+                </IconButton>
+              </Tooltip> 
+            </Grid> :<></> 
+          }
+          <Grid item xs={2} lg={2}>
+            <Tooltip title="Delete">
+              <IconButton onClick={handleDeleteModalOpen}>
+                <Delete />
+              </IconButton>
+            </Tooltip>
+            <ConfirmationModal
+                open={deleteModalOpen}
+                handleClose={handleDeleteModalClose}
+                handleConfirmation={onDelete}
+                question={"Delete? This cannot be undone."}
+            />
+          </Grid>
+        </Grid>
       ) : (
         <Grid container spacing={2} direction="row" alignItems={"right"} justifyContent={"right"}>
-          <Grid item xs={10}>
+          <Grid item xs={10} md={10}>
             <Collapse in={filtering} orientation="vertical" className='w-full'>
                 <TextField size="small" label="Search" fullWidth
                   value={searchString} onChange={(e) => setSearchString(e.target.value)}></TextField>

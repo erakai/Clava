@@ -1,18 +1,19 @@
 import { Chip, Box, Button, Stack, TextField, Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material/"
 import { editTag as _editTag } from "../../api/memberApi"
-import React from "react"
+import React, { Dispatch, useEffect } from "react"
 import to from "await-to-js"
 
 type TagChipProps = {
   name: string
   color: string
   _id: string
+  tags: Tag[]
+  setTags: React.Dispatch<React.SetStateAction<Tag[]>>
   deleteTag: (delTagReq: DeleteTagRequest) => void
   hasTagName: (name: string, _id: string) => boolean
 }
 
-function TagChip({ name, color, _id, deleteTag, hasTagName }: TagChipProps) {
-  
+function TagChip({ name, color, _id, deleteTag, hasTagName, tags, setTags }: TagChipProps) {
   const [currName, setCurrName] = React.useState(name)
   const [currColor, setCurrColor] = React.useState(color)
   const [isEditing, setEditing] = React.useState(false)
@@ -20,6 +21,7 @@ function TagChip({ name, color, _id, deleteTag, hasTagName }: TagChipProps) {
   const [newColor, setNewColor] = React.useState('')
   const [nameError, setNameError] = React.useState('')
   const [colorError, setColorError] = React.useState('')
+
   const open = () => {
     setNameError("")
     setColorError("")
@@ -66,6 +68,19 @@ function TagChip({ name, color, _id, deleteTag, hasTagName }: TagChipProps) {
     } else if (res) {
       setCurrName(newName)
       setCurrColor(newColor)
+      
+      let idx = -1
+      tags.forEach((tag, index) => {
+        if (tag._id == _id) {
+          idx = index
+        }
+      })
+
+      if (idx != -1) {
+        let newTags = tags
+        newTags[idx] = {_id, name: newName, color: newColor}
+        setTags(newTags)
+      }
     }
     close()
   }
