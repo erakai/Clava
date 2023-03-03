@@ -4,9 +4,11 @@ import to from 'await-to-js'
 import { useEffect, useState } from 'react'
 
 import AddMemberModal from './AddMemberModal'
+import AddRoleModal from './AddRoleModal'
 import MemberDisplay from './MemberDisplay'
 import { createMember as _createMember, getMembers } from '../../api/memberApi'
 import { createTag as _createTag, getTags } from '../../api/memberApi'
+import { createRole as _createRole } from '../../api/roleApi'
 import { ClavaNavbar, ScrollTop } from '../../components/Navigation'
 import useUser from '../../hooks/useUser'
 import TagsEditor from '../../components/TagsEditor'
@@ -20,10 +22,13 @@ type MemberViewProps = {
 export default function MemberView({ club_id, state }: MemberViewProps) {
   const [errorMessage, setErrorMessage] = useState('')
   const [members, setMembers] = useState<Member[]>([])
+  const [roles, setRoles] = useState<Role[]>([])
   const [memberOpen, setMemberOpen] = useState(false)
+  const [roleOpen, setRoleOpen] = useState(false)
   const [tags, setTags] = useState<Tag[]>([])
   const [officerOpen, setOfficerOpen] = useState(false)
   const [disableAddingMember, setDisableAddingMember] = useState(false)
+  const [disableAddingRole, setDisableAddingRole] = useState(false)
 
 
   const createMember = async (member: MemberRequest) => {
@@ -38,6 +43,19 @@ export default function MemberView({ club_id, state }: MemberViewProps) {
     }
 
     setDisableAddingMember(false)
+  }
+  const createRole = async (role: RoleRequest) => {
+    setDisableAddingRole(true)
+
+    const [err, res] = await to(_createRole(role))
+    if (err) {
+      console.log(err)
+      setErrorMessage('Something went wrong.')
+    } else if (res) {
+      setRoles([...roles, res.data.role])
+    }
+
+    setDisableAddingRole(false)
   }
 
   const createTag = async (tag: CreateTagRequest) => {
@@ -95,6 +113,14 @@ export default function MemberView({ club_id, state }: MemberViewProps) {
         club_id={club_id}
         disableAddingMember={disableAddingMember}
       />
+      <AddRoleModal
+        open={roleOpen}
+        setOpen={setRoleOpen}
+        createRole={createRole}
+        errorMessage={errorMessage}
+        setErrorMessage={setErrorMessage}
+        club_id={club_id}
+        disableAddingRole={disableAddingRole}/>
       <Box className="m-4 mb-16">
         <Grid container spacing={2}>
           <Grid item xs={4}>
@@ -121,14 +147,19 @@ export default function MemberView({ club_id, state }: MemberViewProps) {
             </Box>
           </Grid>
           <Grid item xs={4}>
-            <Box
-              display="flex"
-              justifyContent="right"
-              alignItems="right"
-              height="100%">
-              <Button variant="contained" color="secondary">
-                Add Officer
-              </Button>
+            <Box display="flex" height="100%" >
+              <Grid container spacing={1} justifyContent="flex-end">
+                <Grid item xs={12} md={6} lg={3}>
+                  <Button className='h-full' variant="contained" color="secondary" onClick={() => setRoleOpen(true)}>
+                    Add Role
+                  </Button>
+                </Grid> 
+                <Grid item xs={12} md={6} lg={3}>
+                  <Button className='h-full' variant="contained" color="secondary">
+                    Add Officer
+                  </Button>
+                </Grid> 
+              </Grid>
             </Box>
           </Grid>
           <Grid item xs={12} md={6}>
