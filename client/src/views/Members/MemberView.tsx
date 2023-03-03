@@ -32,7 +32,6 @@ export default function MemberView({ club_id, state }: MemberViewProps) {
   const [roleOpen, setRoleOpen] = useState(false)
   const [roleViewOpen, setRoleViewOpen] = useState(false)
   const [tags, setTags] = useState<Tag[]>([])
-  const [roles, setRoles] = useState<Role[]>([])
   const [officerOpen, setOfficerOpen] = useState(false)
   const [disableAddingMember, setDisableAddingMember] = useState(false)
   const [disableAddingRole, setDisableAddingRole] = useState(false)
