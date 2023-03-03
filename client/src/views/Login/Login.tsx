@@ -11,7 +11,7 @@ import RegisterContainer from "./RegisterContainer"
 import { Container } from "@mui/material"
 import useEmailVerify from "../../hooks/useEmailVerify"
 
-const pageAfter = '/bookclub/members'
+const pageAfter = '/clubs'
 
 function Login() {
   const [page, setPage] = useState<string>('login')
@@ -55,15 +55,19 @@ function Login() {
     }
 
     const [error] = await to(dispatch(register(req)).unwrap())
-    const { err } = error as any
 
-    if (err && err.name == 'UserExistsError') {
-      setErrorMessage('A user with that email already exists.')
-    } else if (err) {
-      setErrorMessage('Invalid register.')
-    } else {
-      navigate(pageAfter)
+    if (error) {
+      const { err } = error as any
+      if (err && err.name == 'UserExistsError') {
+        setErrorMessage('A user with that email already exists.')
+        return
+      } else if (err) {
+        setErrorMessage('Invalid register.')
+        return
+      }
     }
+    navigate(pageAfter)
+
   }
 
   const switchToLogin = () => {

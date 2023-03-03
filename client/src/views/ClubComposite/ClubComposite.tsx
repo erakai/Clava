@@ -3,6 +3,7 @@ import { useParams } from 'react-router'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
 import { ClavaNavbar } from '../../components/Navigation'
+import useUser from '../../hooks/useUser'
 import DocumentView from '../Documents'
 import _404View from '../Error'
 import UrlNotFound from '../Error/UrlNotFound'
@@ -11,15 +12,18 @@ import FinanceView from '../Finances'
 import MemberView from '../Members'
 
 export default function ClubCompositie() {
+  const { state, user, logout } = useUser()
   const { clubId, clubRoute } = useParams<{
     clubId: string
     clubRoute: string
   }>()
 
   const getRoute = (): JSX.Element => {
+    if (!clubId) return <UrlNotFound />
+
     switch (clubRoute) {
       case 'members':
-        return <MemberView club_id="5e1a0651741b255ddda996c4" />
+        return <MemberView club_id={clubId} state={state} />
       case 'events':
         return <EventView />
       case 'documents':
@@ -32,11 +36,11 @@ export default function ClubCompositie() {
   }
 
   return (
-    <div className="p-2 items-center">
+    <div className="items-center">
       <ClavaNavbar
         currentRoute={clubRoute || 'null'}
         clubId={clubId || 'null'}
-        clubName="Bookclub!"
+        clubName="Bookclub!" logout={logout}
       />
       {getRoute()}
     </div>

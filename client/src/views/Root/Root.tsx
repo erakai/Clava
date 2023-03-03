@@ -5,7 +5,6 @@ import ClubPage from '../ClubPage'
 import UrlNotFound from '../Error/UrlNotFound'
 import Login from '../Login'
 import Main from '../Main'
-import Test from '../Main/Test'
 import Reset from '../Reset'
 import ResetRequest from "../ResetRequest";
 

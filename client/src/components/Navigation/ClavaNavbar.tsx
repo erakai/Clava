@@ -13,6 +13,7 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 
 import NavButton from './NavButton';
+import { Stack } from '@mui/material';
 
 const pages = ['Members', 'Events', 'Documents', 'Finances'];
 const settings = ['Profile', 'Logout'];
@@ -21,9 +22,10 @@ type ClavaNavbarProps = {
   currentRoute : string
   clubId : string
   clubName : string
+  logout: () => Promise<void | undefined>
 }
 
-function ClavaNavbar({currentRoute, clubId, clubName} : ClavaNavbarProps) {
+function ClavaNavbar({currentRoute, clubId, clubName, logout} : ClavaNavbarProps) {
   // menu operations for transformations when window size is changed
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
@@ -39,14 +41,19 @@ function ClavaNavbar({currentRoute, clubId, clubName} : ClavaNavbarProps) {
     setAnchorElNav(null);
   };
 
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
+  const handleCloseUserMenu = (clicked: string) => {
+    setAnchorElUser(null);  
+    if (typeof clicked == 'string') {
+      if (clicked == 'Logout') {
+        logout()
+      }
+    }
   };
 
   return (
     <AppBar position="sticky">
-      <Container maxWidth="xl">
-        <Toolbar disableGutters>
+      <Container maxWidth={false}>
+        <Toolbar disableGutters sx={{justifyContent: "space-between"}}>
           {/* === START OF TITLE FOR LARGE WINDOW SIZE === */}
           <Typography
             variant="h6"
@@ -54,8 +61,10 @@ function ClavaNavbar({currentRoute, clubId, clubName} : ClavaNavbarProps) {
             component="a"
             href="/"
             sx={{
-              mr: 2,
-              display: { xs: 'none', md: 'flex' },
+              justifySelf: { xs: 'none', md: 'flex-start'},
+              flex: { xs: 0, md: 1 },
+              display: { xs: "none", md: "flex" },
+              mr: 'auto',
               fontFamily: 'monospace',
               fontWeight: 700,
               letterSpacing: '.3rem',
@@ -67,7 +76,7 @@ function ClavaNavbar({currentRoute, clubId, clubName} : ClavaNavbarProps) {
           </Typography>
           {/* === END OF TITLE FOR LARGE WINDOW SIZE === */}
           {/* === START OF NAVIGATION MENU FOR SMALL WINDOW SIZE === */}
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+          <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -111,9 +120,8 @@ function ClavaNavbar({currentRoute, clubId, clubName} : ClavaNavbarProps) {
             component="a"
             href=""
             sx={{
-              mr: 2,
               display: { xs: 'flex', md: 'none' },
-              flexGrow: 1,
+              flexGrow: 0,
               fontFamily: 'monospace',
               fontWeight: 700,
               letterSpacing: '.3rem',
@@ -125,10 +133,11 @@ function ClavaNavbar({currentRoute, clubId, clubName} : ClavaNavbarProps) {
           </Typography>
           {/* === END OF TITLE FOR SMALL WINDOW SIZE === */}
           {/* === START OF MENU ITEMS AS BUTTONS === */}
-          <Box
-            justifyContent="center"
+          <Stack
             alignItems="center"
-            sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}
+            direction="row"
+            justifyContent="center"
+            sx={{ display: { xs: 'none', md: 'flex' } }}
           >
             {pages.map((page) => (
               <NavButton 
@@ -137,10 +146,10 @@ function ClavaNavbar({currentRoute, clubId, clubName} : ClavaNavbarProps) {
                 clubId={clubId}
               />
             ))}
-          </Box>
+          </Stack>
           {/* === END OF MENU ITEMS AS BUTTONS === */}
           {/* === START OF AVATAR ICON BUTTON === */}
-          <Box sx={{ flexGrow: 0 }}>
+          <Box sx={{ display:"flex", justifyContent:"flex-end", flex:1 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar alt="Remy Sharp" src="" />
@@ -163,7 +172,7 @@ function ClavaNavbar({currentRoute, clubId, clubName} : ClavaNavbarProps) {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                <MenuItem key={setting} onClick={() => handleCloseUserMenu(setting)}>
                   <Typography textAlign="center">{setting}</Typography>
                 </MenuItem>
               ))}
