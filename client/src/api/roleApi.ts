@@ -6,6 +6,8 @@ type GetRolesResponse = { roles: Role[] }
 type CreateRoleResponse = { role: Role }
 type DeleteRoleResponse = { role: Role }
 type EditRoleResponse = { role: Role }
+type DeleteTagFromOfficerResponse = {}
+type AddTagToOfficerResponse = {}
 
 
 const RoleInstance = axios.create({
@@ -29,6 +31,13 @@ export const deleteRole = ({ _id }: RoleDeleteRequest) =>  {
 }
 
 export const editRole = ({ newName, newColor, _id }: EditRoleRequest) =>  {
-  console.log("hi")
   return RoleInstance.put<EditRoleResponse>('/roles', { newName, newColor, _id })
+}
+ 
+export const deleteRoleFromOfficer = ({role_id, officer_id}: DeleteRoleFromOfficerRequest) => {
+  return RoleInstance.delete<DeleteTagFromOfficerResponse>('/roles/', { data: {role_id, officer_id }})
+}
+
+export const addRolesToOfficer = ({role_id, officer_ids}: AddRoleToOfficerRequest) => {
+  return RoleInstance.post<AddTagToOfficerResponse>('/roles/', {role_id, officer_ids})
 }

@@ -22,3 +22,13 @@ interface EditRoleRequest {
 interface RoleDeleteRequest {
   _id: string
 }
+
+interface DeleteRoleFromOfficerRequest {
+  role_id: string
+  officer_id: string
+}
+
+interface AddRoleToOfficerRequest {
+  role_id: string
+  officer_ids: string[]
+}
