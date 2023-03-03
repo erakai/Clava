@@ -7,7 +7,9 @@ import AddMemberModal from './AddMemberModal'
 import AddRoleModal from './AddRoleModal'
 import RoleModal from './RoleModal'
 import MemberDisplay from './MemberDisplay'
+import AddOfficerModal from './AddOfficerModal'
 import { createMember as _createMember, getMembers } from '../../api/memberApi'
+import { _sendOfficerInvite } from "../../api/officerApi";
 import { createTag as _createTag, getTags } from '../../api/memberApi'
 import { createRole as _createRole, getRoles } from '../../api/roleApi'
 import { ClavaNavbar, ScrollTop } from '../../components/Navigation'
@@ -32,7 +34,6 @@ export default function MemberView({ club_id, state }: MemberViewProps) {
   const [roleOpen, setRoleOpen] = useState(false)
   const [roleViewOpen, setRoleViewOpen] = useState(false)
   const [tags, setTags] = useState<Tag[]>([])
-  const [roles, setRoles] = useState<Role[]>([])
   const [officerOpen, setOfficerOpen] = useState(false)
   const [disableAddingMember, setDisableAddingMember] = useState(false)
   const [disableAddingRole, setDisableAddingRole] = useState(false)
@@ -74,8 +75,14 @@ export default function MemberView({ club_id, state }: MemberViewProps) {
     }
   }
 
-  const createOfficer = (member: Member) => {
-    console.log('Created officer (THIS IS PLACEHOLDER')
+  const createOfficer = async (officer: AddOfficerRequest) => {
+    const [err, res] = await to(_sendOfficerInvite(officer))
+    if (err) {
+      console.log(err)
+      setErrorMessage('Something went wrong.')
+    } else if (res) {
+      setMembers([...members, res.data.member])
+    }
   }
 
   useEffect(() => {
@@ -138,6 +145,14 @@ export default function MemberView({ club_id, state }: MemberViewProps) {
 
   return (
     <Box className="min-w-full flex-auto">
+      <AddOfficerModal
+          createOfficer={createOfficer}
+          open={officerOpen}
+          setOpen={setOfficerOpen}
+          errorMessage={errorMessage}
+          setErrorMessage={setErrorMessage}
+          club_id={club_id}
+      />
       <AddMemberModal
         open={memberOpen}
         setOpen={setMemberOpen}
@@ -199,7 +214,7 @@ export default function MemberView({ club_id, state }: MemberViewProps) {
                   </Button>
                 </Grid> 
                 <Grid item xs={12} md={6} lg={3}>
-                  <Button className='h-full' variant="contained" color="secondary">
+                  <Button className='h-full' variant="contained" color="secondary" onClick={() => setOfficerOpen(true)}>
                     Add Officer
                   </Button>
                 </Grid> 

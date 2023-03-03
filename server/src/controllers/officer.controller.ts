@@ -1,6 +1,7 @@
 import type { Request, Response } from 'express'
 import Member from 'models/member.model'
 import Officer from 'models/officer.model'
+import {sendOfficerInvitationEmail} from "../modules/Emailing";
 
 export const getOfficers = async (req: Request, res: Response) => {
 	console.log(req.query)
@@ -21,11 +22,9 @@ export const getOfficers = async (req: Request, res: Response) => {
 }
 
 export const requestAddOfficer = async (req: Request, res: Response) => {
-	let { name, club_id, email } = req.body
+	let { name, email, club_id } = req.body
 	
 	const expiration = new Date(new Date().getTime() + (24 * 60 * 60 * 1000)); // officer invitation will expire
-
-	// TODO: Verify club_id is a valid id
 
 	if (!name || !club_id) {
 		return res.status(400).json({error: 'no name or club provided'})
@@ -70,7 +69,8 @@ export const requestAddOfficer = async (req: Request, res: Response) => {
 		    if (err) {
 		      return res.status(500).send({err})
 		    }
-
+			const link = process.env.CLIENT_URL + "/" + club_id + "/members"
+			sendOfficerInvitationEmail(email, name, link)
 		    return res.status(200).json({officer})
 		  })
 		}
