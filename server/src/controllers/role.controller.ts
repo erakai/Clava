@@ -1,6 +1,7 @@
 import to from 'await-to-js'
 import type { Request, Response } from 'express'
 import Club from 'models/club.model'
+import Officer from 'models/officer.model'
 import Role from 'models/Role.model'
 import Tag from 'models/tag.model'
 import { IClub } from 'types/club'
@@ -40,6 +41,8 @@ export const getRoles = async (req: Request, res: Response) => {
 }
 
 export const createRole = async (req: Request, res: Response) => {
+  if (req.body.officer_ids) return addRoleToOfficer(req, res)
+
   let { name, color, perms, club_id } = req.body
 
  
@@ -68,6 +71,7 @@ export const createRole = async (req: Request, res: Response) => {
 }
 
 export const deleteRole = async (req: Request, res: Response) => {
+  if (req.body.officer_id) return removeRoleFromOfficer(req, res)
 
   let { _id } = req.body
 
@@ -86,4 +90,38 @@ export const deleteRole = async (req: Request, res: Response) => {
 
     return res.status(200).json({role})
   })
+}
+
+export const removeRoleFromOfficer = async (req: Request, res: Response) => {
+  let { officer_id, role_id } = req.body
+
+  if (!officer_id) return res.status(500).json({error: 'no officer id provided'})
+  if (!role_id) return res.status(500).json({error: 'no role id provided'})
+
+  Officer.findByIdAndUpdate(officer_id, { $pull: {"role_ids": role_id}}, async (err, result) => {
+    if (err) return res.status(500).send({err})
+    return res.status(200).json({result})
+  })
+}
+
+export const addRoleToOfficer = async (req: Request, res: Response) => {
+  let { officer_ids, role_id } = req.body
+
+  if (!officer_ids) return res.status(500).json({error: 'no officer id provided'})
+  if (!role_id) return res.status(500).json({error: 'no tag role provided'})
+
+  // TODO: Check that they do not already have the tag
+
+  let conditions = (officer_id) => { return {
+    _id: officer_id,
+    'role_ids': { $nin: role_id }
+  }}
+
+  officer_ids.forEach(officer_id => {
+    Officer.findOneAndUpdate(conditions(officer_id), { $push: {"role_ids": role_id}},  async (err, result) => {
+      if (err) return res.status(500).send({err})
+    })
+  })
+
+  return res.status(200).json({success: "true"})
 }

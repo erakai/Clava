@@ -2,6 +2,8 @@ import { Autocomplete, Collapse, Grid, IconButton, Stack, TextField, Tooltip } f
 import { Dispatch, useState } from "react";
 import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 import AddIcon from '@mui/icons-material/Add';
+import { addRolesToOfficer } from "../../api/roleApi";
+import to from "await-to-js";
 
 type OfficerToolbarExtensionProps = {
   selected: Officer[]
@@ -23,6 +25,14 @@ function OfficerToolbarExtension({
 
     let officer_ids = selected.map(s => s._id)
 
+    const [err] = await to(addRolesToOfficer({role_id: selectedRole._id, officer_ids}))
+    if (err) {
+      console.log(err)
+      setAdding(false)
+      return
+    }
+
+    
     let newOfficers = officers
     newOfficers.forEach(o => {
       if (selected.indexOf(o) != -1) {

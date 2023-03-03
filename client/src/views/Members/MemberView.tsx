@@ -201,11 +201,18 @@ export default function MemberView({ club_id, state, user_id, owner_id }: Member
                   <Button className='h-full' disabled={ownerVisibility} variant="contained" color="secondary" onClick={() => setRoleViewOpen(true)}>
                     Add Role
                   </Button>
+                  <Grid container justifyContent="flex-end" className='h-full'>
+                    <Button className='h-full' disabled={ownerVisibility} variant="contained" color="secondary" onClick={() => setRoleViewOpen(true)}>
+                    Add Role
+                    </Button>
+                  </Grid>
                 </Grid> 
                 <Grid item xs={12} md={6} lg={3}>
-                  <Button className='h-full' variant="contained" color="secondary">
-                    Add Officer
-                  </Button>
+                  <Grid container justifyContent="flex-end" className='h-full'>
+                    <Button className='h-full' variant="contained" color="secondary">
+                      Add Officer
+                    </Button>
+                  </Grid>
                 </Grid> 
               </Grid>
             </Box>
