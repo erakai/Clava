@@ -80,7 +80,8 @@ function RoleChip({ name, color, _id, deleteRole, hasRoleName }: RoleChipProps) 
         className=""
         label={currName}
         onDelete={handleDelete}
-        onClick={open}/>
+        onClick={open}
+        style={{ backgroundColor: currColor }}/>
        <Dialog
         open={isEditing}
         onClose={close}>
