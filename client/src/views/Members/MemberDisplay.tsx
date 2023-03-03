@@ -95,6 +95,16 @@ export default function MemberDisplay({ members, setMembers, title, club_id, sta
       }
     }
 
+    if (member.tag_ids.length > 0) {
+      let found = false
+      tags.forEach(t => {
+        if (member.tag_ids.includes(t._id) && t.name.toLowerCase().includes(searchString)) {
+          found = true
+        }
+      })
+      if (found) return found
+    }
+
     return (member.name.toLowerCase().includes(searchString) ||
             member.email.toLowerCase().includes(searchString))
   })

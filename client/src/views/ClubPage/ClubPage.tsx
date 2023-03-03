@@ -8,7 +8,7 @@ import { getClubs, createClub as _createClub, addClubToUser } from '../../api/cl
 import { useEffect, useState } from 'react'
 import useUser from '../../hooks/useUser'
 
-const settings = ['Profile', 'Logout'];
+const settings = ['Logout'];
 
 function ClubPage() {
 
