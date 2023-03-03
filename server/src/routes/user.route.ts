@@ -1,6 +1,6 @@
 import { Router } from 'express'
 
-import { getSelf, login, logout, refresh, register } from 'controllers/user.controller'
+import { getSelf, login, logout, refresh, register, resetrequest, reset} from 'controllers/user.controller'
 import passport from 'passport'
 import { verifyUser } from 'config/auth'
 
@@ -22,5 +22,7 @@ userRouter.post('/register', register)
 userRouter.post('/login', passport.authenticate('local'), login)
 userRouter.post('/refresh', refresh)
 userRouter.post('/logout', verifyUser, logout)
+userRouter.post('/resetrequest', resetrequest)
+userRouter.post('/reset', reset)
 
 export default userRouter

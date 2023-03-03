@@ -2,6 +2,8 @@ import { Chip, Box, Button, Stack, TextField, Dialog, DialogTitle, DialogContent
 import { editTag as _editTag } from "../../api/memberApi"
 import React, { Dispatch, useEffect } from "react"
 import to from "await-to-js"
+import { CirclePicker } from "@hello-pangea/color-picker";
+
 
 type TagChipProps = {
   name: string
@@ -16,6 +18,7 @@ type TagChipProps = {
 function TagChip({ name, color, _id, deleteTag, hasTagName, tags, setTags }: TagChipProps) {
   const [currName, setCurrName] = React.useState(name)
   const [currColor, setCurrColor] = React.useState(color)
+
   const [isEditing, setEditing] = React.useState(false)
   const [newName, setNewName] = React.useState('')
   const [newColor, setNewColor] = React.useState('')
@@ -91,7 +94,8 @@ function TagChip({ name, color, _id, deleteTag, hasTagName, tags, setTags }: Tag
         className=""
         label={currName}
         onDelete={handleDelete}
-        onClick={open}/>
+        onClick={open}
+        style={{ backgroundColor: currColor }}/>
        <Dialog
         open={isEditing}
         onClose={close}>
@@ -106,13 +110,7 @@ function TagChip({ name, color, _id, deleteTag, hasTagName, tags, setTags }: Tag
                 setNewName(e.target.value.trim())
                 setNameError("")
               }}/>
-            <TextField label="Tag Color" variant="standard" size="small" defaultValue={currColor}
-              error={colorError != ""} 
-              helperText={colorError}
-              onChange={(e) => {
-                setNewColor(e.target.value.trim())
-                setColorError("")
-              }}/>
+            <CirclePicker defaultColor={color} onChange={(e) => setNewColor(e.hex)} />
           </Stack>
         </DialogContent>
         <DialogActions>
