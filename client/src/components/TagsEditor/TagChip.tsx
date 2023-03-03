@@ -79,7 +79,8 @@ function TagChip({ name, color, _id, deleteTag, hasTagName }: TagChipProps) {
         className=""
         label={currName}
         onDelete={handleDelete}
-        onClick={open}/>
+        onClick={open}
+        style={{ backgroundColor: color }}/>
        <Dialog
         open={isEditing}
         onClose={close}>
