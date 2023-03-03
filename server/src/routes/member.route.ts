@@ -10,7 +10,7 @@ Member Routes:
   - /members GET (club id): returns all members in club 
   - /members POST (name, email, club id, ?expiration): creates + returns new member in club
   - /members DELETE ([member_ids]): deletes members
-  - /member PUT (member_id, name, email) : updates the member_id with information
+  - /members PUT (member_id, name, email) : updates the member_id with information
 */
 
 memberRouter.get('/', verifyUser, getMembers)
