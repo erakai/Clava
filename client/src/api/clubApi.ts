@@ -19,7 +19,7 @@ export const getClubs = (user_id: string) => {
 }
 
 export const getClub = (club_id: string) => {
-  return ClubInstance.get<GetClubsResponse>('/id', { params: { club_id }})
+  return ClubInstance.get<GetClubResponse>('/id', { params: { club_id }})
 }
 
 export const createClub = ({ name, description }: ClubRequest) =>  {

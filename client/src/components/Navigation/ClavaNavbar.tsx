@@ -59,7 +59,7 @@ function ClavaNavbar({currentRoute, clubId, clubName, logout} : ClavaNavbarProps
             variant="h6"
             noWrap
             component="a"
-            href="/"
+            href="/clubs"
             sx={{
               justifySelf: { xs: 'none', md: 'flex-start'},
               flex: { xs: 0, md: 1 },
