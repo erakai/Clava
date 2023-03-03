@@ -58,3 +58,24 @@ export const createRole = async (req: Request, res: Response) => {
     return res.status(200).json({role})
   })
 }
+
+export const deleteRole = async (req: Request, res: Response) => {
+
+  let { _id } = req.body
+
+  console.log("hi")
+ 
+  if (!_id) {
+    return res.status(500).json({error: 'no id provided'})
+  }
+
+  Role.findByIdAndDelete({
+    _id
+  }, async (err, role) => {
+    if (err) {
+      return res.status(500).send({err})
+    }
+
+    return res.status(200).json({role})
+  })
+}

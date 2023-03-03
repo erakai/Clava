@@ -5,10 +5,11 @@ import { useEffect, useState } from 'react'
 
 import AddMemberModal from './AddMemberModal'
 import AddRoleModal from './AddRoleModal'
+import RoleModal from './RoleModal'
 import MemberDisplay from './MemberDisplay'
 import { createMember as _createMember, getMembers } from '../../api/memberApi'
 import { createTag as _createTag, getTags } from '../../api/memberApi'
-import { createRole as _createRole } from '../../api/roleApi'
+import { createRole as _createRole, getRoles } from '../../api/roleApi'
 import { ClavaNavbar, ScrollTop } from '../../components/Navigation'
 import useUser from '../../hooks/useUser'
 import TagsEditor from '../../components/TagsEditor'
@@ -25,6 +26,7 @@ export default function MemberView({ club_id, state }: MemberViewProps) {
   const [roles, setRoles] = useState<Role[]>([])
   const [memberOpen, setMemberOpen] = useState(false)
   const [roleOpen, setRoleOpen] = useState(false)
+  const [roleViewOpen, setRoleViewOpen] = useState(false)
   const [tags, setTags] = useState<Tag[]>([])
   const [officerOpen, setOfficerOpen] = useState(false)
   const [disableAddingMember, setDisableAddingMember] = useState(false)
@@ -98,8 +100,22 @@ export default function MemberView({ club_id, state }: MemberViewProps) {
       }
     }
 
+    const fetchRoles = async () => {
+      const [err, res] = await to(getRoles(club_id))
+      if (err) {
+        console.log(err)
+        return
+      }
+
+      const retrieved = res.data.roles
+      if (retrieved) {
+        setRoles(retrieved)
+      }
+    }
+
     fetchMembers()
     fetchTags()
+    fetchRoles()
   }, [state])
 
   return (
@@ -121,6 +137,16 @@ export default function MemberView({ club_id, state }: MemberViewProps) {
         setErrorMessage={setErrorMessage}
         club_id={club_id}
         disableAddingRole={disableAddingRole}/>
+
+      <RoleModal
+        open={roleViewOpen}
+        setOpen={setRoleViewOpen}
+        setRoleOpen={setRoleOpen}
+        setRoles={setRoles}
+        errorMessage={errorMessage}
+        setErrorMessage={setErrorMessage}
+        club_id={club_id}
+        roles={roles}/>
       <Box className="m-4 mb-16">
         <Grid container spacing={2}>
           <Grid item xs={4}>
@@ -150,7 +176,7 @@ export default function MemberView({ club_id, state }: MemberViewProps) {
             <Box display="flex" height="100%" >
               <Grid container spacing={1} justifyContent="flex-end">
                 <Grid item xs={12} md={6} lg={3}>
-                  <Button className='h-full' variant="contained" color="secondary" onClick={() => setRoleOpen(true)}>
+                  <Button className='h-full' variant="contained" color="secondary" onClick={() => setRoleViewOpen(true)}>
                     Add Role
                   </Button>
                 </Grid> 

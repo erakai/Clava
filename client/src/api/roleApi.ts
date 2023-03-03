@@ -4,6 +4,7 @@ import { getRefreshToken } from "./userApi"
 
 type GetRolesResponse = { roles: Role[] }
 type CreateRoleResponse = { role: Role }
+type DeleteRoleResponse = { role: Role }
 
 
 const RoleInstance = axios.create({
@@ -20,4 +21,8 @@ export const getRoles = (club_id: string) => {
 
 export const createRole = ({ name, color, perms }: RoleRequest) =>  {
   return RoleInstance.post<CreateRoleResponse>('/roles', { name, color, perms })
+}
+
+export const deleteRole = ({ _id }: RoleDeleteRequest) =>  {
+  return RoleInstance.delete<DeleteRoleResponse>('/roles', { data: { _id }})
 }

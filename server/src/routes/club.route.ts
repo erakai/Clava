@@ -1,6 +1,6 @@
 import { verifyUser } from "config/auth";
 import { getClubs, getClub, createClub, addClubToUser, removeClubFromUser } from "controllers/club.controller";
-import { getRoles, createRole } from "controllers/role.controller";
+import { getRoles, createRole, deleteRole } from "controllers/role.controller";
 import { Router } from "express";
 
 const clubRouter = Router()
@@ -20,5 +20,7 @@ clubRouter.put('/leave', verifyUser, removeClubFromUser)
 
 clubRouter.get('/roles', verifyUser, getRoles)
 clubRouter.post('/roles', verifyUser, createRole)
+clubRouter.delete('/roles', verifyUser, deleteRole)
+
 
 export default clubRouter

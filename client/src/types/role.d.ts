@@ -10,3 +10,7 @@ interface RoleRequest {
   color: string,
   perms: Array<string>
 }
+
+interface RoleDeleteRequest {
+  _id: string
+}
