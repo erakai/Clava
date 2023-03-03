@@ -98,7 +98,7 @@ export const removeRoleFromOfficer = async (req: Request, res: Response) => {
   if (!officer_id) return res.status(500).json({error: 'no officer id provided'})
   if (!role_id) return res.status(500).json({error: 'no role id provided'})
 
-  Officer.findByIdAndUpdate(officer_id, { $pull: {"tag_ids": role_id}}, async (err, result) => {
+  Officer.findByIdAndUpdate(officer_id, { $pull: {"role_ids": role_id}}, async (err, result) => {
     if (err) return res.status(500).send({err})
     return res.status(200).json({result})
   })
@@ -114,11 +114,11 @@ export const addRoleToOfficer = async (req: Request, res: Response) => {
 
   let conditions = (officer_id) => { return {
     _id: officer_id,
-    'tag_ids': { $nin: role_id }
+    'role_ids': { $nin: role_id }
   }}
 
   officer_ids.forEach(officer_id => {
-    Officer.findOneAndUpdate(conditions(officer_id), { $push: {"tag_ids": role_id}},  async (err, result) => {
+    Officer.findOneAndUpdate(conditions(officer_id), { $push: {"role_ids": role_id}},  async (err, result) => {
       if (err) return res.status(500).send({err})
     })
   })
