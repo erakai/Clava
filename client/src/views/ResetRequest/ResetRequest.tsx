@@ -1,16 +1,48 @@
-import { Box, TextField, Stack, Typography, Button, IconButton } from "@mui/material"
+import {
+  Box,
+  TextField,
+  Stack,
+  Typography,
+  Button,
+  IconButton,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText
+} from "@mui/material"
 import { Link } from "react-router-dom"
-import {ArrowBack} from "@mui/icons-material"
-import Popup from 'reactjs-popup';
+import { ArrowBack } from "@mui/icons-material"
+import { _resetRequest } from '../../api/userApi'
 import 'reactjs-popup/dist/index.css';
-
+import to from 'await-to-js'
+import React from "react";
+import useEmailVerify from '../../hooks/useEmailVerify'
 function ResetRequest() {
+  const [email, setEmail] = React.useState('')
+
+  const emailVerify = useEmailVerify()
+  const sendResetRequest = async (req: UserResetRequest) => {
+    try {
+      await to(_resetRequest(req))
+    } catch (err) {
+      console.log(err)
+      }
+    }
+
+  const [open, setOpen] = React.useState(false);
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
       <Box className="flex w-screen h-screen items-center justify-center" sx={{bgcolor: "secondary.main"}}
       >
         <Stack
             spacing={7} bgcolor="white" color="secondary"
-            className="items-center m-8 p-8 pb-20 max-w-[30%]"
+            className="items-center m-8 p-8 pb-20 max-w-md"
             sx={{ borderRadius: '2%', borderColor: 'grey.500', bgcolor: 'white' }}
         >
           <Stack spacing={1} className="flex w-full items-center">
@@ -28,12 +60,37 @@ function ResetRequest() {
                 id="email-text-field"
                 label="Email"
                 variant="outlined"
-                type="email"/>
-            <Popup trigger={<Button className="w-80" variant="contained" color="secondary">Request Reset</Button>} modal>
-              <div className="modal">
-                If an account associated with the provided email exists, you will receive a password reset link in your inbox.
-              </div>
-            </Popup>
+                type="email"
+                value={email}
+                error={email != '' && !emailVerify(email)}
+                helperText={(email != '' && !emailVerify(email)) ? "Please enter a valid email" : ""}
+                onChange={(e) => {
+                  setEmail(e.target.value.trim())
+                }}
+            />
+            <Button className="w-80" variant="contained" color="secondary"
+              onClick={(e) => {
+                if (emailVerify(email)) {
+                  handleClickOpen()
+                  _resetRequest({email}).then(r => {console.log("ERROR")})}
+                }
+              }
+            >Request Reset</Button>
+            <Dialog
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+              <DialogTitle id="alert-dialog-title">
+                {"Reset Request Success"}
+              </DialogTitle>
+              <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                  If an account tied to the entered email address exists, an email containing instructions on how to reset your password will be sent to your inbox.
+                </DialogContentText>
+              </DialogContent>
+            </Dialog>
           </Stack>
         </Stack>
       </Box>

@@ -26,6 +26,12 @@ export const _getUser = () =>
 export const _logout = () => 
   UserInstance.post('/logout')
 
+export const _resetRequest = ({ email }: UserResetRequest) =>
+  UserInstance.post('/resetrequest', { email })
+
+export const _passwordChangeRequest = ({ user_id, password }: UserChangePasswordRequest) =>
+  UserInstance.post('/reset', { user_id, password })
+
 export const getRefreshToken = () => 
   UserInstance.post<AuthResponse>('/refresh')
 

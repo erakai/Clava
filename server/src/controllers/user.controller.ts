@@ -4,7 +4,8 @@ import type { Request, Response } from 'express'
 import jwt, { JwtPayload } from 'jsonwebtoken'
 import User from 'models/user.model'
 import { IUser } from 'types/user'
-// import send_password_reset from 'modules/Emailing.mjs'
+import { sendResetRequestEmail } from "modules/Emailing"
+
 
 // again i followed https://www.codingdeft.com/posts/react-authentication-mern-node-passport-express-mongo/
 // very closely for the below approach
@@ -41,14 +42,40 @@ export const register = async (req: Request, res: Response) => {
 export const resetrequest = async (req: Request, res: Response) => {
   let { email } = req.body
   User.findOne({ email : email },
-      async (err, user) => {
+      async (err, user: IUser) => {
         if (err) {
           //No user found --> no account associated with given email
-          return res.status(200).send({err})
+          return res.status(404).send({err})
         }
-        const link = process.env.CLIENT_URL + "/reset/_id"
-        // send_password_reset(email, user.name, link)
-        return res.status(200)
+
+        if (!user) {
+          return res.status(404).send("NO USER FOUND")
+        }
+
+        console.log(user.name)
+        const link = process.env.CLIENT_URL + "/reset/" + user._id
+        const parameters = {
+          recipient: email,
+          recipient_name: user.name,
+          link: link
+        }
+        sendResetRequestEmail(email, user.name, link)
+        return res.status(200).send("RESET EMAIL SENT")
+      })
+}
+
+// All validation and verifications check should already be done client-side
+export const reset = async (req: Request, res: Response) => {
+  let { user_id, password } = req.body
+  User.findById(user_id,
+      async (err, user: IUser) => {
+        if (err || !user) {
+          return res.status(404).send("NO USER FOUND")
+        }
+        user.setPassword(password, function(){
+          user.save()
+          return res.status(200).send("PASSWORD RESET COMPLETE")
+        })
       })
 }
 
