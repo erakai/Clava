@@ -56,9 +56,9 @@ export default function AddRoleModal({
     for(let i=0; i<checkedState.length; i++) {
       if(checkedState[i]) perms.push(permString[i])
     }
-
+    
     let roleRequest : RoleRequest = {
-      name, color, perms
+      name, color, perms, club_id
     }
     createRole(roleRequest)
     handleClose();

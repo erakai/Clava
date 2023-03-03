@@ -2,6 +2,7 @@ import to from 'await-to-js'
 import type { Request, Response } from 'express'
 import Club from 'models/club.model'
 import Role from 'models/Role.model'
+import Tag from 'models/tag.model'
 import { IClub } from 'types/club'
 import { IRole } from 'types/role'
 
@@ -14,26 +15,33 @@ export const getRoles = async (req: Request, res: Response) => {
   const club: IClub = await Club.findById(club_id)
 
   if(!club) return res.status(401).send('Unauthorized')
+  
+  // make sure club exists
 
-  const role_ids = club.role_ids;
+  Club.find({
+    club_id: club_id
+  }, async (err) => {
+    if (err) {
+      console.log("no club")
+      return res.status(500).send({err})
+    }
+  })
 
-  const roles = []
+  Role.find({
+    club_id: club_id
+  }, async (err, roles) => {
+    if (err) {
+      return res.status(500).send({err})
+    }
 
-  for(let i=0; i<role_ids.length; i++) {
-      
-    const role = await Role.findById(role_ids[i])
+    return res.status(200).json({roles})
 
-    if(!role) return res.status(401).send('Unauthorized')
-
-    roles.push(role)
-
-  }
-
-  return res.status(200).json({roles})
+  })
 }
 
 export const createRole = async (req: Request, res: Response) => {
-  let { name, color, perms } = req.body
+  let { name, color, perms, club_id } = req.body
+
  
 
   if (!name) {
@@ -47,9 +55,9 @@ export const createRole = async (req: Request, res: Response) => {
   if (!perms) {
     perms = []
   }
-
+  console.log("mom is fat " + club_id)
   Role.create({
-    name, color, perms
+    name, color, perms, club_id
   }, async (err, role) => {
     if (err) {
       return res.status(500).send({err})

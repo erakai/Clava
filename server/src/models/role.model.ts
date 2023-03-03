@@ -11,6 +11,7 @@ const RoleSchema = new Schema<IRole>({
     default: "#000000"
   },
   perms: [SchemaTypes.String],
+  club_id: SchemaTypes.ObjectId
 })
 
 const Role = model('role', RoleSchema) as Model<IRole>

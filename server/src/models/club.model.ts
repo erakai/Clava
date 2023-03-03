@@ -7,8 +7,6 @@ const ClubSchema = new Schema<IClub>({
     required: true,
   },
   description: SchemaTypes.String,
-  tag_ids: [SchemaTypes.ObjectId],
-  role_ids: [SchemaTypes.ObjectId],
   tran_ids: [SchemaTypes.ObjectId],
   reim_ids: [SchemaTypes.ObjectId],
   member_ids: [SchemaTypes.ObjectId],

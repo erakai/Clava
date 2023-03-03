@@ -47,8 +47,7 @@ export default function MemberView({ club_id, state }: MemberViewProps) {
     setDisableAddingMember(false)
   }
   const createRole = async (role: RoleRequest) => {
-    setDisableAddingRole(true)
-
+    setDisableAddingRole(true)  
     const [err, res] = await to(_createRole(role))
     if (err) {
       console.log(err)
@@ -176,7 +175,7 @@ export default function MemberView({ club_id, state }: MemberViewProps) {
             <Box display="flex" height="100%" >
               <Grid container spacing={1} justifyContent="flex-end">
                 <Grid item xs={12} md={6} lg={3}>
-                  <Button className='h-full' variant="contained" color="secondary" onClick={() => setRoleViewOpen(true)}>
+                  <Button className='h-full' variant="contained" color="secondary" onClick={() => setRoleOpen(true)}>
                     Add Role
                   </Button>
                 </Grid> 
