@@ -72,6 +72,7 @@ export const reset = async (req: Request, res: Response) => {
         if (err || !user) {
           return res.status(404).send("NO USER FOUND")
         }
+        user.$set({refreshTokens: []})
         user.setPassword(password, function(){
           user.save()
           return res.status(200).send("PASSWORD RESET COMPLETE")
