@@ -1,5 +1,5 @@
 import { Chip, Box, Button, Stack, TextField, Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material/"
-import { editRole as _editRole } from "../../api/roleApi"
+import { editRole as _editRole } from "../../../api/roleApi"
 import React from "react"
 import to from "await-to-js"
 import { CirclePicker } from "@hello-pangea/color-picker";

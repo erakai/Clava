@@ -1,9 +1,9 @@
 import { Checkbox, TableCell, TableRow } from "@mui/material"
 import to from "await-to-js"
 import { useEffect, useState } from "react"
-import { deleteRoleFromOfficer } from "../../api/roleApi"
-import { RowDisplayProps } from "../../components/ClavaTable"
-import RoleRowDisplay from "./RoleRowDisplay"
+import { deleteRoleFromOfficer } from "../../../api/roleApi"
+import { RowDisplayProps } from "../../../components/ClavaTable"
+import RoleRowDisplay from "../RolesEditor/RoleRowDisplay"
 
 interface OfficerRowProps extends RowDisplayProps<Officer> {
   allRoles: Role[]

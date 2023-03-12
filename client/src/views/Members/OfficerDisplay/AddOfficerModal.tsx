@@ -1,7 +1,7 @@
 import { Box, Button, Grid, IconButton, Modal, TextField, Typography } from "@mui/material"
 import React, { Dispatch, useState } from "react"
 import CloseIcon from '@mui/icons-material/Close';
-import useEmailVerify from "../../hooks/useEmailVerify"
+import useEmailVerify from "../../../hooks/useEmailVerify"
 
 type AddOfficerProps = {
     createOfficer: (officer: AddOfficerRequest) => void

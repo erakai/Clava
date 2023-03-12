@@ -1,11 +1,11 @@
-import { ClavaTable, HeaderCell, RowDisplayProps } from "../../components/ClavaTable"
+import { ClavaTable, HeaderCell, RowDisplayProps } from "../../../components/ClavaTable"
 import { useState } from "react"
 import { Box } from "@mui/material"
 
-import EditMemberModal from "./EditMemberModal"
-import { UserState } from "../../store/user/userSlice"
+import EditMemberModal from "../MemberDisplay/EditMemberModal"
+import { UserState } from "../../../store/user/userSlice"
 
-import { AlternateSelectedToolbarProps } from "../../components/ClavaTable/TableToolbar"
+import { AlternateSelectedToolbarProps } from "../../../components/ClavaTable/TableToolbar"
 import OfficerRow from "./OfficerRow"
 import OfficerToolbarExtension from "./OfficerToolbarExtension"
 

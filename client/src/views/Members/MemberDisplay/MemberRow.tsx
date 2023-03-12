@@ -1,9 +1,9 @@
 import { Checkbox, TableCell, TableRow } from "@mui/material"
 import to from "await-to-js"
 import { useEffect, useState } from "react"
-import { deleteTagFromMember } from "../../api/memberApi"
-import { RowDisplayProps } from "../../components/ClavaTable"
-import { TagRowDisplay } from "../../components/TagsEditor"
+import { deleteTagFromMember } from "../../../api/memberApi"
+import { RowDisplayProps } from "../../../components/ClavaTable"
+import { TagRowDisplay } from "../TagsEditor"
 
 interface MemberRowProps extends RowDisplayProps<Member> {
   allTags: Tag[]

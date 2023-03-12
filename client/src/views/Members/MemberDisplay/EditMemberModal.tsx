@@ -3,7 +3,7 @@ import { DatePicker } from "@mui/x-date-pickers"
 import moment, { Moment } from "moment"
 import { Dispatch, useState } from "react"
 import CloseIcon from '@mui/icons-material/Close';
-import useEmailVerify from "../../hooks/useEmailVerify"
+import useEmailVerify from "../../../hooks/useEmailVerify"
 
 type EditMemberProps = {
   onEdit: (member: Member) => void

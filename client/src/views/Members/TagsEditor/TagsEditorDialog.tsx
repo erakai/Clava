@@ -1,5 +1,5 @@
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material'
-import { deleteTag as _deleteTag } from '../../api/memberApi';
+import { deleteTag as _deleteTag } from '../../../api/memberApi';
 import * as React from 'react';
 import CreateTagDialog from './CreateTagDialog';
 import TagChip from './TagChip';

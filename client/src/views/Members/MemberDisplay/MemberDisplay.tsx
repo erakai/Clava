@@ -1,14 +1,14 @@
-import { ClavaTable, HeaderCell, RowDisplayProps } from "../../components/ClavaTable"
+import { ClavaTable, HeaderCell, RowDisplayProps } from "../../../components/ClavaTable"
 import { useState } from "react"
 import { Box } from "@mui/material"
 
 import to from 'await-to-js'
-import { deleteMembers, updateMember } from '../../api/memberApi'
+import { deleteMembers, updateMember } from '../../../api/memberApi'
 import EditMemberModal from "./EditMemberModal"
-import { UserState } from "../../store/user/userSlice"
+import { UserState } from "../../../store/user/userSlice"
 import MemberRow from "./MemberRow"
 import MemberToolbarExtension from "./MemberToolbarExtension"
-import { AlternateSelectedToolbarProps } from "../../components/ClavaTable/TableToolbar"
+import { AlternateSelectedToolbarProps } from "../../../components/ClavaTable/TableToolbar"
 
 const headerCells: HeaderCell<Member>[] = [
   {

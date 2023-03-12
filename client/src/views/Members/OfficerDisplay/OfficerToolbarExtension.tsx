@@ -2,7 +2,7 @@ import { Autocomplete, Collapse, Grid, IconButton, Stack, TextField, Tooltip } f
 import { Dispatch, useState } from "react";
 import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 import AddIcon from '@mui/icons-material/Add';
-import { addRolesToOfficer } from "../../api/roleApi";
+import { addRolesToOfficer } from "../../../api/roleApi";
 import to from "await-to-js";
 
 type OfficerToolbarExtensionProps = {

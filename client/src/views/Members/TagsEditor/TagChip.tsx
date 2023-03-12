@@ -1,5 +1,5 @@
 import { Chip, Box, Button, Stack, TextField, Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material/"
-import { editTag as _editTag } from "../../api/memberApi"
+import { editTag as _editTag } from "../../../api/memberApi"
 import React, { Dispatch, useEffect } from "react"
 import to from "await-to-js"
 import { CirclePicker } from "@hello-pangea/color-picker";

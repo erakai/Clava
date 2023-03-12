@@ -2,7 +2,7 @@ import { Box, Button, Dialog, DialogTitle, DialogContent, DialogActions, Chip } 
 import RoleChip from "./RoleChip"
 import AddIcon from '@mui/icons-material/Add';
 import to from "await-to-js"
-import { deleteRole as _deleteRole } from '../../api/roleApi';
+import { deleteRole as _deleteRole } from '../../../api/roleApi';
 import { Dispatch, useState } from "react"
 
 type RoleProps = {

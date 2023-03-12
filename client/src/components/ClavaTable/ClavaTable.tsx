@@ -1,7 +1,5 @@
-import { Compress } from "@mui/icons-material";
 import { Box, Paper, Table, TableBody, TableCell, TableContainer, TablePagination, TableRow } from "@mui/material";
 import { ChangeEvent, useState, MouseEvent, Dispatch } from "react";
-import EditMemberModal from "../../views/Members/EditMemberModal";
 import TableHeader, { HeaderCell } from "./TableHeader";
 import TableToolbar, { AlternateSelectedToolbarProps } from "./TableToolbar";
 
