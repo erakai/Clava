@@ -221,7 +221,7 @@ export default function MemberView({ club_id, state, user_id, owner_id }: Member
                   </Grid>
                 </Grid>
                 <Grid item xs={12} md={6} lg={3}>
-                  <Button className='h-full' variant="contained" color="secondary" onClick={() => setOfficerOpen(true)}>
+                  <Button className='h-full' disabled={ownerVisibility} variant="contained" color="secondary" onClick={() => setOfficerOpen(true)}>
                     Add Officer
                   </Button>
                 </Grid>
