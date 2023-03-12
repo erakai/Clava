@@ -4,7 +4,6 @@ import Officer from 'models/officer.model'
 import {sendOfficerInvitationEmail} from "../modules/Emailing";
 
 export const getOfficers = async (req: Request, res: Response) => {
-	console.log(req.query)
 	let { club_id } = req.query
 	if (!club_id) {
 		return res.status(500).json({error: 'no club id'})

@@ -12,8 +12,7 @@ import { createMember as _createMember, getMembers } from '../../api/memberApi'
 import { _sendOfficerInvite } from "../../api/officerApi";
 import { createTag as _createTag, getTags } from '../../api/memberApi'
 import { createRole as _createRole, getRoles } from '../../api/roleApi'
-import { ClavaNavbar, ScrollTop } from '../../components/Navigation'
-import useUser from '../../hooks/useUser'
+import { ScrollTop } from '../../components/Navigation'
 import { TagsEditorDialog } from './TagsEditor'
 import { UserState } from '../../store/user/userSlice'
 import useForceUpdate from '../../hooks/useForceUpdate'
@@ -41,8 +40,6 @@ export default function MemberView({ club_id, state, user_id, owner_id }: Member
   const [disableAddingRole, setDisableAddingRole] = useState(false)
 
   const ownerVisibility = user_id != owner_id
-  console.log(user_id, owner_id)
-  console.log(ownerVisibility)
   const forceUpdate = useForceUpdate()
 
   const createMember = async (member: MemberRequest) => {
@@ -91,65 +88,55 @@ export default function MemberView({ club_id, state, user_id, owner_id }: Member
   }
 
   useEffect(() => {
-    const fetchMembers = async () => {
-      const [err, res] = await to(getMembers(club_id))
-      if (err) {
-        console.log(err)
+    const fetchAll = async () => {
+      const [errMem, resMem] = await to(getMembers(club_id))
+      if (errMem) {
+        console.log(errMem)
         return
       }
 
-      const retrieved = res.data.members
-      if (retrieved) {
-        setMembers(retrieved)
+      const retrievedMem = resMem.data.members
+      if (retrievedMem) {
+        setMembers(retrievedMem)
       }
-    }
 
-    const fetchTags = async () => {
-      const [err, res] = await to(getTags(club_id))
-      if (err) {
-        console.log(err)
+      const [errTags, resTags] = await to(getTags(club_id))
+      if (errTags) {
+        console.log(errTags)
         return
       }
 
-      const retrieved = res.data.tags
-      if (retrieved) {
-        setTags(retrieved)
-      }
-    }
+      const retrievedTags = resTags.data.tags
+      if (retrievedTags) {
+        setTags(retrievedTags)
+      } 
 
-    const fetchRoles = async () => {
-      const [err, res] = await to(getRoles(club_id))
-      if (err) {
-        console.log(err)
+      const [errRoles, resRoles] = await to(getRoles(club_id))
+      if (errRoles) {
+        console.log(errRoles)
         return
       }
-      const retrieved = res.data.roles
-      if (retrieved) {
-        setRoles(retrieved)
+      const retrievedRoles = resRoles.data.roles
+      if (retrievedRoles) {
+        setRoles(retrievedRoles)
       }
-    }
 
-    const fetchOfficers = async () => {
-      const [err, res] = await to(getOfficers(club_id))
-      if (err) {
-        console.log(err)
+      const [errOff, resOff] = await to(getOfficers(club_id))
+      if (errOff) {
+        console.log(errOff)
         return
       }
-      const retrieved = res.data.officers
-      console.log(res.data)
-      if (retrieved) {
-        setOfficers(retrieved)
+      const retrievedOff = resOff.data.officers
+      if (retrievedOff) {
+        setOfficers(retrievedOff)
       }
     }
 
-    fetchMembers()
-    fetchTags()
-    fetchRoles()
-    fetchOfficers()
+    fetchAll()
   }, [state])
 
   return (
-    <Box className="min-w-full flex-auto">
+    <Box>
       <AddOfficerModal
           createOfficer={createOfficer}
           open={officerOpen}
@@ -185,7 +172,7 @@ export default function MemberView({ club_id, state, user_id, owner_id }: Member
         setErrorMessage={setErrorMessage}
         club_id={club_id}
         roles={roles}/>
-      <Box className="m-4 mb-16">
+      <Box className="mx-4 mt-4">
         <Grid container spacing={2}>
           <Grid item xs={4}>
             <Box display="flex" height="100%">
