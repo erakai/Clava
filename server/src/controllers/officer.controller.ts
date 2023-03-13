@@ -1,7 +1,9 @@
 import type { Request, Response } from 'express'
 import Member from 'models/member.model'
 import Officer from 'models/officer.model'
+import User from 'models/user.model'
 import {sendOfficerInvitationEmail} from "../modules/Emailing";
+import * as async_hooks from "async_hooks";
 
 export const getOfficers = async (req: Request, res: Response) => {
 	console.log(req.query)
@@ -33,7 +35,7 @@ export const requestAddOfficer = async (req: Request, res: Response) => {
 	// if member already exists, no need to add
 
 	Member.find({
-      name: name, email: email
+      email: email
     }, async (err, members) => {
       if (err) {
         return res.status(500).send({err})
@@ -67,9 +69,22 @@ export const requestAddOfficer = async (req: Request, res: Response) => {
 		    if (err) {
 		      return res.status(500).send({err})
 		    }
+		  User.findOne({email: email}, async (err, user) => {
+				if (err) {
+					//TODO: Handle new user case
+				}
+				let clubs_arr = []
+				for (let club in user.club_ids) {
+					clubs_arr.push(club)
+				}
+				clubs_arr.push(club_id)
+				user.$set({club_ids: clubs_arr})
+				user.save()
+			})
+
 			const link = process.env.CLIENT_URL + "/" + club_id + "/members"
 			sendOfficerInvitationEmail(email, name, link)
-		    return res.status(200).json({officer})
+			return res.status(200).json({officer})
 		  })
 		}
 	})
