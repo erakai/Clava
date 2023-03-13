@@ -100,8 +100,8 @@ function ClubPage() {
   return (
     <Box className="ClubPage w-screen">
 
-      <AppBar sx={{backgroundColor: 'primary.light'}} position="sticky">
-        <Container maxWidth="xl">
+      <AppBar position="sticky">
+        <Container maxWidth={false}>
           <Toolbar disableGutters>
             <Typography
             variant="h6"
@@ -111,12 +111,12 @@ function ClubPage() {
               display: { xs: 'none', md: 'flex' },
               fontFamily: 'monospace',
               fontWeight: 700,
-              letterSpacing: '.3rem',
+              letterSpacing: '.1rem',
               color: 'inherit',
               textDecoration: 'none',
             }}
           >
-            Clubs
+            Select A Club
           </Typography>
           <Box
             justifyContent="center"

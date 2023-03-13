@@ -141,12 +141,12 @@ function ClavaNavbar({currentRoute, clubId, clubName, logout} : ClavaNavbarProps
               flexGrow: 0,
               fontFamily: 'monospace',
               fontWeight: 700,
-              letterSpacing: '.3rem',
+              letterSpacing: '.1rem',
               color: 'inherit',
               textDecoration: 'none',
             }}
           >
-            Clava
+            {clubName}
           </Typography>
           {/* === END OF TITLE FOR SMALL WINDOW SIZE === */}
           {/* === START OF MENU ITEMS AS BUTTONS === */}
