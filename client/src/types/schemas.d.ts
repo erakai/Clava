@@ -94,3 +94,16 @@ interface Role {
   name: string,
   color: string,
 }
+
+interface Document {
+  _id: string,
+  name: string,
+  link: string,
+  role_ids: Array<string> // should actually be permisions
+}
+
+interface CreateDocumentRequest {
+  name: string,
+  link: string,
+  role_ids: Array<string> // should actually be permisions
+}
