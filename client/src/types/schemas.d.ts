@@ -99,7 +99,7 @@ interface Document {
   _id: string,
   name: string,
   link: string,
-  role_ids: Array<string> // should actually be permisions
+  //role_ids: Array<string> // should actually be permisions
 }
 
 interface AddDocumentRequest {

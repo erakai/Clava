@@ -3,17 +3,17 @@ import AddIcon from '@mui/icons-material/Add';
 import to from "await-to-js"
 import { UserState } from '../../store/user/userSlice'
 import React, { useEffect, useState } from "react"
-import AddEditDocumentModal from "./AddEditDocumentModal"
+import AddDocumentModal from "./AddDocumentModal"
 import DocumentCard from "./DocumentCard"
-import { createDocument as _createDocument, getDocuments } from '../../api/documentApi'
+import { createDocument as _createDocument, editDocument as _editDocument, getDocuments } from '../../api/documentApi'
+import useForceUpdate from "../../hooks/useForceUpdate";
 
 type DocumentViewProps = {
   club_id: string
   state: UserState
-  user_id: string
 }
 
-export default function DocumentView({ club_id, state, user_id }: DocumentViewProps) {
+export default function DocumentView({ club_id, state }: DocumentViewProps) {
 
   const [addDocOpen, setAddDocOpen] = useState(false)
   const [documents, setDocuments] = useState<Document[]>([])
@@ -28,8 +28,29 @@ export default function DocumentView({ club_id, state, user_id }: DocumentViewPr
       //setErrorMessage('Something went wrong.')
     } else if (res) {
       setDocuments([...documents, res.data.document])
-      console.log("shouldve added doc")
     }
+  }
+
+  const editDocument = async (document: EditDocumentRequest) => {
+    const [err, res] = await to(_editDocument(document))
+    if (err) {
+      console.log(err)
+    } else if (res) {
+      // let editDoc = res.data.document
+      // let idx = -1
+      // documents.forEach((document, index) => {
+      //   if (document._id == editDoc._id) {
+      //     idx = index
+      //   }
+      // })
+
+      // if (idx != -1) {
+      //   let newDocuments : Document[] = documents
+      //   newDocuments[idx] = {_id: editDoc._id, name: editDoc.name, link: editDoc.link}
+      //   setDocuments(newDocuments)
+      // }
+    }
+    close()
   }
 
   // createMode == true, checks all docs
@@ -64,25 +85,14 @@ export default function DocumentView({ club_id, state, user_id }: DocumentViewPr
   return (
     <Box className="">
       
-      <AddEditDocumentModal
-        addMode={true}
+      <AddDocumentModal
         club_id={club_id}
         open={addDocOpen}
         setOpen={setAddDocOpen}
-        setDocuments={setDocuments}
         addDocument={addDocument}
         isUniqueDocumentName={isUniqueDocumentName}
         />
 
-      <AddEditDocumentModal
-        addMode={false}
-        club_id={club_id}
-        open={editDocOpen}
-        setOpen={setEditDocOpen}
-        setDocuments={setDocuments}
-        addDocument={addDocument}
-        isUniqueDocumentName={isUniqueDocumentName}
-        /> 
 
       <Box className="m-4 flex justify-center items-center">
         <Typography className="grow text-center" variant="h4">Documents</Typography>
@@ -98,7 +108,10 @@ export default function DocumentView({ club_id, state, user_id }: DocumentViewPr
           {documents.map(document => (
             <DocumentCard 
               name={document.name} 
-              link={document.link} />
+              link={document.link}
+              _id={document._id}
+              editDocument={editDocument}
+              isUniqueDocumentName={isUniqueDocumentName}/>
           ))}
         </Grid>
       </Box>

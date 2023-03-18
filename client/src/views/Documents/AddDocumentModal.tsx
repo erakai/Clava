@@ -3,17 +3,17 @@ import React, { Dispatch, useState } from "react"
 
 
 type AddDocumentProps = {
-  addMode: boolean // true if adding, false if editing
-  _id?: string // null if adding, should be an id if editing
+  // addMode: boolean // true if adding, false if editing
+  // _id?: string // null if adding, should be an id if editing
   club_id: string
   open: boolean
   setOpen: Dispatch<React.SetStateAction<boolean>>
-  setDocuments: React.Dispatch<React.SetStateAction<Document[]>>
+  // setDocuments: React.Dispatch<React.SetStateAction<Document[]>>
   addDocument: (document: AddDocumentRequest) => void
   isUniqueDocumentName: (name: string, _id?: string) => boolean
 }
 
-export default function AddEditDocumentModal({addMode, _id, club_id, open, setOpen, setDocuments, addDocument, isUniqueDocumentName}: AddDocumentProps) {
+export default function AddDocumentModal({ club_id, open, setOpen, addDocument, isUniqueDocumentName}: AddDocumentProps) {
   const [name, setName] = useState("")
   const [nameError, setNameError] = useState("")
   const [link, setLink] = useState("")
@@ -29,7 +29,7 @@ export default function AddEditDocumentModal({addMode, _id, club_id, open, setOp
       setLinkError("Document link is required")
       badInput = true
     }
-    if (!badInput && isUniqueDocumentName(name, _id)) {
+    if (!badInput && isUniqueDocumentName(name)) {
       setNameError("Document name needs to be unique")
       badInput = true
     }
@@ -55,6 +55,7 @@ export default function AddEditDocumentModal({addMode, _id, club_id, open, setOp
         <Stack
           spacing={2}>
           <TextField label="Name" variant="standard" size="small" 
+            defaultValue={name}
             error={nameError != ""} 
             helperText={nameError}
             onChange={(e) => {
@@ -62,6 +63,7 @@ export default function AddEditDocumentModal({addMode, _id, club_id, open, setOp
             setNameError("")
           }}/>
           <TextField label="Link" variant="standard" size="small" 
+            defaultValue={link}
             error={linkError != ""} 
             helperText={linkError}
             onChange={(e) => {
