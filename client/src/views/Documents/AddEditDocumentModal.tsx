@@ -2,18 +2,17 @@ import { Dialog, DialogTitle, DialogContent, DialogActions, Stack, TextField, Bu
 import React, { Dispatch } from "react"
 import { useEffect, useState } from "react"
 
-type CreateDocumentProps = {
-  createMode: boolean // true if creating, false if editing
-  _id?: string // null if creating, should be an id if editing
+type AddDocumentProps = {
+  addMode: boolean // true if adding, false if editing
+  _id?: string // null if adding, should be an id if editing
   open: boolean
   setOpen: Dispatch<React.SetStateAction<boolean>>
   setDocuments: React.Dispatch<React.SetStateAction<Document[]>>
-  createDocument: (document: CreateDocumentRequest) => void
+  addDocument: (document: AddDocumentRequest) => void
   isUniqueDocumentName: (name: string, _id?: string) => boolean
 }
 
-export default function CreateEditDocumentModal({createMode, _id, open, setOpen, setDocuments, createDocument, isUniqueDocumentName}: CreateDocumentProps) {
-
+export default function AddEditDocumentModal({addMode, _id, open, setOpen, setDocuments, addDocument, isUniqueDocumentName}: AddDocumentProps) {
   const [name, setName] = useState("")
   const [nameError, setNameError] = useState("")
   const [link, setLink] = useState("")
@@ -68,7 +67,7 @@ export default function CreateEditDocumentModal({createMode, _id, open, setOpen,
       </DialogContent>
       <DialogActions>
         <Button onClick={() => setOpen(false)}>Cancel</Button>
-        <Button onClick={handleAdd} variant="contained">Create</Button>
+        <Button onClick={handleAdd} variant="contained">Done</Button>
       </DialogActions>
       </Dialog>
   )

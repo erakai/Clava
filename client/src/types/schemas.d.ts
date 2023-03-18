@@ -102,8 +102,19 @@ interface Document {
   role_ids: Array<string> // should actually be permisions
 }
 
-interface CreateDocumentRequest {
+interface AddDocumentRequest {
   name: string,
   link: string,
-  role_ids: Array<string> // should actually be permisions
+  club_id: string,
+  //role_ids: Array<string> // should actually be permisions
+}
+
+interface DeleteDocumentRequest {
+  _id: string,
+}
+
+interface EditDocumentRequest {
+  newName: string,
+  newLink: string,
+  _id: string,
 }

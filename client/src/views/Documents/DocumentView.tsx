@@ -1,7 +1,7 @@
 import {Box, Grid, Button, Typography, Fab} from "@mui/material"
 import React from "react"
 import { useEffect, useState } from "react"
-import CreateEditDocumentModal from "./CreateEditDocumentModal"
+import AddEditDocumentModal from "./AddEditDocumentModal"
 import DocumentCard from "./DocumentCard"
 import AddIcon from '@mui/icons-material/Add';
 
@@ -41,8 +41,8 @@ export default function DocumentView() {
   return (
     <Box className="">
       
-      <CreateEditDocumentModal
-        createMode={true}
+      <AddEditDocumentModal
+        addMode={true}
         open={createDocOpen}
         setOpen={setCreateDocOpen}
         setDocuments={setDocuments}
@@ -50,8 +50,8 @@ export default function DocumentView() {
         isUniqueDocumentName={isUniqueDocumentName}
         />
 
-      <CreateEditDocumentModal
-        createMode={false}
+      <AddEditDocumentModal
+        addMode={false}
         open={editDocOpen}
         setOpen={setEditDocOpen}
         setDocuments={setDocuments}
