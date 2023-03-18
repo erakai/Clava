@@ -13,6 +13,6 @@ const DocumentSchema = new Schema<IDocument>({
   club_id: SchemaTypes.ObjectId,
 })
 
-const Document = model('tag', DocumentSchema) as Model<IDocument>
+const Document = model('document', DocumentSchema) as Model<IDocument>
 
 export default Document

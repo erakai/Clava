@@ -32,7 +32,10 @@ export default function DocumentCard({name, link}: DocumentCardProps) {
                 onClose={() => setMenuOpen(false)}
                 >
                 <MenuItem>
-                  Hello
+                  Edit
+                </MenuItem>
+                <MenuItem>
+                  Delete
                 </MenuItem>
               </Menu>
               
