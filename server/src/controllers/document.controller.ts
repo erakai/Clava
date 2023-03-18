@@ -22,8 +22,9 @@ export const getDocuments = async (req: Request, res: Response) => {
 
 export const documentPost = async (req: Request, res: Response) => {
   let { name, link, club_id, } = req.body
-
+  
   if (!club_id) {
+    console.log("no club_id !?!?!?!?")
     return res.status(500).json({error: 'no club id provided'})
   }
 

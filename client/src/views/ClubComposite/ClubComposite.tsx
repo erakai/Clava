@@ -58,7 +58,10 @@ export default function ClubCompositie() {
       case 'events':
         return <EventView />
       case 'documents':
-        return <DocumentView />
+        if (user == null) {
+          return <DocumentView club_id={clubId} state={state} user_id={""} />
+        }
+        return <DocumentView club_id={clubId} state={state} user_id={user._id} />
       case 'finances':
         return <FinanceView />
       default:

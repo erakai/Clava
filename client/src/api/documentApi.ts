@@ -9,7 +9,7 @@ type EditDocumentResponse = { document: Document }
 
 
 const DocumentInstance = axios.create({
-  baseURL: `http://localhost:8080/document`,
+  baseURL: `http://localhost:8080/documents`,
   timeout: 1000,
   withCredentials: true,
 })
@@ -17,17 +17,17 @@ const DocumentInstance = axios.create({
 intercepts(DocumentInstance, getRefreshToken)
 
 export const getDocuments = (club_id: string) => {
-  return DocumentInstance.get<GetDocumentsResponse>('/documents', { params: { club_id: club_id }})
+  return DocumentInstance.get<GetDocumentsResponse>('/', { params: { club_id: club_id }})
 }
 
 export const createDocument = ({ name, link, club_id }: AddDocumentRequest) =>  {
-  return DocumentInstance.post<CreateDocumentResponse>('/documents', { name, link, club_id })
+  return DocumentInstance.post<CreateDocumentResponse>('/', { name, link, club_id })
 }
 
 export const deleteDocument = ({ _id }: DeleteDocumentRequest) =>  {
-  return DocumentInstance.delete<DeleteDocumentResponse>('/doocuments', { data: { _id }})
+  return DocumentInstance.delete<DeleteDocumentResponse>('/', { data: { _id }})
 }
 
 export const editDocument = ({ newName, newLink, _id }: EditDocumentRequest) =>  {
-  return DocumentInstance.put<EditDocumentResponse>('/documents', { newName, newLink, _id })
+  return DocumentInstance.put<EditDocumentResponse>('/', { newName, newLink, _id })
 }

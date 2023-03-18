@@ -1,10 +1,17 @@
-import { Box, Menu, Grid, Button, Card, CardActions, CardContent, Typography, MenuItem, CardActionArea } from "@mui/material"
+import { Box, Menu, Grid, Button, Card, CardActions, CardContent, Typography, MenuItem, CardActionArea, IconButton, CardMedia } from "@mui/material"
 import { useEffect, useState } from "react"
-import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { MoreVert as MoreVertIcon, Article as ArticleIcon } from '@mui/icons-material/';
 
 type DocumentCardProps = {
   name: string
   link: string
+}
+
+const iconSize = {
+  largeIcon: {
+    width: 60,
+    height: 60,
+  }
 }
 
 export default function DocumentCard({name, link}: DocumentCardProps) {
@@ -16,7 +23,13 @@ export default function DocumentCard({name, link}: DocumentCardProps) {
       <Card>
         <CardActionArea href={link} target="_blank">
           <CardContent>
+            {/* <CardMedia className="items-center justify-center"
+              sx={{ height: 140 }}
+              image=""
+              title="green iguana">
+            </CardMedia> */}
             <Box className="flex items-center">
+              <ArticleIcon className="mr-4" color="secondary" />
               <Typography className="grow" variant="h6" component="div">
                 Document
               </Typography>
@@ -24,9 +37,9 @@ export default function DocumentCard({name, link}: DocumentCardProps) {
                 Lizards are a widespread group of squamate reptiles, with over 6,000
                 species, ranging across all continents except Antarctica
               </Typography> */}
-              <Button onClick={() => setMenuOpen(!menuOpen)}>
-                <MoreVertIcon/>
-              </Button>
+              <IconButton onClick={() => setMenuOpen(!menuOpen)}>
+                <MoreVertIcon fontSize="inherit"/>
+              </IconButton>
               <Menu
                 open={menuOpen}
                 onClose={() => setMenuOpen(false)}
