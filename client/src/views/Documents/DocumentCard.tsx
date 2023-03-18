@@ -1,4 +1,4 @@
-import { Box, Menu, Grid, Button, Card, CardActions, CardContent, Typography, MenuItem, CardActionArea, IconButton, CardMedia } from "@mui/material"
+import { Box, Menu, Grid, Button, Card, CardActions, CardContent, Typography, MenuItem, CardActionArea, IconButton, CardMedia, Link } from "@mui/material"
 import { useEffect, useState } from "react"
 import { MoreVert as MoreVertIcon, Article as ArticleIcon } from '@mui/icons-material/';
 
@@ -18,48 +18,47 @@ export default function DocumentCard({name, link}: DocumentCardProps) {
 
   const [menuOpen, setMenuOpen] = useState(false)
 
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const handleMenuClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+    setMenuOpen(!menuOpen)
+  };
+
   return (
     <Grid item xs={6} sm={4} md={3} lg={3} xl={1}>
-      <Card>
-        <CardActionArea href={link} target="_blank">
-          <CardContent>
-            {/* <CardMedia className="items-center justify-center"
-              sx={{ height: 140 }}
-              image=""
-              title="green iguana">
-            </CardMedia> */}
-            <Box className="flex items-center">
+      <Card 
+        sx={{
+          ':hover': {
+            boxShadow: 3,
+          },
+        }}>
+        <Box className="flex items-center justify-center">
+          <Link href={link} target="_blank" className="grow" underline="none">
+            <Box className="m-4 flex items-center justify-center">
               <ArticleIcon className="mr-4" color="secondary" />
-              <Typography className="grow" variant="h6" component="div">
+              <Typography className="grow" color="black" variant="h6" component="div">
                 {name}
               </Typography>
-              {/* <Typography variant="body2" color="text.secondary">
-                Lizards are a widespread group of squamate reptiles, with over 6,000
-                species, ranging across all continents except Antarctica
-              </Typography> */}
-              <IconButton onClick={() => setMenuOpen(!menuOpen)}>
-                <MoreVertIcon fontSize="inherit"/>
-              </IconButton>
             </Box>
-            
-          </CardContent>
-    
-          {/* <CardActions>
-            <Button size="small">Share</Button>
-            <Button size="small">Learn More</Button>
-          </CardActions> */}
-        </CardActionArea>
-        <Menu
-                open={menuOpen}
-                onClose={() => setMenuOpen(false)}
-                >
-                <MenuItem>
-                  Edit
-                </MenuItem>
-                <MenuItem>
-                  Delete
-                </MenuItem>
-              </Menu>
+          </Link>
+          <Box className="m-2">
+            <IconButton className="m-17" onClick={handleMenuClick}>
+              <MoreVertIcon fontSize="inherit"/>
+            </IconButton>
+            <Menu
+              anchorEl={anchorEl}
+              open={menuOpen}
+              onClose={() => setMenuOpen(false)}
+              >
+              <MenuItem>
+                Edit
+              </MenuItem>
+              <MenuItem>
+                Delete
+              </MenuItem>
+            </Menu>
+          </Box>
+        </Box>
       </Card>
     </Grid>
   )
