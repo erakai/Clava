@@ -31,7 +31,7 @@ export default function DocumentCard({name, link}: DocumentCardProps) {
             <Box className="flex items-center">
               <ArticleIcon className="mr-4" color="secondary" />
               <Typography className="grow" variant="h6" component="div">
-                Document
+                {name}
               </Typography>
               {/* <Typography variant="body2" color="text.secondary">
                 Lizards are a widespread group of squamate reptiles, with over 6,000
@@ -40,7 +40,16 @@ export default function DocumentCard({name, link}: DocumentCardProps) {
               <IconButton onClick={() => setMenuOpen(!menuOpen)}>
                 <MoreVertIcon fontSize="inherit"/>
               </IconButton>
-              <Menu
+            </Box>
+            
+          </CardContent>
+    
+          {/* <CardActions>
+            <Button size="small">Share</Button>
+            <Button size="small">Learn More</Button>
+          </CardActions> */}
+        </CardActionArea>
+        <Menu
                 open={menuOpen}
                 onClose={() => setMenuOpen(false)}
                 >
@@ -51,15 +60,6 @@ export default function DocumentCard({name, link}: DocumentCardProps) {
                   Delete
                 </MenuItem>
               </Menu>
-              
-            </Box>
-            
-          </CardContent>
-          {/* <CardActions>
-            <Button size="small">Share</Button>
-            <Button size="small">Learn More</Button>
-          </CardActions> */}
-        </CardActionArea>
       </Card>
     </Grid>
   )

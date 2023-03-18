@@ -57,7 +57,8 @@ export default function DocumentView({ club_id, state, user_id }: DocumentViewPr
         setDocuments(retrieved)
       }
     }
-
+ 
+    fetchDocuments()
   }, [state])
 
   return (
@@ -94,16 +95,11 @@ export default function DocumentView({ club_id, state, user_id }: DocumentViewPr
       </Fab>
       <Box className="m-4">
         <Grid container spacing={2}>
-          <DocumentCard />
-          <DocumentCard />
-          <DocumentCard />
-          <DocumentCard />
-          <DocumentCard />
-          <DocumentCard />
-          <DocumentCard />
-          <DocumentCard />
-          <DocumentCard />
-          
+          {documents.map(document => (
+            <DocumentCard 
+              name={document.name} 
+              link={document.link} />
+          ))}
         </Grid>
       </Box>
     </Box>
