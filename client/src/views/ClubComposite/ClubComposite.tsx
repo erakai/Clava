@@ -68,13 +68,15 @@ export default function ClubCompositie() {
 
   return (
     <div className="items-center">
+      {user && 
       <ClavaNavbar
         currentRoute={clubRoute || 'null'}
         clubId={clubId || 'null'}
         clubName={clubName} logout={logout}
-        username={user.name}
-        email={user.email}
+        username={user.name || 'loading'}
+        email={user.email || 'loading'}
       />
+      }
       {getRoute()}
     </div>
   )
