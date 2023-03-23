@@ -12,8 +12,9 @@ import UrlNotFound from '../Error/UrlNotFound'
 import EventView from '../Events'
 import FinanceView from '../Finances'
 import MemberView from '../Members'
+import { Settings } from '../Settings'
 
-export default function ClubCompositie() {
+export default function ClubComposite() {
   const { state, user, logout } = useUser()
   const { clubId, clubRoute } = useParams<{
     clubId: string
@@ -61,6 +62,8 @@ export default function ClubCompositie() {
         return <DocumentView />
       case 'finances':
         return <FinanceView />
+      case 'settings':
+        return <Settings clubName={clubName} club_id={clubId}/>
       default:
         return <UrlNotFound />
     }

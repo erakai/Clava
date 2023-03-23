@@ -21,7 +21,13 @@ function App() {
         main: "#ffb500"
       },
       secondary: {
-        main: "#ffd366"
+        main: "#ffd366",
+      },
+      info: {
+        main: "#ffffff"
+      },
+      background: {
+        default: "#ffe194"
       }
     }
   })

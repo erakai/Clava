@@ -8,7 +8,7 @@ const clubRouter = Router()
 /*
 Club Routes:
   - /clubs GET (user id): returns all clubs for a user
-  - /clubs POST (name, description): makes a new club and returns it
+  - /clubs POST (name, description, owner_id): makes a new club and returns it
   - /clubs PUT (user id, club id) adds the club to a user
 */
 
