@@ -5,6 +5,8 @@ const SettingsSchema = new Schema<ISettings>({
   dense: SchemaTypes.Boolean,
   memberButtonPresetOne: SchemaTypes.String,
   memberButtonPresetTwo: SchemaTypes.String,
+  memberButtonLabelOne: SchemaTypes.String,
+  memberButtonLabelTwo: SchemaTypes.String,
   club_id: SchemaTypes.ObjectId,
 })
 

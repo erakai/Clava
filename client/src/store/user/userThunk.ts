@@ -9,11 +9,7 @@ import {
   _register,
 } from '../../api/userApi'
 import { AuthResponse } from '../../api/config'
-import { errorT } from './userSlice'
-
-type Error = {
-  rejectValue: errorT
-}
+import { errorT, Error } from '..'
 
 export const getUser = createAsyncThunk<{ user: User }, void, Error>('users/getSelf', 
   async (_, { rejectWithValue }) => {

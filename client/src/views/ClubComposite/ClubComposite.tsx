@@ -63,7 +63,7 @@ export default function ClubComposite() {
       case 'finances':
         return <FinanceView />
       case 'settings':
-        return <Settings clubName={clubName}/>
+        return <Settings clubName={clubName} club_id={clubId}/>
       default:
         return <UrlNotFound />
     }

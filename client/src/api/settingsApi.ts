@@ -2,8 +2,8 @@ import axios from "axios"
 import { intercepts } from "./config"
 import { getRefreshToken } from "./userApi"
 
-type GetSettingsResponse = { settings: Settings }
-type SetSettingsResponse = { settings: Settings }
+export type GetSettingsResponse = { settings: Settings }
+export type SetSettingsResponse = { settings: Settings }
 
 const SettingsInstance = axios.create({
   baseURL: `http://localhost:8080/settings`,
@@ -13,10 +13,10 @@ const SettingsInstance = axios.create({
 
 intercepts(SettingsInstance, getRefreshToken)
 
-export const getSettings = (club_id: string) => {
+export const _getSettings = (club_id: string) => {
   return SettingsInstance.get<GetSettingsResponse>('/', { params: { club_id: club_id }})
 }
 
-export const updateSettings = (req: UpdateSettingsRequest) => {
+export const _updateSettings = (req: UpdateSettingsRequest) => {
   return SettingsInstance.post<SetSettingsResponse>('/', req)
 }

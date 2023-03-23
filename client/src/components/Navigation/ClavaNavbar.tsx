@@ -131,11 +131,16 @@ function ClavaNavbar({currentRoute, clubId, clubName, logout} : ClavaNavbarProps
           </Box>
           {/* === END OF NAVIGATION MENU FOR SMALL WINDOW SIZE === */}
           {/* === START OF TITLE FOR SMALL WINDOW SIZE === */}
+          <Tooltip title="Club Settings" sx={{ marginRight: 1}}>
+              <IconButton sx ={{ display: { xs: 'flex', md: 'none' },}}onClick={handleSettingsClicked}>
+                <SettingsIcon />
+              </IconButton>
+            </Tooltip>
           <Typography
             variant="h5"
             noWrap
             component="a"
-            href=""
+            href="/clubs"
             sx={{
               display: { xs: 'flex', md: 'none' },
               flexGrow: 0,

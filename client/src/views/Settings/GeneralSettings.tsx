@@ -1,15 +1,20 @@
 import { Box, Button, Grid, Stack, Switch, Typography } from "@mui/material";
-import { ChangeEvent } from "react";
+import { ChangeEvent, useState } from "react";
 import { SettingAccordionProp } from "./Settings";
 
-export default function GeneralSettings({ setExpanded }: SettingAccordionProp) {
+export default function GeneralSettings({ setExpanded, settings, club_id, updateSettings }: SettingAccordionProp) {
+  const [dense, setDense] = useState(settings.dense)
 
   const onSave = () => {
     setExpanded(false)
+    if (dense != settings.dense) {
+      let request: UpdateSettingsRequest = { club_id: club_id, dense: dense }
+      updateSettings(request)
+    }
   }
 
   const onSwitchChange = (e: ChangeEvent<HTMLInputElement>) => {
-    let checked = e.target.checked
+    setDense(!dense)
   }
 
   return (
@@ -21,7 +26,7 @@ export default function GeneralSettings({ setExpanded }: SettingAccordionProp) {
         </Stack>
       </Grid>
       <Grid container item xs={4} alignItems='center' justifyContent="end">
-        <Switch onChange={onSwitchChange} />
+        <Switch onChange={onSwitchChange} checked={dense} />
       </Grid>
 
       <Grid item xs={12} marginTop={4}>

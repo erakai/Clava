@@ -18,6 +18,7 @@ import { UserState } from '../../store/user/userSlice'
 import useForceUpdate from '../../hooks/useForceUpdate'
 import OfficerDisplay from './OfficerDisplay/OfficerDisplay'
 import { getOfficers } from '../../api/officerApi'
+import useSettings from '../../hooks/useSettings'
 
 type MemberViewProps = {
   club_id: string
@@ -38,6 +39,7 @@ export default function MemberView({ club_id, state, user_id, owner_id }: Member
   const [officerOpen, setOfficerOpen] = useState(false)
   const [disableAddingMember, setDisableAddingMember] = useState(false)
   const [disableAddingRole, setDisableAddingRole] = useState(false)
+  const { settings, refreshSettings } = useSettings()
 
   const ownerVisibility = user_id != owner_id
   const forceUpdate = useForceUpdate()
@@ -132,6 +134,7 @@ export default function MemberView({ club_id, state, user_id, owner_id }: Member
       }
     }
 
+    refreshSettings(club_id)
     fetchAll()
   }, [state])
 
@@ -153,6 +156,7 @@ export default function MemberView({ club_id, state, user_id, owner_id }: Member
         setErrorMessage={setErrorMessage}
         club_id={club_id}
         disableAddingMember={disableAddingMember}
+        settings={settings}
       />
       <AddRoleModal
         open={roleOpen}
@@ -162,7 +166,6 @@ export default function MemberView({ club_id, state, user_id, owner_id }: Member
         setErrorMessage={setErrorMessage}
         club_id={club_id}
         disableAddingRole={disableAddingRole}/>
-
       <RoleModal
         open={roleViewOpen}
         setOpen={setRoleViewOpen}
@@ -224,6 +227,8 @@ export default function MemberView({ club_id, state, user_id, owner_id }: Member
               state={state}
               tags={tags}
               forceUpdate={forceUpdate}
+              dense={(settings) ? settings.dense : false}
+              settings={settings}
             />
           </Grid>
           <Grid item xs={12} lg={6}>
@@ -235,6 +240,7 @@ export default function MemberView({ club_id, state, user_id, owner_id }: Member
               state={state}
               roles={roles}
               forceUpdate={forceUpdate}
+              dense={(settings) ? settings.dense : false}
             />
           </Grid>
         </Grid>

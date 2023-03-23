@@ -8,7 +8,9 @@ export function defaultSettings() {
     club_id: '',
     dense: false,
     memberButtonPresetOne: '+6m',
-    memberButtonPresetTwo: '+12m'
+    memberButtonPresetTwo: '+12m',
+    memberButtonLabelOne: '6M',
+    memberButtonLabelTwo: '12M',
   }
 }
 
@@ -38,14 +40,19 @@ export const setSettings = async (req: Request, res: Response) => {
   let { club_id, 
         dense, 
         memberButtonPresetOne, 
-        memberButtonPresetTwo } = req.body
+        memberButtonPresetTwo,
+        memberButtonLabelOne,
+        memberButtonLabelTwo  } = req.body
   const [err, settings] = await to(Settings.findOneAndUpdate({ club_id: club_id },
     { 
       dense: dense,
       memberButtonPresetOne: memberButtonPresetOne,
-      memberButtonPresetTwo: memberButtonPresetTwo
+      memberButtonPresetTwo: memberButtonPresetTwo,
+      memberButtonLabelOne: memberButtonLabelOne,
+      memberButtonLabelTwo: memberButtonLabelTwo,
     }, { new: true }).exec())
   
   if (err) return res.status(500).send({err})
+  if (!settings) return res.status(500).json({error: 'invalid club id'})
   return res.status(200).json({settings})
 }

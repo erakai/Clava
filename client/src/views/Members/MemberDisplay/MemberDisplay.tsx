@@ -45,11 +45,12 @@ type DisplayProps = {
   state: UserState,
   tags: Tag[]
   forceUpdate: () => void
+  dense: boolean
+  settings: Settings | null
 }
 
-export default function MemberDisplay({ members, setMembers, title, club_id, state, tags, forceUpdate }: DisplayProps) {
+export default function MemberDisplay({ members, setMembers, title, club_id, state, tags, forceUpdate, dense, settings }: DisplayProps) {
   const [searchString, setSearchString] = useState('')
-  const [dense, setDense] = useState(false)
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [editing, setEditing] = useState<Member>(members[0])
 
@@ -128,6 +129,7 @@ export default function MemberDisplay({ members, setMembers, title, club_id, sta
             open={editModalOpen}
             setOpen={setEditModalOpen}
             memberSelected={editing}
+            settings={settings}
           />
         }
     </Box>

@@ -5,4 +5,6 @@ interface ISettings extends Document {
   dense: boolean,
   memberButtonPresetOne: string,
   memberButtonPresetTwo: string,
+  memberButtonLabelOne: string,
+  memberButtonLabelTwo: string,
 }
