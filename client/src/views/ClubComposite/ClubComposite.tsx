@@ -72,6 +72,8 @@ export default function ClubCompositie() {
         currentRoute={clubRoute || 'null'}
         clubId={clubId || 'null'}
         clubName={clubName} logout={logout}
+        username={user.name}
+        email={user.email}
       />
       {getRoute()}
     </div>

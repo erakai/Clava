@@ -25,6 +25,7 @@ export const createMember = async (req: Request, res: Response) => {
   }
 
   // TODO: Verify club_id is a valid id
+  console.log(req.user)
 
   if (!name || !club_id) {
     return res.status(500).json({error: 'no name or club provided'})
