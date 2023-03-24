@@ -1,5 +1,5 @@
 import { verifyUser } from "config/auth";
-import { createMember, deleteMembers, getMembers, updateMembers } from "controllers/member.controller";
+import { createMember, deleteMembers, getMembers, updateMember } from "controllers/member.controller";
 import { Router } from "express";
 import tagRouter from "./tag.route";
 
@@ -16,7 +16,7 @@ Member Routes:
 memberRouter.get('/', verifyUser, getMembers)
 memberRouter.post('/', verifyUser, createMember)
 memberRouter.delete('/', verifyUser, deleteMembers)
-memberRouter.put('/', verifyUser, updateMembers)
+memberRouter.put('/', verifyUser, updateMember)
 
 memberRouter.use('/tags', tagRouter)
 

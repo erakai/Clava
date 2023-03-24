@@ -5,6 +5,7 @@ import to from 'await-to-js'
 import { removeClubFromUser } from '../../api/clubApi'
 import PlaceHolder from '../../assets/placeholder.png'
 import DiamondIcon from '@mui/icons-material/Diamond';
+import useSettings from '../../hooks/useSettings'
 
 type ClubProps = {
     user_id: string,
@@ -16,6 +17,7 @@ export default function ClubCard({user_id, club, removeClub} : ClubProps) {
 
     const [open, setLeaveClubOpen] = React.useState(false)
     const [disableLeavingClub, setDisableLeavingClub] = React.useState(false)
+    const { refreshSettings } = useSettings()
 
     const ownerVisibility = user_id == club.owner_id ? "visible" : "invisible"
 
@@ -40,6 +42,7 @@ export default function ClubCard({user_id, club, removeClub} : ClubProps) {
     let navigate = useNavigate();
     const routeChange = () =>{ 
         let path = `/${club._id}/members`;
+        refreshSettings(club._id)
         navigate(path);
     }
 

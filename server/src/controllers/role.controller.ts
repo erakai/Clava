@@ -45,8 +45,6 @@ export const createRole = async (req: Request, res: Response) => {
 
   let { name, color, perms, club_id } = req.body
 
- 
-
   if (!name) {
     return res.status(500).json({error: 'no name provided'})
   }
@@ -75,8 +73,6 @@ export const deleteRole = async (req: Request, res: Response) => {
 
   let { _id } = req.body
 
-  console.log("hi")
- 
   if (!_id) {
     return res.status(500).json({error: 'no id provided'})
   }

@@ -12,8 +12,9 @@ import UrlNotFound from '../Error/UrlNotFound'
 import EventView from '../Events'
 import FinanceView from '../Finances'
 import MemberView from '../Members'
+import { Settings } from '../Settings'
 
-export default function ClubCompositie() {
+export default function ClubComposite() {
   const { state, user, logout } = useUser()
   const { clubId, clubRoute } = useParams<{
     clubId: string
@@ -61,6 +62,8 @@ export default function ClubCompositie() {
         return <DocumentView />
       case 'finances':
         return <FinanceView club_id={clubId}/>
+      case 'settings':
+        return <Settings clubName={clubName} club_id={clubId}/>
       default:
         return <UrlNotFound />
     }
@@ -68,11 +71,15 @@ export default function ClubCompositie() {
 
   return (
     <div className="items-center">
+      {user && 
       <ClavaNavbar
         currentRoute={clubRoute || 'null'}
         clubId={clubId || 'null'}
         clubName={clubName} logout={logout}
+        username={user.name || 'loading'}
+        email={user.email || 'loading'}
       />
+      }
       {getRoute()}
     </div>
   )

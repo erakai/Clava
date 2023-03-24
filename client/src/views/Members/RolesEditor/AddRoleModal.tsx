@@ -89,10 +89,9 @@ export default function AddRoleModal({
             <CirclePicker defaultColor={color} onChange={(e) => { setColor(e.hex)}}/>
             <FormGroup>
               {options.map((option, index) => (
-                <FormControlLabel control={<Checkbox checked={checkedState[index]} onChange={() => handleOnChange(index)}/>} label={option}/>
+                <FormControlLabel control={<Checkbox checked={checkedState[index]} onChange={() => handleOnChange(index)}/>} label={option} key={index}/>
               ))}
             </FormGroup>
-
           </Stack>
         </DialogContent>
         <DialogActions>
