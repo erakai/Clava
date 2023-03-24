@@ -94,3 +94,19 @@ interface Role {
   name: string,
   color: string,
 }
+
+interface Reimbursement {
+  name: string,
+  amount: number,
+  link: string,
+  paid: boolean,
+  club_id: string
+}
+
+interface CreateReimbursementRequest {
+  name: string,
+  amount: number,
+  link: string,
+  paid: boolean,
+  club_id: string
+}
