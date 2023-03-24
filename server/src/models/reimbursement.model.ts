@@ -10,6 +10,10 @@ const ReimbursementSchema = new Schema<IReimbursement>({
     type: SchemaTypes.Number,
     required: true
   },
+  creditor: {
+    type: SchemaTypes.String,
+    required: true
+  },
   link: SchemaTypes.String,
   paid: SchemaTypes.Boolean,
   club_id: SchemaTypes.ObjectId

@@ -39,11 +39,11 @@ export const getReimbursements = async (req: Request, res: Response) => {
 
 export const createReimbursement = async (req: Request, res: Response) => {
 
-  let { name, amount, link, paid, club_id } = req.body
+  let { name, amount, creditor, link, paid, club_id } = req.body
 
  
 
-  if (!name || !amount || !club_id) {
+  if (!name || !amount || !club_id || !creditor) {
     return res.status(500).json({error: 'not all required fields specified'})
   }
 
@@ -56,7 +56,7 @@ export const createReimbursement = async (req: Request, res: Response) => {
   }
 
   Reimbursement.create({
-    name, amount, link, paid, club_id
+    name, amount, creditor, link, paid, club_id
   }, async (err, reimbursement) => {
     if (err) {
       return res.status(500).send({err})

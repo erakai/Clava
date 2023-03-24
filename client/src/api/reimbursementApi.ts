@@ -17,6 +17,6 @@ export const getReimbursements = (club_id: string) => {
   return ReimbursementInstance.get<GetReimbursementsResponse>('/reimbursements', { params: { club_id: club_id }})
 }
 
-export const createReimbursement = ({ name, amount, link, paid, club_id }: CreateReimbursementRequest) =>  {
-  return ReimbursementInstance.post<CreateReimbursementResponse>('/reimbursements', { name, amount, link, paid, club_id })
+export const createReimbursement = ({ name, amount, creditor, link, paid, club_id }: CreateReimbursementRequest) =>  {
+  return ReimbursementInstance.post<CreateReimbursementResponse>('/reimbursements', { name, amount, creditor, link, paid, club_id })
 }
