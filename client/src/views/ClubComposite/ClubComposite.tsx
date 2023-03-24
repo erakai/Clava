@@ -7,12 +7,14 @@ import { getClub } from '../../api/clubApi'
 import { ClavaNavbar } from '../../components/Navigation'
 import useUser from '../../hooks/useUser'
 import DocumentView from '../Documents'
-import _404View from '../Error'
 import UrlNotFound from '../Error/UrlNotFound'
+import { BadRequest, RestrictedAccess, DefaultError } from '../Error'
+import { AxiosError } from 'axios'
 import EventView from '../Events'
 import FinanceView from '../Finances'
 import MemberView from '../Members'
 import { Settings } from '../Settings'
+import { Typography } from '@mui/material'
 
 export default function ClubComposite() {
   const { state, user, logout } = useUser()
@@ -22,16 +24,25 @@ export default function ClubComposite() {
   }>()
 
   const [clubName, setClubName] = useState('')
-
   const [clubOwnerId, setClubOwner] = useState('')
+  const [clubLoadCode, setClubLoadCode] = useState('Loading')
 
   useEffect(() => {
     const fetchClub = async () => {
       if (clubId) {
         const [err, res] = await to(getClub(clubId))
-        if (err) {
-          console.log(err)
+        if (err instanceof AxiosError) {
           setClubName("FAILED TO GET CLUB")
+          var status_code = "Loading"
+          if (err.response) {
+            status_code = err.response.status.toString();
+          }
+          setClubLoadCode(status_code)
+          return
+        }
+
+        if (!res) {
+          setClubLoadCode('400')
           return
         }
 
@@ -39,16 +50,27 @@ export default function ClubComposite() {
         if (retrieved) {
           setClubName(retrieved.name)
           setClubOwner(retrieved.owner_id)
+          setClubLoadCode('200')
         }
       }
-
     }
-
     fetchClub()
   }, [])
 
   const getRoute = (): JSX.Element => {
     if (!clubId) return <UrlNotFound />
+    if (clubLoadCode != '200') { 
+      switch (clubLoadCode) {
+        case 'Loading':
+          return <div><Typography>Loading...</Typography></div>
+        case '400':
+          return <BadRequest />
+        case '403':
+          return <RestrictedAccess />
+        default:
+          return <DefaultError />
+      }
+    }
 
     switch (clubRoute) {
       case 'members':
@@ -71,14 +93,16 @@ export default function ClubComposite() {
 
   return (
     <div className="items-center">
-      {user && 
-      <ClavaNavbar
-        currentRoute={clubRoute || 'null'}
-        clubId={clubId || 'null'}
-        clubName={clubName} logout={logout}
-        username={user.name || 'loading'}
-        email={user.email || 'loading'}
-      />
+      {user && clubLoadCode == '200' &&
+      <div>
+        <ClavaNavbar
+          currentRoute={clubRoute || 'null'}
+          clubId={clubId || 'null'}
+          clubName={clubName} logout={logout}
+          username={user.name || 'loading'}
+          email={user.email || 'loading'}
+        />
+      </div>
       }
       {getRoute()}
     </div>
