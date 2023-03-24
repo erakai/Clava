@@ -1,5 +1,5 @@
 import { createAction, createSlice } from "@reduxjs/toolkit"
-import { StoreState } from "../../store"
+import { errorT, StoreState } from "../../store"
 import { login, logout, register, getUser } from "./userThunk"
 
 export enum UserState {
@@ -7,11 +7,6 @@ export enum UserState {
   LOGGING_IN,
   LOGGING_OUT,
   REGISTERING,
-}
-
-export type errorT = {
-  name: string,
-  message: string
 }
 
 export interface IUserState {

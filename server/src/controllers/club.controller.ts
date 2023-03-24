@@ -4,6 +4,9 @@ import Club from 'models/club.model'
 import User from 'models/user.model'
 import { IUser } from 'types/user'
 import { IClub } from 'types/club'
+import Settings from 'models/settings.model'
+import { getDefaultSettings } from 'http2'
+import { defaultSettings } from './settings.controller'
 
 export const getClubs = async (req: Request, res: Response) => {
   let { user_id } = req.query
@@ -65,6 +68,14 @@ export const createClub = async (req: Request, res: Response) => {
     name, description, owner_id
   }, async (err, club) => {
     if (err) {
+      return res.status(500).send({err})
+    }
+
+    const defSettings = defaultSettings()
+    defSettings.club_id = club._id
+
+    const [sErr, setting] = await to (Settings.create((defSettings)))
+    if (sErr) {
       return res.status(500).send({err})
     }
 

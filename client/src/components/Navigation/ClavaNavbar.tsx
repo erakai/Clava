@@ -12,9 +12,11 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import Divider from "@mui/material/Divider";
+import SettingsIcon from '@mui/icons-material/Settings';
 
 import NavButton from './NavButton';
 import { Stack } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 const pages = ['Members', 'Events', 'Documents', 'Finances'];
 const settings = ['Logout'];
@@ -29,6 +31,8 @@ type ClavaNavbarProps = {
 }
 
 function ClavaNavbar({currentRoute, clubId, clubName, logout, username, email} : ClavaNavbarProps) {
+	const navigate = useNavigate();
+
   // menu operations for transformations when window size is changed
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
@@ -53,30 +57,43 @@ function ClavaNavbar({currentRoute, clubId, clubName, logout, username, email} :
     }
   };
 
+  const handleSettingsClicked = () => {
+    navigate('/' + clubId + '/settings')
+  }
+
   return (
     <AppBar position="sticky">
       <Container maxWidth={false}>
         <Toolbar disableGutters sx={{justifyContent: "space-between"}}>
           {/* === START OF TITLE FOR LARGE WINDOW SIZE === */}
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="/clubs"
-            sx={{
-              justifySelf: { xs: 'none', md: 'flex-start'},
-              flex: { xs: 0, md: 1 },
-              display: { xs: "none", md: "flex" },
-              mr: 'auto',
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
+          <Box sx={{
+            justifySelf: { xs: 'none', md: 'flex-start'},
+            flex: { xs: 0, md: 1 },
+            display: { xs: "none", md: "flex" },
+            mr: 'auto',
+            alignItems: 'center'}}
           >
-            {clubName}
-          </Typography>
+            <Tooltip title="Club Settings" sx={{ marginRight: 1}}>
+              <IconButton onClick={handleSettingsClicked}>
+                <SettingsIcon />
+              </IconButton>
+            </Tooltip>
+            <Typography
+              variant="h4"
+              noWrap
+              component="a"
+              href="/clubs"
+              sx={{
+                fontFamily: 'monospace',
+                fontWeight: 700,
+                letterSpacing: '.1rem',
+                color: 'inherit',
+                textDecoration: 'none',
+              }}
+            >
+              {clubName}
+            </Typography>
+          </Box>
           {/* === END OF TITLE FOR LARGE WINDOW SIZE === */}
           {/* === START OF NAVIGATION MENU FOR SMALL WINDOW SIZE === */}
           <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
@@ -117,22 +134,27 @@ function ClavaNavbar({currentRoute, clubId, clubName, logout, username, email} :
           </Box>
           {/* === END OF NAVIGATION MENU FOR SMALL WINDOW SIZE === */}
           {/* === START OF TITLE FOR SMALL WINDOW SIZE === */}
+          <Tooltip title="Club Settings" sx={{ marginRight: 1}}>
+              <IconButton sx ={{ display: { xs: 'flex', md: 'none' },}}onClick={handleSettingsClicked}>
+                <SettingsIcon />
+              </IconButton>
+            </Tooltip>
           <Typography
             variant="h5"
             noWrap
             component="a"
-            href=""
+            href="/clubs"
             sx={{
               display: { xs: 'flex', md: 'none' },
               flexGrow: 0,
               fontFamily: 'monospace',
               fontWeight: 700,
-              letterSpacing: '.3rem',
+              letterSpacing: '.1rem',
               color: 'inherit',
               textDecoration: 'none',
             }}
           >
-            Clava
+            {clubName}
           </Typography>
           {/* === END OF TITLE FOR SMALL WINDOW SIZE === */}
           {/* === START OF MENU ITEMS AS BUTTONS === */}
