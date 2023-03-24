@@ -11,6 +11,7 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
+import Divider from "@mui/material/Divider";
 import SettingsIcon from '@mui/icons-material/Settings';
 
 import NavButton from './NavButton';
@@ -22,12 +23,14 @@ const settings = ['Logout'];
 
 type ClavaNavbarProps = {
   currentRoute : string
+  username : string
+  email : string
   clubId : string
   clubName : string
   logout: () => Promise<void | undefined>
 }
 
-function ClavaNavbar({currentRoute, clubId, clubName, logout} : ClavaNavbarProps) {
+function ClavaNavbar({currentRoute, clubId, clubName, logout, username, email} : ClavaNavbarProps) {
 	const navigate = useNavigate();
 
   // menu operations for transformations when window size is changed
@@ -193,6 +196,13 @@ function ClavaNavbar({currentRoute, clubId, clubName, logout} : ClavaNavbarProps
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
+              <MenuItem disabled={true}>
+                <Typography>{username}</Typography>
+              </MenuItem>
+              <MenuItem disabled={true}>
+                <Typography>{email}</Typography>
+              </MenuItem>
+              <Divider />
               {settings.map((setting) => (
                 <MenuItem key={setting} onClick={() => handleCloseUserMenu(setting)}>
                   <Typography textAlign="center">{setting}</Typography>

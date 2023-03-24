@@ -71,11 +71,15 @@ export default function ClubComposite() {
 
   return (
     <div className="items-center">
+      {user && 
       <ClavaNavbar
         currentRoute={clubRoute || 'null'}
         clubId={clubId || 'null'}
         clubName={clubName} logout={logout}
+        username={user.name || 'loading'}
+        email={user.email || 'loading'}
       />
+      }
       {getRoute()}
     </div>
   )
