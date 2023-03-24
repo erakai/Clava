@@ -1,9 +1,15 @@
 import { useEffect, useState } from "react"
+import { Box } from '@mui/material'
+import ReimbursementDisplay from "./ReimbursementDisplay"
 
-export default function FinanceView() {
+type FinanceProps = {
+  club_id : string
+}
+
+export default function FinanceView({club_id} : FinanceProps) {
   return (
-    <div className="p-2 items-center">
-      <h1>Finances</h1>
-    </div>
+    <Box className="w-screen">
+      <ReimbursementDisplay club_id={club_id}></ReimbursementDisplay>
+    </Box>
   )
 }

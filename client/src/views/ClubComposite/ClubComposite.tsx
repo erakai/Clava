@@ -60,7 +60,7 @@ export default function ClubCompositie() {
       case 'documents':
         return <DocumentView />
       case 'finances':
-        return <FinanceView />
+        return <FinanceView club_id={clubId}/>
       default:
         return <UrlNotFound />
     }
