@@ -23,7 +23,9 @@ export const getOfficers = async (req: Request, res: Response) => {
 
 export const requestAddOfficer = async (req: Request, res: Response) => {
 	let { name, email, club_id } = req.body
-	
+
+
+	const user_id = null // null until invitation acceptence
 	const expiration = new Date(new Date().getTime() + (24 * 60 * 60 * 1000)); // officer invitation will expire
 
 	if (!name || !club_id) {
@@ -62,7 +64,7 @@ export const requestAddOfficer = async (req: Request, res: Response) => {
 		} else {
 		  // add to officer
 		  Officer.create({
-		    name, club_id, expiration
+		    name, club_id, expiration, user_id
 		  }, async (err, officer) => {
 		    if (err) {
 		      return res.status(500).send({err})
