@@ -23,3 +23,15 @@ export const addTransaction = async (req: Request, res: Response) => {
 
   return res.status(200).json({transaction})
 }
+
+export const deleteTransactions = async (req: Request, res: Response) => {
+  let { transaction_ids } = req.body
+  
+  if (!transaction_ids || transaction_ids.length == 0) {
+    return res.status(500).json({error: 'no transaction_ids provided'})
+  }
+
+  const [err] = await to(Transaction.deleteMany({ '_id': { '$in': transaction_ids }}).exec())
+  if (err) return res.status(500).send({err})
+  return res.status(200).json({})
+}

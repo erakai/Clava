@@ -5,6 +5,7 @@ import { getRefreshToken } from "./userApi";
 
 export type GetTransactionsResponse = { transactions: Transaction[] }
 export type AddTransactionsResponse = { transaction: Transaction }
+export type DeleteTransactionResponse = {}
 
 const TransactionInstance = axios.create({
   baseURL: `http://localhost:8080/transactions`,
@@ -20,4 +21,8 @@ export const getTransactions = (club_id: string) => {
 
 export const addTransaction = (req: AddTransactionRequest) => {
   return TransactionInstance.post<AddTransactionsResponse>('/', req)
+}
+
+export const deleteTransactions = (transaction_ids: string[]) => {
+  return TransactionInstance.delete<DeleteTransactionResponse>('/', { data : { transaction_ids } })
 }

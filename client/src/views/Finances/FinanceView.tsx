@@ -4,7 +4,7 @@ import { Avatar, Box, Button, Fab, Grid, IconButton, Paper, Stack, Tooltip, Typo
 import to from "await-to-js"
 import moment from "moment"
 import { useEffect, useState } from "react"
-import { addTransaction, getTransactions } from "../../api/transactionApi"
+import { addTransaction, deleteTransactions, getTransactions } from "../../api/transactionApi"
 import { ScrollTop } from "../../components/Navigation"
 import useSettings from "../../hooks/useSettings"
 import { TransactionDisplay } from "./Transactions"
@@ -75,6 +75,26 @@ export default function FinanceView(props: FinanceViewProps) {
     return null
   }
 
+   
+  const onTransactionDelete = async (deleted: Transaction[]) => {
+    const trans_ids: string[] =  deleted.map(t => t._id)
+    const [err, res]= await to(deleteTransactions(trans_ids))
+    if (err) {
+      console.log(err)
+      return
+    }
+
+    // I love horrific code  patterns !
+    let newIncome = income.filter(t => {
+      return deleted.indexOf(t) == -1
+    })
+    setIncome(newIncome)
+    let newExpenses = expenses.filter(t => {
+      return deleted.indexOf(t) == -1
+    })
+    setExpenses(newExpenses)
+  }
+
   return (
     <>
       <AddTransactionModal open={addTransactionModalOpen} 
@@ -96,10 +116,10 @@ export default function FinanceView(props: FinanceViewProps) {
           {/*Income/Expense (Transaction) Tables*/}
           <Grid item container xs={12} spacing={1}>
             <Grid item xs={12} lg={6}>
-              <TransactionDisplay title="Income" transactions={income} settings={settings}/>
+              <TransactionDisplay title="Income" transactions={income} settings={settings} onDelete={onTransactionDelete}/>
             </Grid>
             <Grid item xs={12} lg={6}>
-              <TransactionDisplay title="Expenses" transactions={expenses} settings={settings}/>
+              <TransactionDisplay title="Expenses" transactions={expenses} settings={settings} onDelete={onTransactionDelete}/>
             </Grid>
           </Grid>
 
