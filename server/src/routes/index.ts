@@ -4,6 +4,7 @@ import clubRouter from "./club.route"
 import memberRouter from "./member.route"
 import officerRouter from "./officer.route"
 import settingsRouter from "./settings.route"
+import transactionRouter from "./transaction.route"
 
 const rootRouter = Router()
 
@@ -12,5 +13,6 @@ rootRouter.use('/members', memberRouter)
 rootRouter.use('/clubs', clubRouter)
 rootRouter.use('/officers', officerRouter)
 rootRouter.use('/settings', settingsRouter)
+rootRouter.use('/transactions', transactionRouter)
 
 export default rootRouter

@@ -74,16 +74,13 @@ export default function ClubComposite() {
 
     switch (clubRoute) {
       case 'members':
-        if (user == null) {
-          return <MemberView club_id={clubId} state={state} user_id={""} owner_id={clubOwnerId} />
-        }
-        return <MemberView club_id={clubId} state={state} user_id={user._id} owner_id={clubOwnerId} />
+        return <MemberView club_id={clubId} state={state} user_id={(user) ? user._id : ""} owner_id={clubOwnerId} />
       case 'events':
         return <EventView />
       case 'documents':
         return <DocumentView />
       case 'finances':
-        return <FinanceView />
+        return <FinanceView club_id={clubId}/>
       case 'settings':
         return <Settings clubName={clubName} club_id={clubId}/>
       default:
