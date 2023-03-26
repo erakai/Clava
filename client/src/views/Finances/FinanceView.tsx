@@ -1,92 +1,150 @@
-import { Box, Grid, Paper, Typography } from "@mui/material"
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import { Avatar, Box, Button, Fab, Grid, IconButton, Paper, Stack, Tooltip, Typography } from "@mui/material"
+import to from "await-to-js"
 import moment from "moment"
 import { useEffect, useState } from "react"
+import { addTransaction, getTransactions } from "../../api/transactionApi"
+import { ScrollTop } from "../../components/Navigation"
 import useSettings from "../../hooks/useSettings"
 import { TransactionDisplay } from "./Transactions"
+import AddTransactionModal from './Transactions/AddTransactionModal';
 
 type FinanceViewProps = {
   club_id: string
 }
 
-const transactions: Transaction[] = [
-  {
-    _id: "test",
-    source: "test",
-    amount: -100,
-    date: moment().valueOf()
-  },
-  {
-    _id: "test",
-    source: "test2",
-    amount: 100,
-    date: moment().add(-1, 'w').valueOf()
-  }
-]
-
 export default function FinanceView(props: FinanceViewProps) {
+  // Data State
   const [income, setIncome] = useState<Transaction[]>([])
   const [expenses, setExpenses] = useState<Transaction[]>([])
   const [balance, setBalance] = useState(0)
-  const { settings, refreshSettings} = useSettings()
+  const { settings, refreshSettings } = useSettings()
 
+  // Modal State
+  const [addTransactionModalOpen, setAddTransactionModalOpen] = useState(false)
+
+  // Loading data on render
   useEffect(() => {
-    let trans = transactions
-
-    let b = 0
-    let incomeTemp: Transaction[] = []
-    let expensesTemp: Transaction[] = []
-    trans.forEach(t => {
-      if (t.amount >= 0) {
-        incomeTemp.push(t)
-      } else {
-        expensesTemp.push(t)
+    const fetchData = async () => {
+      const [errT, trans] = await to(getTransactions(props.club_id))
+      if (errT) {
+        console.log(errT)
+        return
       }
 
-      b += t.amount
-    })
-    setBalance(b)
-    setIncome(incomeTemp)
-    setExpenses(expensesTemp)
+      let b = 0
+      let incomeTemp: Transaction[] = []
+      let expensesTemp: Transaction[] = []
+      trans.data.transactions.forEach((t: Transaction) => {
+        if (t.amount >= 0) {
+          incomeTemp.push(t)
+        } else {
+          expensesTemp.push(t)
+        }
+
+        b += t.amount
+      })
+      setBalance(b)
+      setIncome(incomeTemp)
+      setExpenses(expensesTemp)
+    }
+
+    fetchData()
+    refreshSettings(props.club_id)
   }, [])
 
+  const addTransactionWrapper = async (req: AddTransactionRequest) => {
+    const [err, t] = await to(addTransaction(req))
+    if (err) {
+      return "Something went wrong."
+    }
+
+    let trans = t.data.transaction
+    if (trans.amount >= 0) {
+      let newIncome = income
+      newIncome.push(trans)
+      setIncome(newIncome)
+    } else {
+      let newExpense = expenses
+      newExpense.push(trans)
+      setExpenses(newExpense)
+    }
+    setBalance(balance + trans.amount)
+
+    return null
+  }
+
   return (
-    <Grid container marginY={0} rowSpacing={2}>
-      <Grid item xs={12}>
-        <Box
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          height="100%">
-          <Typography variant="h4">Finance Dashboard</Typography>
-        </Box>
-      </Grid>
+    <>
+      <AddTransactionModal open={addTransactionModalOpen} 
+        setOpen={setAddTransactionModalOpen} club_id={props.club_id}
+        addTransactionWrapper={addTransactionWrapper}/>
 
-      <Grid item container marginX={2} xs={12} md={8} rowSpacing={2}>
-        {/*Income/Expense (Transaction) Tables*/}
-        <Grid item container xs={12} spacing={1}>
-          <Grid item md={6}>
-            <TransactionDisplay title="Income" transactions={income} settings={settings}/>
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <TransactionDisplay title="Expenses" transactions={expenses} settings={settings}/>
-          </Grid>
-        </Grid>
-
-        {/*Balance Overview and Buttons*/}
+      <Grid container marginY={0} rowSpacing={2}>
         <Grid item xs={12}>
-          <Paper style={{padding: 8, alignContent: 'center', textAlign: 'center'}} elevation={3}>
-            <Typography variant="h5">Current Balance</Typography>
-            <Typography variant="h6" sx={{ 'color': (balance >= 0) ? 'green' : 'red' }}>
-              ${balance}
-            </Typography>
-          </Paper>
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            height="100%">
+            <Typography variant="h4">Finance Dashboard</Typography>
+          </Box>
+        </Grid>
+
+        <Grid item container marginX={2} xs={12} md={8} rowSpacing={2}>
+          {/*Income/Expense (Transaction) Tables*/}
+          <Grid item container xs={12} spacing={1}>
+            <Grid item xs={12} lg={6}>
+              <TransactionDisplay title="Income" transactions={income} settings={settings}/>
+            </Grid>
+            <Grid item xs={12} lg={6}>
+              <TransactionDisplay title="Expenses" transactions={expenses} settings={settings}/>
+            </Grid>
+          </Grid>
+
+          {/*Balance Overview and Buttons*/}
+          <Grid item xs={12}>
+            <Paper style={{padding: 8, alignContent: 'center', textAlign: 'center'}} elevation={3}>
+              <Grid container alignItems={"center"}>
+                <Grid item xs={4} container justifyContent="flex-start" alignItems="center">
+                  <Stack alignItems={"center"} paddingLeft={1}>
+                    {/* <Typography variant="caption">Add Transaction</Typography> */}
+                    <Tooltip title={"Add Transaction"}>
+                      <Avatar sx={{ bgcolor: "secondary.main", mx:1, width:48, height:48 }}>
+                        <IconButton sx={{ color: 'white', display: 'block', width:48, height:48 }}
+                          onClick={() => setAddTransactionModalOpen(true)} >
+                          <AddShoppingCartIcon/>
+                        </IconButton>
+                      </Avatar>
+                    </Tooltip>
+                  </Stack>
+                </Grid>
+                <Grid item xs={4}>
+                  <Typography variant="h5">Current Balance</Typography>
+                  <Typography variant="h6" sx={{ 'color': (balance >= 0) ? 'green' : 'red' }}>
+                    ${(Math.round(balance * 100) / 100).toFixed(2)}
+                  </Typography>
+                </Grid>
+                <Grid item xs={4}/>
+              </Grid>
+            </Paper>
+          </Grid>
+        </Grid>
+
+        {/*Reimbursements column*/}
+        <Grid item xs={12} md={3} margin={2} style={{ textAlign: 'center' }} border={2}>
+          {/*LEO JUST PUT YOUR REIMBURSEMENTS COMP IN HERE*/}
+          <Typography variant="h5">Reimbursements</Typography>
         </Grid>
       </Grid>
 
-      {/*Reimbursements column*/}
-      <Grid item xs={12} md={3} marginLeft={2} style={{ textAlign: 'center' }} border={2}>
-        <Typography variant="h5">Reimbursements</Typography>
-      </Grid>
-    </Grid>
+
+      <ScrollTop>
+        <Fab size="small">
+          <KeyboardArrowUpIcon />
+        </Fab>
+      </ScrollTop>
+    </>
   )
 }

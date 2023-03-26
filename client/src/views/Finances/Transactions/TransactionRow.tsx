@@ -14,7 +14,8 @@ export default function TransactionRow({
         {new Date(row.date).toLocaleDateString()}
       </TableCell>
       <TableCell align="right" sx={{ 'color': (row.amount >= 0) ? 'green' : 'red' }}>
-        {(row.amount > 0) ? "$" + row.amount : "$" + row.amount.toString().substring(1)}
+        {(row.amount > 0) ? "$" + (Math.round(row.amount * 100) / 100).toFixed(2) 
+          : "$" + (Math.round(parseFloat(row.amount.toString().substring(1)) * 100) / 100).toFixed(2)}
       </TableCell>
     </TableRow>
   )

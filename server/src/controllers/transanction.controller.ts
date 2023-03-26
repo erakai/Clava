@@ -14,7 +14,7 @@ export const getTransactions = async (req: Request, res: Response) => {
 
 export const addTransaction = async (req: Request, res: Response) => {
   let { club_id, source, amount, date } = req.body
-  if (!club_id || !source || !amount) {
+  if (!club_id || !source|| !amount) {
     return res.status(400).json({error: 'not all fields'})
   }
 

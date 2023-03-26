@@ -86,13 +86,13 @@ export default function TableToolbar<T>({
         </Grid>
       ) : (
         <Grid container spacing={2} direction="row" alignItems={"right"} justifyContent={"right"}>
-          <Grid item xs={10} md={10}>
+          <Grid item xs={10} md={8} xl={10}>
             <Collapse in={filtering} orientation="vertical" className='w-full'>
                 <TextField size="small" label="Search" fullWidth
                   value={searchString} onChange={(e) => setSearchString(e.target.value)}></TextField>
             </Collapse> 
           </Grid>
-          <Grid item xs={2}>
+          <Grid item xs={2} md={4} xl={2}>
             <Tooltip title="Filter">
               <IconButton onClick={() => setFiltering(!filtering)}>
                 <FilterList />
