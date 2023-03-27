@@ -2,7 +2,6 @@ import { Model, model, Schema, SchemaTypes } from "mongoose";
 import {IEvent} from "../types/event";
 
 const EventSchema = new Schema<IEvent>({
-  event_id: SchemaTypes.ObjectId,
   name: {
     type: SchemaTypes.String, 
     required: true,
@@ -10,7 +9,8 @@ const EventSchema = new Schema<IEvent>({
   date: SchemaTypes.Date,
   started: SchemaTypes.Boolean,
   description: SchemaTypes.String,
-  attendance: SchemaTypes.Number
+  attendance: SchemaTypes.Number,
+  club_id: SchemaTypes.ObjectId
 })
 
 const Event = model('event', EventSchema) as Model<IEvent>

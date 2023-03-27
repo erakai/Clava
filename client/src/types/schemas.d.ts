@@ -98,5 +98,6 @@ interface Role {
 interface CreateEventRequest {
   name: string,
   date: Date,
-  description: string
+  description: string,
+  club_id: string
 }
