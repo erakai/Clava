@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { AuthResponse, Token } from './config';
 import { intercepts } from './config';
+import { getRefreshToken } from "./userApi"
 
 
 const UserInstance = axios.create({
@@ -9,6 +10,8 @@ const UserInstance = axios.create({
   withCredentials: true,
 })
 
+/* Very important - embeds tokens! */
+intercepts(UserInstance, getRefreshToken)
 
 export const _createEvent = ({ name, description, date, club_id }: CreateEventRequest) => {
   if (!description) {
@@ -17,8 +20,4 @@ export const _createEvent = ({ name, description, date, club_id }: CreateEventRe
   return UserInstance.post<AuthResponse>('/', { name, description, date, club_id })
 }
 
-export const getRefreshToken = () => 
-  UserInstance.post<AuthResponse>('/refresh')
 
-/* Very important - embeds tokens! */
-intercepts(UserInstance, getRefreshToken)

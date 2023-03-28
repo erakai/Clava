@@ -10,6 +10,7 @@ type CreateEventProps = {
   setOpen: Dispatch<React.SetStateAction<boolean>>
   errorMessage: string
   setErrorMessage: Dispatch<React.SetStateAction<string>>
+  club_id: string
 }
 
 const style = {
@@ -26,7 +27,7 @@ const style = {
 }
 
 export default function CreateEventModal({
-                                           createEvent, open, setOpen, errorMessage, setErrorMessage
+                                           createEvent, open, setOpen, errorMessage, setErrorMessage, club_id
                                          }: CreateEventProps) {
   const [name, setName] = useState('')
   const [date, setDate] = useState<Moment | null>(null)
@@ -44,8 +45,18 @@ export default function CreateEventModal({
   }
 
   const handleCreate = () => {
-    if (!name || !description) {
-      setErrorMessage('Please enter both name and description of the event.')
+    if (!name && !date) {
+      setErrorMessage('Please enter a name and a date for the event')
+      return
+    }
+
+    if (!name) {
+      setErrorMessage('Please enter a name for the event.')
+      return
+    }
+
+    if (!date) {
+      setErrorMessage('Please enter a date for the event.')
       return
     }
 
@@ -53,6 +64,16 @@ export default function CreateEventModal({
       setErrorMessage('Invalid date.')
       return
     }
+
+    let newEvent: CreateEventRequest = {
+      name: name,
+      description: description,
+      date: date?.toDate(),
+      club_id: club_id
+    }
+
+    createEvent(newEvent)
+    clearFields()
   }
 
   return (
@@ -85,10 +106,10 @@ export default function CreateEventModal({
                        onChange={(e) => { setName(e.target.value); setErrorMessage('')}}/>
           </Grid>
           <Grid item>
-            <TextField className="w-[100%]" size="small" value={description} required
+            <TextField className="w-[100%]" size="small" value={description}
                        label="Description" variant="outlined" type="text" id="description-text-field"
                        onChange={(e) => { setDesc(e.target.value); setErrorMessage('')}}
-                       error={description != ''}/>
+                       />
           </Grid>
           <Grid item>
             <Grid container direction="row" spacing={1}>

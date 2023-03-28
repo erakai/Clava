@@ -56,7 +56,7 @@ export default function ClubCompositie() {
         }
         return <MemberView club_id={clubId} state={state} user_id={user._id} owner_id={clubOwnerId} />
       case 'events':
-        return <EventView />
+        return <EventView club_id={clubId}/>
       case 'documents':
         return <DocumentView />
       case 'finances':
