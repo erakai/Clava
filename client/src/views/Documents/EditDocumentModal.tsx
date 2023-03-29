@@ -12,9 +12,10 @@ type EditDocumentProps = {
   setLink: Dispatch<React.SetStateAction<string>>
   editDocument: (document: EditDocumentRequest) => void
   isUniqueDocumentName: (name: string, _id?: string) => boolean
+  verifyUrl: (url: string) => boolean
 }
 
-export default function EditDocumentModal({ documentId, open, setOpen, oldName, oldLink, setName, setLink, editDocument, isUniqueDocumentName}: EditDocumentProps) {
+export default function EditDocumentModal({ documentId, open, setOpen, oldName, oldLink, setName, setLink, editDocument, isUniqueDocumentName, verifyUrl}: EditDocumentProps) {
   const [name, setNewName] = useState(oldName)
   const [nameError, setNewNameError] = useState("")
   const [link, setNewLink] = useState(oldLink)
@@ -25,18 +26,28 @@ export default function EditDocumentModal({ documentId, open, setOpen, oldName, 
     if (!name) {
       setNewNameError("Document name is required")
       badInput = true
+    } else if (!isUniqueDocumentName(name, documentId)) {
+      setNewNameError("Document name needs to be unique")
+      badInput = true
     }
     if (!link) {
       setNewLinkError("Document link is required")
       badInput = true
-    }
-    if (!badInput && isUniqueDocumentName(name, documentId)) {
-      setNewNameError("Document name needs to be unique")
+    } else if (!verifyUrl(link)) {
+      setNewLinkError("Invalid url")
       badInput = true
-    }
+    } 
+    // if (!badInput && !isUniqueDocumentName(name, documentId)) {
+    //   setNewNameError("Document name needs to be unique")
+    //   badInput = true
+    // }
     if (badInput) {
       return
     }
+
+    
+
+   
     // if here, input is valid, so proceed with edit
     let editDocReq: EditDocumentRequest = {
       newName: name, 

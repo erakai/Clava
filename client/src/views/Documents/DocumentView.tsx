@@ -18,6 +18,13 @@ export default function DocumentView({ club_id, state }: DocumentViewProps) {
   const [addDocOpen, setAddDocOpen] = useState(false)
   const [documents, setDocuments] = useState<ClubDocument[]>([])
 
+  const verifyUrl = (url: string) => {
+    const regex: RegExp = /^(?:([A-Za-z]+):)?(\/{0,3})([0-9.\-A-Za-z]+)(?::(\d+))?(?:\/([^?#]*))?(?:\?([^#]*))?(?:#(.*))?$/
+
+    const verify = regex.exec(url)
+    return (verify != null)
+  }
+
   const addDocument = async (document: AddDocumentRequest) => {
     const [err, res] = await to(_createDocument(document))
     if (err) {
@@ -82,7 +89,7 @@ export default function DocumentView({ club_id, state }: DocumentViewProps) {
       documentsFil = documents.filter(document => document._id != _id)
     }
     let documentNames = documentsFil.map(document => document.name);
-    return documentNames.includes(name)
+    return !documentNames.includes(name)
   }
 
   useEffect(() => {
@@ -111,6 +118,7 @@ export default function DocumentView({ club_id, state }: DocumentViewProps) {
         setOpen={setAddDocOpen}
         addDocument={addDocument}
         isUniqueDocumentName={isUniqueDocumentName}
+        verifyUrl={verifyUrl}
         />
 
 
@@ -132,7 +140,8 @@ export default function DocumentView({ club_id, state }: DocumentViewProps) {
               _id={document._id}
               editDocument={editDocument}
               deleteDocument={deleteDocument}
-              isUniqueDocumentName={isUniqueDocumentName}/>
+              isUniqueDocumentName={isUniqueDocumentName}
+              verifyUrl={verifyUrl}/>
           ))}
         </Grid>
       </Box>

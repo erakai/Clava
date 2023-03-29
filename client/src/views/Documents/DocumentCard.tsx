@@ -1,4 +1,4 @@
-import { Box, Menu, Grid, Button, Card, CardActions, CardContent, Typography, MenuItem, CardActionArea, IconButton, CardMedia, Link, Dialog, DialogContent, DialogContentText, DialogActions } from "@mui/material"
+import { Box, Menu, Grid, Button, Card, CardActions, CardContent, Typography, MenuItem, CardActionArea, IconButton, CardMedia, Link, Dialog, DialogContent, DialogContentText, DialogActions, Divider } from "@mui/material"
 import { useEffect, useState } from "react"
 import { MoreVert as MoreVertIcon, Article as ArticleIcon } from '@mui/icons-material/';
 import EditDocumentModal from "./EditDocumentModal";
@@ -10,6 +10,7 @@ type DocumentCardProps = {
   editDocument: (document: EditDocumentRequest) => void
   deleteDocument: (_id: string) => void
   isUniqueDocumentName: (name: string, _id?: string) => boolean
+  verifyUrl: (url: string) => boolean
 }
 
 const iconSize = {
@@ -19,7 +20,7 @@ const iconSize = {
   }
 }
 
-export default function DocumentCard({ docName, docLink, _id, editDocument, deleteDocument, isUniqueDocumentName }: DocumentCardProps) {
+export default function DocumentCard({ docName, docLink, _id, editDocument, deleteDocument, isUniqueDocumentName, verifyUrl }: DocumentCardProps) {
 
   const [name, setName] = useState(docName)
   const [link, setLink] = useState(docLink)
@@ -58,17 +59,22 @@ export default function DocumentCard({ docName, docLink, _id, editDocument, dele
             boxShadow: 3,
           },
         }}>
-        <Box className="flex items-center justify-center">
-          <Link href={link} target="_blank" className="grow" underline="none">
-            <Box className="m-4 flex items-center justify-center">
-              <ArticleIcon className="mr-4" color="secondary" />
-              <Typography className="grow" color="black" variant="h6" component="div">
-                {name}
-              </Typography>
-            </Box>
-          </Link>
-          <Box className="m-2">
-            <IconButton className="m-17" onClick={handleMenuClick}>
+        {/* <Box className="flex shrink items-center"> */}
+        <Link href={link} target="_blank" className="grow" underline="none">
+          <Box className="m-4 flex items-center justify-start">
+            <ArticleIcon className="mr-4" color="secondary" />
+            <Typography className="shrink" noWrap color="black" variant="h6" component="div">
+              {name}
+            </Typography>
+          </Box>
+        </Link>
+        {/* </Box> */}
+        <Divider className="mx-2"></Divider>
+        <Box className="flex mx-2 my-1">
+          <Box className="grow"></Box>
+          <Button onClick={handleMenuEditOptionClick}>Edit</Button>
+          <Button className="justify-end" onClick={handleMenuDeleteOptionClick}>Delete</Button>
+            {/* <IconButton className="m-17" onClick={handleMenuClick}>
               <MoreVertIcon fontSize="inherit"/>
             </IconButton>
             <Menu
@@ -82,7 +88,7 @@ export default function DocumentCard({ docName, docLink, _id, editDocument, dele
               <MenuItem onClick={handleMenuDeleteOptionClick}>
                 Delete
               </MenuItem>
-            </Menu>
+      </Menu>*/}
             <Dialog
               open={deleteOpen}
               onClose={() => setDeleteOpen(false)}>
@@ -97,7 +103,6 @@ export default function DocumentCard({ docName, docLink, _id, editDocument, dele
               </DialogActions>
             </Dialog>
           </Box>
-        </Box>
       </Card>
       
       <EditDocumentModal 
@@ -110,6 +115,7 @@ export default function DocumentCard({ docName, docLink, _id, editDocument, dele
         setLink={setLink}
         editDocument={editDocument}
         isUniqueDocumentName={isUniqueDocumentName}
+        verifyUrl={verifyUrl}
         />
     </Grid>
   )

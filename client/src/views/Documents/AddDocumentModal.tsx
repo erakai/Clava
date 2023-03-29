@@ -1,5 +1,6 @@
 import { Dialog, DialogTitle, DialogContent, DialogActions, Stack, TextField, Button, Typography, Box } from "@mui/material"
 import React, { Dispatch, useState } from "react"
+import useUrlVerify from "../../hooks/useEmailVerify"
 
 
 type AddDocumentProps = {
@@ -11,9 +12,10 @@ type AddDocumentProps = {
   // setDocuments: React.Dispatch<React.SetStateAction<Document[]>>
   addDocument: (document: AddDocumentRequest) => void
   isUniqueDocumentName: (name: string, _id?: string) => boolean
+  verifyUrl: (url: string) => boolean
 }
 
-export default function AddDocumentModal({ club_id, open, setOpen, addDocument, isUniqueDocumentName}: AddDocumentProps) {
+export default function AddDocumentModal({ club_id, open, setOpen, addDocument, isUniqueDocumentName, verifyUrl}: AddDocumentProps) {
   const [name, setName] = useState("")
   const [nameError, setNameError] = useState("")
   const [link, setLink] = useState("")
@@ -24,13 +26,16 @@ export default function AddDocumentModal({ club_id, open, setOpen, addDocument, 
     if (!name) {
       setNameError("Document name is required")
       badInput = true
+    } else if (!isUniqueDocumentName(name)) {
+      setNameError("Document name needs to be unique")
+      badInput = true
     }
+
     if (!link) {
       setLinkError("Document link is required")
       badInput = true
-    }
-    if (!badInput && isUniqueDocumentName(name)) {
-      setNameError("Document name needs to be unique")
+    } else if (!verifyUrl(link)) {
+      setLinkError("Invalid url")
       badInput = true
     }
     if (badInput) {
