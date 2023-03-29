@@ -91,7 +91,6 @@ function CreateTagDialog({club_id, createTag, hasTagName}: CreateTagProps) {
           }}/>
           <CirclePicker defaultColor={color} onChange={(e) => {setColor(e.hex)}} />
         </Stack>
-        
       </DialogContent>
       <DialogActions>
         <Button onClick={handleCancel}>Cancel</Button>

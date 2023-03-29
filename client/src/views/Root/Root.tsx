@@ -18,8 +18,6 @@ function Root() {
         <Route path="/clubs" element={<ClubPage />} />
         <Route path="/reset/:userId" element={<Reset />} />
         <Route path="/resetrequest" element={<ResetRequest />} />
-
-        {/* TODO: Add Regex for clubId, clubRoute */}
         <Route path="/:clubId/:clubRoute" element={<ClubComposite />} />
         <Route path="*" element={<UrlNotFound />} />
       </Routes>

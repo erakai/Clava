@@ -10,7 +10,6 @@ const UserSchema = new Schema<IUser>({
   },
   refreshTokens: [SchemaTypes.String],
   club_ids: [SchemaTypes.ObjectId],
-  officer_ids: [SchemaTypes.ObjectId]
 }) 
 
 // Enable passport authentication using email as username
