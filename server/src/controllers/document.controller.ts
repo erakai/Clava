@@ -1,7 +1,7 @@
 import to from 'await-to-js'
 import type { Request, Response } from 'express'
 import Club from 'models/club.model'
-import Document from 'models/document.model'
+import ClubDocument from 'models/document.model'
 
 export const getDocuments = async (req: Request, res: Response) => {
   let { club_id } = req.query
@@ -9,7 +9,7 @@ export const getDocuments = async (req: Request, res: Response) => {
     return res.status(500).json({error: 'no club id'})
   }
   
-  Document.find({
+  ClubDocument.find({
     club_id: club_id
   }, async (err, documents) => {
     if (err) {
@@ -47,7 +47,7 @@ export const documentPost = async (req: Request, res: Response) => {
 
   // add the new tag to the club
   
-  Document.create({
+  ClubDocument.create({
     name, link, club_id
   }, async (err, document) => {
     if (err) {
@@ -64,13 +64,13 @@ export const documentDelete = async (req: Request, res: Response) => {
     return res.status(500).json({error: 'no tag with _id exists'})
   }
 
-  Document.findByIdAndDelete({
+
+  ClubDocument.findByIdAndDelete({
     _id
   }, async (err, document) => {
     if (err) {
       return res.status(500).send({err})
     }
-    console.log("success deleting tag\n" + document)
     return res.status(200).json({document})
   })
 }
@@ -81,13 +81,13 @@ export const documentPut = async (req: Request, res: Response) => {
     return res.status(500).json({error: 'invalid request format, missing id or newName or newLink'})
   }
 
-  Document.findByIdAndUpdate({
+  ClubDocument.findByIdAndUpdate({
     _id
-  }, {name: newName, link: newLink}, async (err, document) => {
+  }, {name: newName, link: newLink}, {new: true}, async (err, document) => {
     if (err) {
       return res.status(500).send(err)
     }
-    console.log("updated tag\n")
-    return res.status(200).json(document)
+    console.log("printed from backend", document)
+    return res.status(200).json({document})
   })
 }

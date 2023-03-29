@@ -2,10 +2,10 @@ import axios from "axios"
 import { intercepts } from "./config"
 import { getRefreshToken } from "./userApi"
 
-type GetDocumentsResponse = { documents: Document[] }
-type CreateDocumentResponse = { document: Document }
-type DeleteDocumentResponse = { document: Document }
-type EditDocumentResponse = { document: Document }
+type GetDocumentsResponse = { documents: ClubDocument[] }
+type CreateDocumentResponse = { document: ClubDocument }
+type DeleteDocumentResponse = { document: ClubDocument }
+type EditDocumentResponse = { document: ClubDocument }
 
 
 const DocumentInstance = axios.create({

@@ -76,7 +76,10 @@ export default function MemberView({ club_id, state, user_id, owner_id }: Member
     if (err) {
       console.log(err)
     } else if (res) {
-      setTags([...tags, res.data.tag])
+      const newTags = [...tags, res.data.tag]
+      setTags(newTags)
+      console.log("newtags", newTags)
+      console.log("tags", tags)
     }
   }
 

@@ -8,28 +8,30 @@ type EditDocumentProps = {
   setOpen: Dispatch<React.SetStateAction<boolean>>
   oldName: string
   oldLink: string
+  setName: Dispatch<React.SetStateAction<string>>
+  setLink: Dispatch<React.SetStateAction<string>>
   editDocument: (document: EditDocumentRequest) => void
   isUniqueDocumentName: (name: string, _id?: string) => boolean
 }
 
-export default function EditDocumentModal({ documentId, open, setOpen, oldName, oldLink, editDocument, isUniqueDocumentName}: EditDocumentProps) {
-  const [name, setName] = useState(oldName)
-  const [nameError, setNameError] = useState("")
-  const [link, setLink] = useState(oldLink)
-  const [linkError, setLinkError] = useState("")
+export default function EditDocumentModal({ documentId, open, setOpen, oldName, oldLink, setName, setLink, editDocument, isUniqueDocumentName}: EditDocumentProps) {
+  const [name, setNewName] = useState(oldName)
+  const [nameError, setNewNameError] = useState("")
+  const [link, setNewLink] = useState(oldLink)
+  const [linkError, setNewLinkError] = useState("")
 
   const handleEdit = () => {
     let badInput = false
     if (!name) {
-      setNameError("Document name is required")
+      setNewNameError("Document name is required")
       badInput = true
     }
     if (!link) {
-      setLinkError("Document link is required")
+      setNewLinkError("Document link is required")
       badInput = true
     }
     if (!badInput && isUniqueDocumentName(name, documentId)) {
-      setNameError("Document name needs to be unique")
+      setNewNameError("Document name needs to be unique")
       badInput = true
     }
     if (badInput) {
@@ -42,6 +44,8 @@ export default function EditDocumentModal({ documentId, open, setOpen, oldName, 
       _id: documentId
     }
     editDocument(editDocReq)
+    setName(name)
+    setLink(link)
     setOpen(false)
   }
 
@@ -60,16 +64,16 @@ export default function EditDocumentModal({ documentId, open, setOpen, oldName, 
             error={nameError != ""} 
             helperText={nameError}
             onChange={(e) => {
-            setName(e.target.value.trim())
-            setNameError("")
+            setNewName(e.target.value.trim())
+            setNewNameError("")
           }}/>
           <TextField label="Link" variant="standard" size="small" 
             defaultValue={link}
             error={linkError != ""} 
             helperText={linkError}
             onChange={(e) => {
-            setLink(e.target.value.trim())
-            setLinkError("")
+            setNewLink(e.target.value.trim())
+            setNewLinkError("")
           }}/>
         </Stack>
         

@@ -41,13 +41,22 @@ export default function AddDocumentModal({ club_id, open, setOpen, addDocument, 
       name, link, club_id
     }
     addDocument(addDocReq)
+    handleClose()
+  }
+
+  const handleClose = () => {
+    // clear all input fields
+    setName("")
+    setLink("")
+    setNameError("")
+    setLinkError("")
     setOpen(false)
   }
 
   return (
     <Dialog
         open={open}
-        onClose={() => setOpen(false)}>
+        onClose={handleClose}>
       <DialogTitle>
         Add Document
       </DialogTitle>
@@ -74,7 +83,7 @@ export default function AddDocumentModal({ club_id, open, setOpen, addDocument, 
         
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => setOpen(false)}>Cancel</Button>
+        <Button onClick={handleClose}>Cancel</Button>
         <Button onClick={handleAdd} variant="contained">Done</Button>
       </DialogActions>
       </Dialog>

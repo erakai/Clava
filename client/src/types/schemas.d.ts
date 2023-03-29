@@ -95,10 +95,11 @@ interface Role {
   color: string,
 }
 
-interface Document {
+interface ClubDocument {
   _id: string,
   name: string,
   link: string,
+  club_id: string
   //role_ids: Array<string> // should actually be permisions
 }
 

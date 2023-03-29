@@ -5,7 +5,7 @@ import { UserState } from '../../store/user/userSlice'
 import React, { useEffect, useState } from "react"
 import AddDocumentModal from "./AddDocumentModal"
 import DocumentCard from "./DocumentCard"
-import { createDocument as _createDocument, editDocument as _editDocument, getDocuments } from '../../api/documentApi'
+import { deleteDocument as _deleteDocument, createDocument as _createDocument, editDocument as _editDocument, getDocuments } from '../../api/documentApi'
 import useForceUpdate from "../../hooks/useForceUpdate";
 
 type DocumentViewProps = {
@@ -16,18 +16,20 @@ type DocumentViewProps = {
 export default function DocumentView({ club_id, state }: DocumentViewProps) {
 
   const [addDocOpen, setAddDocOpen] = useState(false)
-  const [documents, setDocuments] = useState<Document[]>([])
-
-  const [editDocOpen, setEditDocOpen] = useState(false)
+  const [documents, setDocuments] = useState<ClubDocument[]>([])
 
   const addDocument = async (document: AddDocumentRequest) => {
-
     const [err, res] = await to(_createDocument(document))
     if (err) {
       console.log(err)
-      //setErrorMessage('Something went wrong.')
     } else if (res) {
+      //const newDocs = [...documents, res.data.document]
+      //console.log(newDocs)
+      //setDocuments(newDocs)
+      //documents.push(res.data.document)
+      console.log(documents)
       setDocuments([...documents, res.data.document])
+      // console.log(documents)
     }
   }
 
@@ -36,21 +38,39 @@ export default function DocumentView({ club_id, state }: DocumentViewProps) {
     if (err) {
       console.log(err)
     } else if (res) {
-      // let editDoc = res.data.document
-      // let idx = -1
-      // documents.forEach((document, index) => {
-      //   if (document._id == editDoc._id) {
-      //     idx = index
-      //   }
-      // })
-
-      // if (idx != -1) {
-      //   let newDocuments : Document[] = documents
-      //   newDocuments[idx] = {_id: editDoc._id, name: editDoc.name, link: editDoc.link}
-      //   setDocuments(newDocuments)
-      // }
+      let retrieved : ClubDocument = res.data.document
+      console.log(retrieved)
+      let idx = -1
+      documents.forEach((document, index) => {
+        if (document._id == retrieved._id) {
+          idx = index
+        }
+      })
+      if (idx != -1) {
+        const newDocuments = documents
+        newDocuments[idx] = {_id: retrieved._id, name: retrieved.name, link: retrieved.link, club_id: retrieved.club_id}
+        setDocuments(newDocuments)
+      }
     }
-    close()
+  }
+
+  const deleteDocument = async (_id: string) => {
+    let deleteDocReq: DeleteDocumentRequest = {
+      _id: _id
+    }
+    const [err, res] = await to(_deleteDocument(deleteDocReq))
+    if (err) {
+      console.log(err)
+    } else if (res) {
+      // let filteredDocs = documents.filter((document) => document.name != retrieved.name)
+      // setDocuments(filteredDocs)
+      
+      let retrieved = res.data.document
+      const newDocs = documents.filter((document) => document.name !== retrieved.name)
+      setDocuments(newDocs)
+      console.log(newDocs)
+      console.log(documents)
+    }
   }
 
   // createMode == true, checks all docs
@@ -107,10 +127,11 @@ export default function DocumentView({ club_id, state }: DocumentViewProps) {
         <Grid container spacing={2}>
           {documents.map(document => (
             <DocumentCard 
-              name={document.name} 
-              link={document.link}
+              docName={document.name} 
+              docLink={document.link}
               _id={document._id}
               editDocument={editDocument}
+              deleteDocument={deleteDocument}
               isUniqueDocumentName={isUniqueDocumentName}/>
           ))}
         </Grid>

@@ -1,7 +1,7 @@
 import { Model, model, Schema, SchemaTypes } from "mongoose";
-import { IDocument } from "types/document";
+import { IClubDocument } from "types/document";
 
-const DocumentSchema = new Schema<IDocument>({
+const DocumentSchema = new Schema<IClubDocument>({
   name: {
     type: SchemaTypes.String,
     required: true,
@@ -13,6 +13,6 @@ const DocumentSchema = new Schema<IDocument>({
   club_id: SchemaTypes.ObjectId,
 })
 
-const Document = model('document', DocumentSchema) as Model<IDocument>
+const ClubDocument = model('document', DocumentSchema) as Model<IClubDocument>
 
-export default Document
+export default ClubDocument
