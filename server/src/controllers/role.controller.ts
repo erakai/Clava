@@ -6,6 +6,8 @@ import Role from 'models/Role.model'
 import Tag from 'models/tag.model'
 import { IClub } from 'types/club'
 import { IRole } from 'types/role'
+import { isOwner } from 'modules/Permissions'
+import cluster from 'cluster'
 
 export const getRoles = async (req: Request, res: Response) => {
   let { club_id } = req.query
@@ -57,6 +59,15 @@ export const createRole = async (req: Request, res: Response) => {
     perms = []
   }
 
+  // <perrmisions>
+  const _user : any = req.user;
+  const [errOwnerOfClub, _isOwnerOfClub] = await to(isOwner(_user._id, club_id.toString()))
+  if (errOwnerOfClub) return res.status(500).json()
+  if (!_isOwnerOfClub) {
+    return res.status(403).json()
+  }
+  // </perrmisions>
+
   Role.create({
     name, color, perms, club_id
   }, async (err, role) => {
@@ -77,6 +88,18 @@ export const deleteRole = async (req: Request, res: Response) => {
     return res.status(500).json({error: 'no id provided'})
   }
 
+  // <perrmisions>
+  const [errGetRole, _role] = await to(Role.findById(_id).exec())
+  if (errGetRole) { return res.status(500).json() }
+  const club_id = _role.club_id;
+  const _user : any = req.user;
+  const [errOwnerOfClub, _isOwnerOfClub] = await to(isOwner(_user._id, club_id.toString()))
+  if (errOwnerOfClub) return res.status(500).json()
+  if (!_isOwnerOfClub) {
+    return res.status(403).json()
+  }
+  // </permissions>
+
   Role.findByIdAndDelete({
     _id
   }, async (err, role) => {
@@ -93,6 +116,18 @@ export const editRole = async (req: Request, res: Response) => {
   if (!newName || !newColor || !_id) {
     return res.status(500).json({error: 'invalid request format, missing id or newName or newColor'})
   }
+
+  // <perrmisions>
+  const [errGetRole, _role] = await to(Role.findById(_id).exec())
+  if (errGetRole) { return res.status(500).json() }
+  const club_id = _role.club_id;
+  const _user : any = req.user;
+  const [errOwnerOfClub, _isOwnerOfClub] = await to(isOwner(_user._id, club_id.toString()))
+  if (errOwnerOfClub) return res.status(500).json()
+  if (!_isOwnerOfClub) {
+    return res.status(403).json()
+  }
+  // </permissions>
 
   Role.findByIdAndUpdate({
     _id
@@ -111,6 +146,19 @@ export const removeRoleFromOfficer = async (req: Request, res: Response) => {
   if (!officer_id) return res.status(500).json({error: 'no officer id provided'})
   if (!role_id) return res.status(500).json({error: 'no role id provided'})
 
+  // <perrmisions>
+  const [errGetRole, _role] = await to(Role.findById(role_id).exec())
+  if (errGetRole) { return res.status(500).json() }
+  const club_id = _role.club_id;
+  const _user : any = req.user;
+  const [errOwnerOfClub, _isOwnerOfClub] = await to(isOwner(_user._id, club_id.toString()))
+  if (errOwnerOfClub) return res.status(500).json()
+  if (!_isOwnerOfClub) {
+    return res.status(403).json()
+  }
+  // </permissions>
+
+
   Officer.findByIdAndUpdate(officer_id, { $pull: {"role_ids": role_id}}, async (err, result) => {
     if (err) return res.status(500).send({err})
     return res.status(200).json({result})
@@ -124,6 +172,18 @@ export const addRoleToOfficer = async (req: Request, res: Response) => {
   if (!role_id) return res.status(500).json({error: 'no tag role provided'})
 
   // TODO: Check that they do not already have the tag
+
+  // <perrmisions>
+  const [errGetRole, _role] = await to(Role.findById(role_id).exec())
+  if (errGetRole) { return res.status(500).json() }
+  const club_id = _role.club_id;
+  const _user : any = req.user;
+  const [errOwnerOfClub, _isOwnerOfClub] = await to(isOwner(_user._id, club_id.toString()))
+  if (errOwnerOfClub) return res.status(500).json()
+  if (!_isOwnerOfClub) {
+    return res.status(403).json()
+  }
+  // </permissions>
 
   let conditions = (officer_id) => { return {
     _id: officer_id,
