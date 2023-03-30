@@ -23,6 +23,18 @@ export const getEvents = async (req: Request, res: Response) => {
   })
 }
 
+export const deleteEvents = async (req: Request, res: Response) => {
+  let { event_ids } = req.body
+
+  if (!event_ids || event_ids.length == 0) {
+    return res.status(500).json({error: 'no event_ids provided'})
+  }
+
+  const [err] = await to(Event.deleteMany({ '_id': { '$in': event_ids }}).exec())
+  if (err) return res.status(500).send({err})
+  return res.status(200).json({})
+}
+
 export const getEvent = async (req: Request, res: Response) => {
   let { event_id } = req.query
   

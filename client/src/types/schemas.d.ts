@@ -95,6 +95,13 @@ interface Role {
   color: string,
 }
 
+interface Event {
+  _id: string,
+  name: string,
+  date: Date,
+  description: string
+}
+
 interface CreateEventRequest {
   name: string,
   date?: Date,
