@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useEffect, useState } from "react"
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
@@ -7,21 +8,20 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
 type Props = {
-    name : string,
-    amount : number,
-		creditor: string,
-    link : string,
-    paid: boolean,
+  _id : string,
+  name : string,
+  amount : number,
+  creditor: string,
+  link : string,
+  paid: boolean,
 }
 
-export default function ReimbursementCard({name, amount, creditor, link, paid} : Props) {
+export default function ReimbursementCard({_id, name, amount, creditor, link, paid} : Props) {
 
-	let status = "Pending"
-	let oppStatus = "Completed"
-	if(paid) {
-		status = "Completed"
-		oppStatus = "Pending"
-	}
+  const [status, setStatus] = useState<boolean>(paid)
+	// if(paid) {
+	// 	setStatus(true)
+	// }
 
   return (
     <Box sx={{ minWidth: 275 }}>
@@ -41,7 +41,7 @@ export default function ReimbursementCard({name, amount, creditor, link, paid} :
         </Typography>
         </CardContent>
         <CardActions>
-        <Button size="small">Mark as {oppStatus}</Button>
+        <Button size="small">Mark as {status? "Pending" : "Completed"}</Button>
 				<Button size="small">Delete</Button>
 				<Button size="small">View Receipt</Button>
         </CardActions>

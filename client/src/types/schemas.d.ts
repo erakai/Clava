@@ -96,6 +96,7 @@ interface Role {
 }
 
 interface Reimbursement {
+  _id: string,
   name: string,
   amount: number,
   creditor: string,
@@ -105,6 +106,16 @@ interface Reimbursement {
 }
 
 interface CreateReimbursementRequest {
+  name: string,
+  amount: number,
+  creditor: string,
+  link: string,
+  paid: boolean,
+  club_id: string
+}
+
+interface EditReimbursementRequest {
+  _id: string,
   name: string,
   amount: number,
   creditor: string,

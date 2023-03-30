@@ -65,3 +65,20 @@ export const createReimbursement = async (req: Request, res: Response) => {
     return res.status(200).json({reimbursement})
   })
 }
+
+export const editReimbursement = async (req: Request, res: Response) => {
+  let { _id, name, amount, creditor, link, paid } = req.body
+  if (!_id || !name || !amount || !creditor || !link || !paid) {
+    return res.status(500).json({error: 'invalid request format'})
+  }
+
+  Reimbursement.findByIdAndUpdate({
+    _id
+  }, {name: name, amount: amount, creditor: creditor, link: link, paid: paid}, async (err, reimbursement) => {
+    if (err) {
+      return res.status(500).send(err)
+    }
+    console.log("updated role\n")
+    return res.status(200).json(reimbursement)
+  })
+}

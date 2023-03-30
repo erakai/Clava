@@ -4,6 +4,7 @@ import { getRefreshToken } from "./userApi"
 
 type GetReimbursementsResponse = { reimbursements: Reimbursement[] }
 type CreateReimbursementResponse = { reimbursement: Reimbursement }
+type EditReimbursementResponse = { reimbursement: Reimbursement }
 
 const ReimbursementInstance = axios.create({
   baseURL: `http://localhost:8080/clubs`,
@@ -19,4 +20,8 @@ export const getReimbursements = (club_id: string) => {
 
 export const createReimbursement = ({ name, amount, creditor, link, paid, club_id }: CreateReimbursementRequest) =>  {
   return ReimbursementInstance.post<CreateReimbursementResponse>('/reimbursements', { name, amount, creditor, link, paid, club_id })
+}
+
+export const editReimbursement = ({ _id, name, amount, creditor, link, paid, club_id }: EditReimbursementRequest) =>  {
+  return ReimbursementInstance.put<EditReimbursementResponse>('/reimbursements', { _id, name, amount, creditor, link, paid, club_id })
 }

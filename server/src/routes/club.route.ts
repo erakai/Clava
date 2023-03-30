@@ -1,7 +1,7 @@
 import { verifyUser } from "config/auth";
 import { getClubs, getClub, createClub, addClubToUser, removeClubFromUser } from "controllers/club.controller";
 import { getRoles, createRole, deleteRole, editRole } from "controllers/role.controller";
-import { getReimbursements, createReimbursement } from "controllers/reimbursement.controller";
+import { getReimbursements, createReimbursement, editReimbursement } from "controllers/reimbursement.controller";
 import { Router } from "express";
 
 const clubRouter = Router()
@@ -26,5 +26,6 @@ clubRouter.delete('/roles', verifyUser, deleteRole)
 
 clubRouter.get('/reimbursements', verifyUser, getReimbursements)
 clubRouter.post('/reimbursements', verifyUser, createReimbursement)
+clubRouter.put('/reimbursements', verifyUser, editReimbursement)
 
 export default clubRouter

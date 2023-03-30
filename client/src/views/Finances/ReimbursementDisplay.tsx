@@ -48,7 +48,7 @@ export default function ReimbursementDisplay({club_id} : DisplayProps) {
         </Grid>
         {completedReimbursements.map((reimbursement) => (
           <Grid item xs={12}>
-            <ReimbursementCard name={reimbursement.name} amount={reimbursement.amount} creditor={reimbursement.creditor} link={reimbursement.link} paid={reimbursement.paid}></ReimbursementCard>
+            <ReimbursementCard _id={reimbursement._id} name={reimbursement.name} amount={reimbursement.amount} creditor={reimbursement.creditor} link={reimbursement.link} paid={reimbursement.paid}></ReimbursementCard>
           </Grid>
         ))}
         <Grid item xs={12}>
@@ -56,7 +56,7 @@ export default function ReimbursementDisplay({club_id} : DisplayProps) {
         </Grid>
         {pendingReimbursements.map((reimbursement) => (
           <Grid item xs={12}>
-            <ReimbursementCard name={reimbursement.name} amount={reimbursement.amount} creditor={reimbursement.creditor} link={reimbursement.link} paid={reimbursement.paid}></ReimbursementCard>
+            <ReimbursementCard _id={reimbursement._id} name={reimbursement.name} amount={reimbursement.amount} creditor={reimbursement.creditor} link={reimbursement.link} paid={reimbursement.paid}></ReimbursementCard>
           </Grid>
         ))}
       </Grid>
