@@ -6,6 +6,8 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import to from 'await-to-js'
+import { editReimbursement } from '../../api/reimbursementApi'
 
 type Props = {
   _id : string,
@@ -14,14 +16,28 @@ type Props = {
   creditor: string,
   link : string,
   paid: boolean,
+  club_id: string,
+  updateReimbursementDisplay : (_id : string) => void
 }
 
-export default function ReimbursementCard({_id, name, amount, creditor, link, paid} : Props) {
+export default function ReimbursementCard({_id, name, amount, creditor, link, paid, club_id, updateReimbursementDisplay} : Props) {
 
   const [status, setStatus] = useState<boolean>(paid)
-	// if(paid) {
-	// 	setStatus(true)
-	// }
+  
+  const statusUpdate = async () => {
+    let updateRequest : EditReimbursementRequest = {
+      _id, name, amount, creditor, link, paid: !status, club_id
+    }
+    const [err, res] = await to(editReimbursement(updateRequest))
+    if (err) {
+      console.log(err)
+    } else if (res) {
+      updateReimbursementDisplay(_id)
+      setStatus(!status)
+    }
+    
+  }
+
 
   return (
     <Box sx={{ minWidth: 275 }}>
@@ -41,7 +57,7 @@ export default function ReimbursementCard({_id, name, amount, creditor, link, pa
         </Typography>
         </CardContent>
         <CardActions>
-        <Button size="small">Mark as {status? "Pending" : "Completed"}</Button>
+        <Button size="small" onClick={statusUpdate}>Mark as {status? "Pending" : "Completed"}</Button>
 				<Button size="small">Delete</Button>
 				<Button size="small">View Receipt</Button>
         </CardActions>

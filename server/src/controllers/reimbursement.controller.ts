@@ -67,14 +67,15 @@ export const createReimbursement = async (req: Request, res: Response) => {
 }
 
 export const editReimbursement = async (req: Request, res: Response) => {
-  let { _id, name, amount, creditor, link, paid } = req.body
-  if (!_id || !name || !amount || !creditor || !link || !paid) {
+  let { _id, name, amount, creditor, link, paid, club_id } = req.body
+  if (!_id) {
+    console.log("hi")
     return res.status(500).json({error: 'invalid request format'})
   }
 
   Reimbursement.findByIdAndUpdate({
     _id
-  }, {name: name, amount: amount, creditor: creditor, link: link, paid: paid}, async (err, reimbursement) => {
+  }, {name: name, amount: amount, creditor: creditor, link: link, paid: paid, club_id: club_id}, async (err, reimbursement) => {
     if (err) {
       return res.status(500).send(err)
     }

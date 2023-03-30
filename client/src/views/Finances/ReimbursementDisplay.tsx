@@ -10,9 +10,19 @@ type DisplayProps = {
 }
 
 export default function ReimbursementDisplay({club_id} : DisplayProps) {
-  const [completedReimbursements, setCompletedReimbursements] = useState<Reimbursement[]>([])
-  const [pendingReimbursements, setPendingReimbursements] = useState<Reimbursement[]>([])
+  const [reimbursements, setReimbursements] = useState<Reimbursement[]>([])
   const { user, state, logout } = useUser()
+
+  const updateReimbursementDisplay = (_id : string) => {
+    const updated = []
+    for(let i=0; i<reimbursements.length; i++) {
+      updated.push(reimbursements[i])
+      if(reimbursements[i]._id === _id ) {
+        updated[i].paid = !updated[i].paid
+      }
+    }
+    setReimbursements(updated)
+  }
 
   // Gets clubs and listens for new clubs added to the DB
   useEffect(() => {
@@ -26,14 +36,12 @@ export default function ReimbursementDisplay({club_id} : DisplayProps) {
 
         const retrieved = res.data.reimbursements
         if(retrieved) {
-          const completed = []
-          const pending = []
+          const reimbursements = []
           for(let i=0; i<retrieved.length; i++) {
-            if(retrieved[i].paid) completed.push(retrieved[i])
-            else pending.push(retrieved[i])
+            reimbursements.push(retrieved[i])
+            
           }
-          setCompletedReimbursements(completed)
-          setPendingReimbursements(pending)
+          setReimbursements(reimbursements)
         }
       }
       fetch()
@@ -46,18 +54,22 @@ export default function ReimbursementDisplay({club_id} : DisplayProps) {
         <Grid item xs={12}>
           <Typography textAlign="center" variant="h6">Completed Reimbursements</Typography>
         </Grid>
-        {completedReimbursements.map((reimbursement) => (
-          <Grid item xs={12}>
-            <ReimbursementCard _id={reimbursement._id} name={reimbursement.name} amount={reimbursement.amount} creditor={reimbursement.creditor} link={reimbursement.link} paid={reimbursement.paid}></ReimbursementCard>
-          </Grid>
+        {reimbursements.map((reimbursement) => (
+          reimbursement.paid &&
+            <Grid key={reimbursement._id} item xs={12}>
+              <ReimbursementCard _id={reimbursement._id} name={reimbursement.name} amount={reimbursement.amount} creditor={reimbursement.creditor} link={reimbursement.link} paid={reimbursement.paid} club_id={reimbursement.club_id} updateReimbursementDisplay={updateReimbursementDisplay}></ReimbursementCard>
+            </Grid>
+          
         ))}
         <Grid item xs={12}>
           <Typography textAlign="center" variant="h6">Pending Reimbursements</Typography>
         </Grid>
-        {pendingReimbursements.map((reimbursement) => (
-          <Grid item xs={12}>
-            <ReimbursementCard _id={reimbursement._id} name={reimbursement.name} amount={reimbursement.amount} creditor={reimbursement.creditor} link={reimbursement.link} paid={reimbursement.paid}></ReimbursementCard>
-          </Grid>
+        {reimbursements.map((reimbursement) => (
+          !reimbursement.paid &&
+            <Grid key={reimbursement._id} item xs={12}>
+              <ReimbursementCard _id={reimbursement._id} name={reimbursement.name} amount={reimbursement.amount} creditor={reimbursement.creditor} link={reimbursement.link} paid={reimbursement.paid} club_id={reimbursement.club_id} updateReimbursementDisplay={updateReimbursementDisplay}></ReimbursementCard>
+            </Grid>
+          
         ))}
       </Grid>
     </Box>
