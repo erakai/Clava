@@ -118,7 +118,7 @@ export default function DocumentView({ club_id, state }: DocumentViewProps) {
       const retrieved = res.data.documents
       if (retrieved) {
         setDocuments(retrieved)
-        setFilteredDocuments(retrieved)
+        performSearch(searchString)
         console.log("damn")
       }
     }
