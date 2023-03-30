@@ -4,6 +4,7 @@ import { Avatar, Box, Button, Fab, Grid, IconButton, Paper, Stack, Tooltip, Typo
 import to from "await-to-js"
 import moment from "moment"
 import { useEffect, useState } from "react"
+import ReimbursementDisplay from "./ReimbursementDisplay"
 import { addTransaction, deleteTransactions, getTransactions } from "../../api/transactionApi"
 import { ScrollTop } from "../../components/Navigation"
 import useSettings from "../../hooks/useSettings"
@@ -154,8 +155,8 @@ export default function FinanceView(props: FinanceViewProps) {
 
         {/*Reimbursements column*/}
         <Grid item xs={12} md={3} margin={2} style={{ textAlign: 'center' }} border={2}>
-          {/*LEO JUST PUT YOUR REIMBURSEMENTS COMP IN HERE*/}
-          <Typography variant="h5">Reimbursements</Typography>
+          
+          <ReimbursementDisplay club_id={club_id}></ReimbursementDisplay>
         </Grid>
       </Grid>
 
