@@ -2,8 +2,7 @@ interface User {
   _id: string,
   name: string,
   email: string,
-  club_ids: Array<string>,
-  officer_ids: Array<string>
+  club_ids: Array<string>
 }
 
 interface UserRequest {
@@ -80,6 +79,7 @@ interface Officer {
   name: string,
   expiration?: number,
   club_id: string,
+  user_id: string,
   role_ids: Array<string> 
 }
 
@@ -118,4 +118,18 @@ interface EditDocumentRequest {
   newName: string,
   newLink: string,
   _id: string,
+}
+
+interface Event {
+  _id: string,
+  name: string,
+  date: Date,
+  description: string
+}
+
+interface CreateEventRequest {
+  name: string,
+  date?: Date,
+  description: string,
+  club_id: string
 }

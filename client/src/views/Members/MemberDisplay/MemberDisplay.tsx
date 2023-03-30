@@ -45,11 +45,12 @@ type DisplayProps = {
   state: UserState,
   tags: Tag[]
   forceUpdate: () => void
+  dense: boolean
+  settings: Settings | null
 }
 
-export default function MemberDisplay({ members, setMembers, title, club_id, state, tags, forceUpdate }: DisplayProps) {
+export default function MemberDisplay({ members, setMembers, title, club_id, state, tags, forceUpdate, dense, settings }: DisplayProps) {
   const [searchString, setSearchString] = useState('')
-  const [dense, setDense] = useState(false)
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [editing, setEditing] = useState<Member>(members[0])
 
@@ -114,8 +115,7 @@ export default function MemberDisplay({ members, setMembers, title, club_id, sta
         <ClavaTable<Member> defaultOrder="name" tableName={title}
           data={filteredMembers} headerCells={headerCells} onDelete={onDelete}
           RowDisplay={({rowSelected, onClick, row}) => 
-            <MemberRow rowSelected={rowSelected} onClick={onClick} row={row} allTags={tags} dense={dense}/>}
-          dense={dense} searchString={searchString} setSearchString={setSearchString}
+          <MemberRow rowSelected={rowSelected} onClick={onClick} row={row} allTags={tags} dense={dense}/>}          dense={dense} searchString={searchString} setSearchString={setSearchString}
           rowsPerPageOptions={[5, 10, 30, 100]} defaultRowsPerPage={10}
           onEdit={onEditClicked} AlternateSelectedToolbar={
             ({selected, setSelected}: AlternateSelectedToolbarProps<Member>) =>
@@ -129,6 +129,7 @@ export default function MemberDisplay({ members, setMembers, title, club_id, sta
             open={editModalOpen}
             setOpen={setEditModalOpen}
             memberSelected={editing}
+            settings={settings}
           />
         }
     </Box>

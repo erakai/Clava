@@ -8,6 +8,7 @@ const OfficerSchema = new Schema<IOfficer>({
   },
   expiration: SchemaTypes.Date,
   club_id: SchemaTypes.ObjectId,
+  user_id : SchemaTypes.ObjectId,
   role_ids: [SchemaTypes.ObjectId]
 })
 

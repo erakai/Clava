@@ -1,10 +1,11 @@
 import * as React from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Box, Card, CardActionArea, CardMedia, CardContent, Typography, CardActions, Button, Dialog, DialogTitle, DialogActions, Link} from '@mui/material'
+import { Box, Card, CardActionArea, CardMedia, CardContent, Typography, CardActions, Button, Dialog, DialogTitle, DialogActions, Link, Tooltip} from '@mui/material'
 import to from 'await-to-js'
 import { removeClubFromUser } from '../../api/clubApi'
 import PlaceHolder from '../../assets/placeholder.png'
 import DiamondIcon from '@mui/icons-material/Diamond';
+import useSettings from '../../hooks/useSettings'
 
 type ClubProps = {
     user_id: string,
@@ -16,6 +17,7 @@ export default function ClubCard({user_id, club, removeClub} : ClubProps) {
 
     const [open, setLeaveClubOpen] = React.useState(false)
     const [disableLeavingClub, setDisableLeavingClub] = React.useState(false)
+    const { refreshSettings } = useSettings()
 
     const ownerVisibility = user_id == club.owner_id ? "visible" : "invisible"
 
@@ -40,6 +42,7 @@ export default function ClubCard({user_id, club, removeClub} : ClubProps) {
     let navigate = useNavigate();
     const routeChange = () =>{ 
         let path = `/${club._id}/members`;
+        refreshSettings(club._id)
         navigate(path);
     }
 
@@ -58,7 +61,9 @@ export default function ClubCard({user_id, club, removeClub} : ClubProps) {
                             {club.name}
                         </Typography>
                         <Box className="grow"/>
-                        <DiamondIcon className={ownerVisibility}/>
+                        <Tooltip title="Owner">
+                            <DiamondIcon className={ownerVisibility}/>
+                        </Tooltip>
                     </Box>
                     <Typography variant="body2" color="text.secondary">
                         {club.description}

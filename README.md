@@ -28,7 +28,7 @@ Clava is a MERN app developed with a frontend React application that, using HTTP
 1. Clone this repository: `git clone https://github.com/erakai/Clava.git`.
 2. In both the `client` and `server` folders:
    1. Run `npm install`.
-   2. Run `cp .env.example .env` and insert the relevant information.
+   2. In server, run `cp .env.example .env` and update the relevant information.
 3. If you wish to develop, install the PostCSS, ESLint, and Prettier plugins.
 4. Install [MongoDB](https://www.mongodb.com) and make sure it is running. You can additionally download MongoDB Compass to view the database using a GUI.
 5. Start the server and then the client with `npm start`.

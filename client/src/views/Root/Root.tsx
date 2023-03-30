@@ -1,6 +1,5 @@
 import {BrowserRouter, Route, Routes, useParams} from 'react-router-dom'
 import Test from '../../views/Main/Test'
-
 import ClubComposite from '../ClubComposite'
 import ClubPage from '../ClubPage'
 import UrlNotFound from '../Error/UrlNotFound'
@@ -19,8 +18,6 @@ function Root() {
         <Route path="/clubs" element={<ClubPage />} />
         <Route path="/reset/:userId" element={<Reset />} />
         <Route path="/resetrequest" element={<ResetRequest />} />
-
-        {/* TODO: Add Regex for clubId, clubRoute */}
         <Route path="/:clubId/:clubRoute" element={<ClubComposite />} />
         <Route path="*" element={<UrlNotFound />} />
       </Routes>

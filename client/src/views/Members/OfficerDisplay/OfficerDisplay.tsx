@@ -38,11 +38,11 @@ type DisplayProps = {
   state: UserState,
   roles: Role[]
   forceUpdate: () => void
+  dense: boolean
 }
 
-export default function OfficerDisplay({ officers, setOfficers, title, club_id, state, roles, forceUpdate }: DisplayProps) {
+export default function OfficerDisplay({ officers, setOfficers, title, club_id, state, roles, forceUpdate, dense }: DisplayProps) {
   const [searchString, setSearchString] = useState('')
-  const [dense, setDense] = useState(false)
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [editing, setEditing] = useState<Officer>(officers[0])
 
