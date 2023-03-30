@@ -44,6 +44,7 @@ MUI Tutorial followed at https://codesandbox.io/s/78z9io?file=/demo.tsx
 */
 type ClavaTableProps<T> = {
   defaultOrder: keyof T,
+  defaultOrderDirection?: number,
   tableName: string,
   data: T[]
   headerCells: HeaderCell<T>[]
@@ -61,9 +62,9 @@ type ClavaTableProps<T> = {
 
 export default function ClavaTable<T>({defaultOrder, tableName, 
   data, onDelete, searchString, setSearchString,
-  headerCells, RowDisplay, dense, rowsPerPageOptions,
+  headerCells, RowDisplay, dense, rowsPerPageOptions, defaultOrderDirection,
   defaultRowsPerPage, onEdit, AlternateSelectedToolbar}: ClavaTableProps<T>) {
-  const [order, setOrder] = useState(-1)
+  const [order, setOrder] = useState(defaultOrderDirection || -1)
   const [orderBy, setOrderBy] = useState<keyof T>(defaultOrder)
   const [selected, setSelected] = useState<T[]>([])
   const [page, setPage] = useState(0)

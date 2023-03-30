@@ -95,6 +95,7 @@ interface Role {
   color: string,
 }
 
+
 interface Reimbursement {
   _id: string,
   name: string,
@@ -122,4 +123,47 @@ interface EditReimbursementRequest {
   link: string,
   paid: boolean,
   club_id: string
+}
+
+interface ClubDocument {
+  _id: string,
+  name: string,
+  link: string,
+  club_id: string
+  //role_ids: Array<string> // should actually be permisions
+}
+
+interface AddDocumentRequest {
+  name: string,
+  link: string,
+  club_id: string,
+  //role_ids: Array<string> // should actually be permisions
+}
+
+interface DeleteDocumentRequest {
+  _id: string,
+}
+
+interface EditDocumentRequest {
+  newName: string,
+  newLink: string,
+  _id: string,
+}
+
+interface Event {
+  _id: string,
+  name: string,
+  date: Date,
+  description: string
+}
+
+interface CreateEventRequest {
+  name: string,
+  date?: Date,
+  description: string,
+  club_id: string
+}
+
+interface IncrementEventAttendanceRequest {
+  _id: string
 }

@@ -1,10 +1,11 @@
-import { Box, Button, CircularProgress, Grid, IconButton, Modal, Stack, TextField, Typography } from "@mui/material"
+import { Box, Button, CircularProgress, Grid, IconButton, Modal, Stack, TextField, Tooltip, Typography } from "@mui/material"
 import { DatePicker } from "@mui/x-date-pickers"
 import moment, { Moment } from "moment"
 import { Dispatch, useState } from "react"
 import CloseIcon from '@mui/icons-material/Close';
 import useEmailVerify from "../../../hooks/useEmailVerify"
 import { dateOperation } from "../../../hooks/useSettings";
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 
 type AddMemberProps = {
   createMember: (member: MemberRequest) => void
@@ -90,6 +91,15 @@ export default function AddMemberModal({
                   <Box textAlign="center" className='h-[100%] flex-col justify-content-center'>
                       <Typography className='' variant="h6" fontWeight={"bold"}>New Member</Typography>
                   </Box>
+                </Grid>
+                <Grid item xs={1}>
+                  <Tooltip title='Setting the "Member Until" date is optional. Doing so will signify that the individual will no longer be a member after 
+                                  that date. They will be highlighted in red for the week prior to the date, and then after the date has passed will be marked 
+                                  as "EXPIRED".' placement="right">
+                    <IconButton size="small">
+                      <InfoOutlinedIcon />
+                    </IconButton>
+                  </Tooltip>
                 </Grid>
               </Grid>
             </Grid>

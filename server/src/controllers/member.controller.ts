@@ -85,7 +85,7 @@ export const deleteMembers = async (req: Request, res: Response) => {
   }
 
   const [permLookupErr, canEditMembers] = await to(hasPermission("EDIT_MEMBERS", club_id, req.user));
-  if (permLookupErr) { res.status(500); }
+  if (permLookupErr) { return res.status(500); }
   if (!canEditMembers) {
     return res.status(403);
   }

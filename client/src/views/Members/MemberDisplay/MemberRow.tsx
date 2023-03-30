@@ -1,5 +1,6 @@
 import { Checkbox, TableCell, TableRow } from "@mui/material"
 import to from "await-to-js"
+import moment from "moment"
 import { useEffect, useState } from "react"
 import { deleteTagFromMember } from "../../../api/memberApi"
 import { RowDisplayProps } from "../../../components/ClavaTable"
@@ -45,21 +46,27 @@ export default function MemberRow(
       height: 60
     }
 
+    const style = (date: number | undefined) => {
+      if (!date) return {}
+      return { color: (moment(date).isAfter(moment()) && moment(date).isBefore(moment().add(1, 'w')) ? 'red' : (moment(date).isBefore(moment()) ? '#7a2828' : 'black')) }
+    }
+
     return (
       <TableRow hover onClick={onClick} selected={rowSelected}
         tabIndex={-1}>
           <TableCell padding="checkbox">
             <Checkbox color="primary" checked={rowSelected}/>
           </TableCell>
-          <TableCell component="th" scope="row" padding="none">{row.name}</TableCell>
-          <TableCell align="left">{row.email}</TableCell>
+          <TableCell component="th" scope="row" padding="none" style={style(row.expiration)}>{row.name}</TableCell>
+          <TableCell align="left" style={style(row.expiration)}>{row.email}</TableCell>
           <TableCell align="left" sx={(dense) ? {} : tagRowStyle}>
             <TagRowDisplay dense={dense} tags={memberTags} allTags={allTags} onDelete={onDeleteTag} onAdd={onAddTag} />
           </TableCell>
-          <TableCell align="right">
+          <TableCell align="right" style={style(row.expiration)}>
             {(row.expiration) ? 
+              (moment(row.expiration).isBefore(moment()) ? "EXPIRED" :
               ((Date.parse(row.expiration as unknown as string).valueOf() != 0) ? 
-              new Date(row.expiration).toLocaleDateString() : 'N/A')
+              new Date(row.expiration).toLocaleDateString() : 'N/A'))
             : "N/A"}
           </TableCell>
       </TableRow>
