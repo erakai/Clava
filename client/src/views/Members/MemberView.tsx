@@ -78,8 +78,8 @@ export default function MemberView({ club_id, state, user_id, owner_id }: Member
     } else if (res) {
       const newTags = [...tags, res.data.tag]
       setTags(newTags)
-      console.log("newtags", newTags)
-      console.log("tags", tags)
+      // console.log("newtags", newTags)
+      // console.log("tags", tags)
     }
   }
 
@@ -149,7 +149,7 @@ export default function MemberView({ club_id, state, user_id, owner_id }: Member
     fetchTags()
     fetchRoles()
     fetchOfficers()
-  }, [state])
+  }, [])
 
   return (
     <Box className="min-w-full flex-auto">

@@ -1,12 +1,12 @@
-import {Box, Grid, Button, Typography, Fab} from "@mui/material"
+import {Box, Grid, Button, Typography, Fab, TextField, Collapse} from "@mui/material"
 import AddIcon from '@mui/icons-material/Add';
 import to from "await-to-js"
 import { UserState } from '../../store/user/userSlice'
 import React, { useEffect, useState } from "react"
 import AddDocumentModal from "./AddDocumentModal"
+import useForceUpdate from '../../hooks/useForceUpdate'
 import DocumentCard from "./DocumentCard"
 import { deleteDocument as _deleteDocument, createDocument as _createDocument, editDocument as _editDocument, getDocuments } from '../../api/documentApi'
-import useForceUpdate from "../../hooks/useForceUpdate";
 
 type DocumentViewProps = {
   club_id: string
@@ -17,6 +17,26 @@ export default function DocumentView({ club_id, state }: DocumentViewProps) {
 
   const [addDocOpen, setAddDocOpen] = useState(false)
   const [documents, setDocuments] = useState<ClubDocument[]>([])
+  const forceUpdate = useForceUpdate()
+  // search stuff
+  const [searchString, setSearchString] = useState("")
+  const [filteredDocuments, setFilteredDocuments] = useState<ClubDocument[]>([])
+  const [update, setUpdate] = useState(0)
+
+  const clearSearchField = () => {
+    performSearch("")
+  }
+
+  const performSearch = (searchString: string) => {
+    // reset documents
+    if (searchString == "") {
+      setFilteredDocuments(documents)
+    }
+    setSearchString(searchString)
+    const filteredDocs = documents.filter((document) => document.name.indexOf(searchString) !== -1)
+    // console.log(filteredDocs)
+    setFilteredDocuments(filteredDocs)
+  }
 
   const verifyUrl = (url: string) => {
     const regex: RegExp = /^(?:([A-Za-z]+):)?(\/{0,3})([0-9.\-A-Za-z]+)(?::(\d+))?(?:\/([^?#]*))?(?:\?([^#]*))?(?:#(.*))?$/
@@ -30,13 +50,8 @@ export default function DocumentView({ club_id, state }: DocumentViewProps) {
     if (err) {
       console.log(err)
     } else if (res) {
-      //const newDocs = [...documents, res.data.document]
-      //console.log(newDocs)
-      //setDocuments(newDocs)
-      //documents.push(res.data.document)
-      console.log(documents)
       setDocuments([...documents, res.data.document])
-      // console.log(documents)
+      setUpdate(update + 1)
     }
   }
 
@@ -69,14 +84,14 @@ export default function DocumentView({ club_id, state }: DocumentViewProps) {
     if (err) {
       console.log(err)
     } else if (res) {
-      // let filteredDocs = documents.filter((document) => document.name != retrieved.name)
-      // setDocuments(filteredDocs)
-      
       let retrieved = res.data.document
+      console.log(retrieved.name)
       const newDocs = documents.filter((document) => document.name !== retrieved.name)
       setDocuments(newDocs)
-      console.log(newDocs)
-      console.log(documents)
+      setFilteredDocuments(newDocs)
+      console.log("newdocs:", newDocs)
+      console.log("docs", documents)
+      setUpdate(update + 1)
     }
   }
 
@@ -103,14 +118,17 @@ export default function DocumentView({ club_id, state }: DocumentViewProps) {
       const retrieved = res.data.documents
       if (retrieved) {
         setDocuments(retrieved)
+        setFilteredDocuments(retrieved)
+        console.log("damn")
       }
     }
- 
+    
     fetchDocuments()
-  }, [state])
+    //setFilteredDocuments(documents)
+  }, [update])
 
   return (
-    <Box className="">
+    <Box className="flex" flexDirection="column">
       
       <AddDocumentModal
         club_id={club_id}
@@ -121,19 +139,15 @@ export default function DocumentView({ club_id, state }: DocumentViewProps) {
         verifyUrl={verifyUrl}
         />
 
-
-      <Box className="m-4 flex justify-center items-center">
-        <Typography className="grow text-center" variant="h4">Documents</Typography>
+      <Box className="m-4 flex justify-center items-center" flexDirection="row">
+        <Typography className="grow" variant="h4" position="relative">Documents</Typography>
+        <TextField className="m-4" size="small" label="Search" margin="none"
+          value={searchString} onChange={(e) => performSearch(e.target.value)}/>
+        <Button onClick={clearSearchField}>Clear</Button>
       </Box>
-      <Fab onClick={() => setAddDocOpen(true)} color="secondary" sx={{
-        position: 'fixed',
-        bottom: 64,
-        right: 64,}}>
-        <AddIcon/>
-      </Fab>
       <Box className="m-4">
         <Grid container spacing={2}>
-          {documents.map(document => (
+          {filteredDocuments.map(document => (
             <DocumentCard 
               docName={document.name} 
               docLink={document.link}
@@ -141,10 +155,17 @@ export default function DocumentView({ club_id, state }: DocumentViewProps) {
               editDocument={editDocument}
               deleteDocument={deleteDocument}
               isUniqueDocumentName={isUniqueDocumentName}
-              verifyUrl={verifyUrl}/>
+              verifyUrl={verifyUrl}
+              key={document._id}/>
           ))}
         </Grid>
       </Box>
+      <Fab onClick={() => setAddDocOpen(true)} color="secondary" sx={{
+        position: 'fixed',
+        bottom: 64,
+        right: 64,}}>
+        <AddIcon/>
+      </Fab>
     </Box>
   )
 }

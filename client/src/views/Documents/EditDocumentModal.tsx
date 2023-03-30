@@ -36,18 +36,11 @@ export default function EditDocumentModal({ documentId, open, setOpen, oldName, 
     } else if (!verifyUrl(link)) {
       setNewLinkError("Invalid url")
       badInput = true
-    } 
-    // if (!badInput && !isUniqueDocumentName(name, documentId)) {
-    //   setNewNameError("Document name needs to be unique")
-    //   badInput = true
-    // }
+    }
     if (badInput) {
       return
     }
 
-    
-
-   
     // if here, input is valid, so proceed with edit
     let editDocReq: EditDocumentRequest = {
       newName: name, 
