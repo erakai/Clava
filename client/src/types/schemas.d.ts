@@ -96,6 +96,7 @@ interface Role {
 }
 
 interface Event {
+  _id: string,
   name: string,
   date: Date,
   description: string
