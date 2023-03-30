@@ -6,6 +6,7 @@ import { getRefreshToken } from "./userApi"
 export type GetEventsResponse = { events: Event[] }
 export type CreateEventResponse = { event: Event }
 export type DeleteEventResponse = {}
+export type IncrementEventAttendanceResponse = {}
 
 const EventInstance = axios.create({
   baseURL: `http://localhost:8080/events`,
@@ -29,4 +30,8 @@ export const _getEvents = (club_id: string) => {
 
 export const _deleteEvents = (event_ids: string[]) => {
   return EventInstance.delete<DeleteEventResponse>('/', { data : { event_ids } })
+}
+
+export const _incrementEventAttendance = ({ _id } : IncrementEventAttendanceRequest ) => {
+  return EventInstance.post<IncrementEventAttendanceResponse>('/increment/', { _id })
 }

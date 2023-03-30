@@ -133,3 +133,7 @@ interface CreateEventRequest {
   description: string,
   club_id: string
 }
+
+interface IncrementEventAttendanceRequest {
+  _id: string
+}

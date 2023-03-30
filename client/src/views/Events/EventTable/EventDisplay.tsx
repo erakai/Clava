@@ -20,6 +20,12 @@ const headerCells: HeaderCell<Event>[] = [
     numeric: true,
     disablePadding: false,
     label: 'Start Date'
+  },
+  {
+    id: '_id',
+    numeric: false,
+    disablePadding: false,
+    label: 'Attendance QR'
   }
 ]
 
