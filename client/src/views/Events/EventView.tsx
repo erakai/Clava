@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import {Box, Button, Dialog, DialogContent, DialogContentText, DialogTitle, Grid} from "@mui/material";
+import {Box, Button, Dialog, DialogContent, DialogContentText, DialogTitle, Grid, Typography} from "@mui/material";
 import CreateEventModal from "./CreateEventModal";
 import {_createEvent} from "../../api/eventApi";
 import to from 'await-to-js'
@@ -51,13 +51,22 @@ export default function EventView({ club_id }: EventViewProps) {
         club_id={club_id}
       />
 
-      <Box className="m-4 mb-16">
-        <Grid container spacing={1}>
+      <Box className="mx-4 mt-4">
+        <Grid container spacing={2}>
           <Grid item xs={12} md={6} lg={3}>
             <Box className="min-w-full flex-auto">
               <Button className='h-full' variant="contained" color="secondary" onClick={() => setCreateEventOpen(true)}>
                 Create Event
               </Button>
+            </Box>
+          </Grid>
+          <Grid item xs={6}>
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              height="100%">
+              <Typography variant="h4">Event Dashboard</Typography>
             </Box>
           </Grid>
         </Grid>
