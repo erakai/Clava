@@ -79,7 +79,7 @@ export const tagDelete = async (req: Request, res: Response) => {
   })
 }
 
-export const editTag = async (req: Request, res: Response) => {
+export const tagPut = async (req: Request, res: Response) => {
   let { newName, newColor, _id } = req.body
   if (!newName || !newColor || !_id) {
     return res.status(500).json({error: 'invalid request format, missing id or newName or newColor'})
