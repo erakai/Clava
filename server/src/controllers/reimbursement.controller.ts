@@ -83,3 +83,22 @@ export const editReimbursement = async (req: Request, res: Response) => {
     return res.status(200).json(reimbursement)
   })
 }
+
+export const deleteReimbursement = async (req: Request, res: Response) => {
+
+  let { _id } = req.body
+
+  if (!_id) {
+    return res.status(500).json({error: 'no id provided'})
+  }
+
+  Reimbursement.findByIdAndDelete({
+    _id
+  }, async (err, role) => {
+    if (err) {
+      return res.status(500).send({err})
+    }
+
+    return res.status(200).json({role})
+  })
+}

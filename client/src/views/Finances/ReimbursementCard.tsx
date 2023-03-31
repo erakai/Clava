@@ -7,7 +7,7 @@ import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import to from 'await-to-js'
-import { editReimbursement } from '../../api/reimbursementApi'
+import { editReimbursement, deleteReimbursement } from '../../api/reimbursementApi'
 
 type Props = {
   _id : string,
@@ -17,7 +17,7 @@ type Props = {
   link : string,
   paid: boolean,
   club_id: string,
-  updateReimbursementDisplay : (_id : string) => void
+  updateReimbursementDisplay : (request : number, _id : string) => void
 }
 
 export default function ReimbursementCard({_id, name, amount, creditor, link, paid, club_id, updateReimbursementDisplay} : Props) {
@@ -32,10 +32,18 @@ export default function ReimbursementCard({_id, name, amount, creditor, link, pa
     if (err) {
       console.log(err)
     } else if (res) {
-      updateReimbursementDisplay(_id)
+      updateReimbursementDisplay(0, _id)
       setStatus(!status)
     }
-    
+  }
+
+  const handleDelete = async () => {
+    const [err, res] = await to(deleteReimbursement(_id))
+    if (err) {
+      console.log(err)
+    } else if (res) {
+      updateReimbursementDisplay(1, _id)
+    }
   }
 
 
@@ -58,7 +66,7 @@ export default function ReimbursementCard({_id, name, amount, creditor, link, pa
         </CardContent>
         <CardActions>
         <Button size="small" onClick={statusUpdate}>Mark as {status? "Pending" : "Completed"}</Button>
-				<Button size="small">Delete</Button>
+				<Button size="small" onClick={handleDelete}>Delete</Button>
 				<Button size="small">View Receipt</Button>
         </CardActions>
       </Card>
