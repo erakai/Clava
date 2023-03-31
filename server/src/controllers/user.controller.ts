@@ -12,6 +12,7 @@ import { sendResetRequestEmail } from "../modules/Emailing"
 
 // on register we want to give them their token and refresh token
 export const register = async (req: Request, res: Response) => {
+  console.log(req)
   let { email, name, password } = req.body
   if (!name) {
     name = email

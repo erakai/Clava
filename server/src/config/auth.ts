@@ -18,13 +18,13 @@ export const COOKIE_OPTIONS: CookieOptions = {
 }
 
 export const getToken = (user: Signed) => {
-  return jwt.sign(user, process.env.JWT_SECRET, {
+  return jwt.sign(user, process.env.JWT_SECRET || 'secret', {
     expiresIn: process.env.SESSION_EXPIRY
   })
 }
 
 export const getRefreshToken = (user: Signed) => {
-  return jwt.sign(user, process.env.REFRESH_SECRET, {
+  return jwt.sign(user, process.env.REFRESH_SECRET || 'secret', {
     expiresIn: process.env.REFRESH_EXPIRY
   })
 }
@@ -32,9 +32,5 @@ export const getRefreshToken = (user: Signed) => {
 export const verifyUser = (req: Request, res: Response, next: NextFunction) => {
   const { signedCookies = {} } = req
   const { refreshToken } = signedCookies
-  if (!refreshToken) {
-    res.status(401).send('Unauthorized – check cookies are unabled.')
-  } else {
-    passport.authenticate('jwt', { session: false })(req, res, next)
-  }
+  passport.authenticate('jwt', { session: false })(req, res, next)
 }

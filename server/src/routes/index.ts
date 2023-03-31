@@ -15,7 +15,7 @@ const rootRouter = Router()
 export const ping = async (req: Request, res: Response) => {
   return res.status(200).send('pong')
 }
-rootRouter.get('/ping', ping)
+rootRouter.get('/ping', verifyUser, ping)
 
 rootRouter.use('/users', userRouter)
 rootRouter.use('/members', memberRouter)
