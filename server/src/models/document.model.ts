@@ -1,5 +1,5 @@
 import { Model, model, Schema, SchemaTypes } from "mongoose";
-import { IClubDocument } from "types/document";
+import { IClubDocument } from "../types/document";
 
 const DocumentSchema = new Schema<IClubDocument>({
   name: {

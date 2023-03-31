@@ -1,8 +1,8 @@
 import to from 'await-to-js'
 import type { Request, Response } from 'express'
-import Club from 'models/club.model'
-import Member from 'models/member.model'
-import { hasPermission } from "modules/Permissions"
+import Club from '../models/club.model'
+import Member from '../models/member.model'
+import { hasPermission } from "../modules/Permissions"
 
 export const getMembers = async (req: Request, res: Response) => {
   let { club_id } = req.query

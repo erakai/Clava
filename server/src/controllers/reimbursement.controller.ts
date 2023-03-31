@@ -1,8 +1,8 @@
 import type { Request, Response } from 'express'
-import Club from 'models/club.model'
-import Officer from 'models/officer.model'
-import Reimbursement from 'models/reimbursement.model'
-import { IClub } from 'types/club'
+import Club from '../models/club.model'
+import Officer from '../models/officer.model'
+import Reimbursement from '../models/reimbursement.model'
+import { IClub } from '../types/club'
 
 export const getReimbursements = async (req: Request, res: Response) => {
   let { club_id } = req.query

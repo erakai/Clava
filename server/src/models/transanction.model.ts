@@ -1,5 +1,5 @@
 import { model, Model, Schema, SchemaTypes } from "mongoose";
-import { ITransaction } from "types/finance";
+import { ITransaction } from "../types/finance";
 
 const TransactionSchema = new Schema<ITransaction>({
   club_id: SchemaTypes.String,

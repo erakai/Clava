@@ -1,5 +1,5 @@
 import { Model, model, Schema, SchemaTypes } from "mongoose";
-import { IOfficer } from "types/officer";
+import { IOfficer } from "../types/officer";
 
 const OfficerSchema = new Schema<IOfficer>({
   name: {

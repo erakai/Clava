@@ -1,5 +1,5 @@
 import { model, Model, Schema, SchemaTypes } from "mongoose";
-import { ISettings } from "types/settings";
+import { ISettings } from "../types/settings";
 
 const SettingsSchema = new Schema<ISettings>({
   dense: SchemaTypes.Boolean,

@@ -1,5 +1,5 @@
-import { verifyUser } from "config/auth";
-import { tagPut, getTags, tagDelete, tagPost } from "controllers/tag.controller";
+import { verifyUser } from "../config/auth";
+import { tagPut, getTags, tagDelete, tagPost } from "../controllers/tag.controller";
 import { Router } from "express";
 
 const tagRouter = Router()

@@ -73,7 +73,7 @@ export default function CreateEventModal({
     }
 
     createEvent(newEvent)
-    clearFields()
+    close()
   }
 
   return (

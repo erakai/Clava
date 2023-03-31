@@ -27,13 +27,17 @@ export default function DocumentView({ club_id, state }: DocumentViewProps) {
     performSearch("")
   }
 
-  const performSearch = (searchString: string) => {
+  const performSearch = (searchString: string, docs?: ClubDocument[]) => {
     // reset documents
+    let useDocs = documents
+    if (docs) {
+      useDocs = docs
+    }
     if (searchString == "") {
-      setFilteredDocuments(documents)
+      setFilteredDocuments(useDocs)
     }
     setSearchString(searchString)
-    const filteredDocs = documents.filter((document) => document.name.indexOf(searchString) !== -1)
+    const filteredDocs = useDocs.filter((document) => document.name.indexOf(searchString) !== -1)
     // console.log(filteredDocs)
     setFilteredDocuments(filteredDocs)
   }
@@ -118,8 +122,7 @@ export default function DocumentView({ club_id, state }: DocumentViewProps) {
       const retrieved = res.data.documents
       if (retrieved) {
         setDocuments(retrieved)
-        performSearch(searchString)
-        console.log("damn")
+        performSearch(searchString, retrieved)
       }
     }
     

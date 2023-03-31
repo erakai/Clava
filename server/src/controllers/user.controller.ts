@@ -1,10 +1,10 @@
 import to from 'await-to-js'
-import { COOKIE_OPTIONS, getRefreshToken, getToken } from 'config/auth'
+import { COOKIE_OPTIONS, getRefreshToken, getToken } from '../config/auth'
 import type { Request, Response } from 'express'
 import jwt, { JwtPayload } from 'jsonwebtoken'
-import User from 'models/user.model'
-import { IUser } from 'types/user'
-import { sendResetRequestEmail } from "modules/Emailing"
+import User from '../models/user.model'
+import { IUser } from '../types/user'
+import { sendResetRequestEmail } from "../modules/Emailing"
 
 
 // again i followed https://www.codingdeft.com/posts/react-authentication-mern-node-passport-express-mongo/
@@ -12,6 +12,7 @@ import { sendResetRequestEmail } from "modules/Emailing"
 
 // on register we want to give them their token and refresh token
 export const register = async (req: Request, res: Response) => {
+  console.log(req)
   let { email, name, password } = req.body
   if (!name) {
     name = email

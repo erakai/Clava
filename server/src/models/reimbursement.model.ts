@@ -1,5 +1,5 @@
 import { Model, model, Schema, SchemaTypes } from "mongoose";
-import { IReimbursement } from "types/reimbursement";
+import { IReimbursement } from "../types/reimbursement";
 
 const ReimbursementSchema = new Schema<IReimbursement>({
   name: {

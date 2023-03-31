@@ -1,9 +1,9 @@
 import to from 'await-to-js'
 import type { Request, Response } from 'express'
-import Club from 'models/club.model'
-import Event from 'models/event.model'
-import { IEvent } from 'types/event'
-import { IClub } from 'types/club'
+import Club from '../models/club.model'
+import Event from '../models/event.model'
+import { IEvent } from '../types/event'
+import { IClub } from '../types/club'
 
 export const getEvents = async (req: Request, res: Response) => {
   let { club_id } = req.query
