@@ -5,4 +5,5 @@ interface IClubDocument extends Document {
   name: string,
   link: string,
   club_id: number,
+  role_ids: Array<string>
 }

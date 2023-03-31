@@ -6,6 +6,9 @@ type GetDocumentsResponse = { documents: ClubDocument[] }
 type CreateDocumentResponse = { document: ClubDocument }
 type DeleteDocumentResponse = { document: ClubDocument }
 type EditDocumentResponse = { document: ClubDocument }
+type GetSingleDocumentResponse = { document: ClubDocument }
+type AddDocumentRoleResponse = { }
+type DeleteDocumentRoleResponse = { }
 
 
 const DocumentInstance = axios.create({
@@ -30,4 +33,16 @@ export const deleteDocument = ({ _id }: DeleteDocumentRequest) =>  {
 
 export const editDocument = ({ newName, newLink, _id }: EditDocumentRequest) =>  {
   return DocumentInstance.put<EditDocumentResponse>('/', { newName, newLink, _id })
+}
+
+export const getDocument = (_id : string) => {
+  return DocumentInstance.get<GetSingleDocumentResponse>('/', { params: { _id }})
+}
+
+export const addDocumentRole = ({ _id, role_id }: AddDeleteDocumentRoleRequest) => {
+  return DocumentInstance.post<AddDocumentRoleResponse>('/', { _id, role_id })
+}
+
+export const deleteDocumentRole = ({ _id, role_id }: AddDeleteDocumentRoleRequest) => {
+  return DocumentInstance.delete<DeleteDocumentRoleResponse>('/', {data: { _id, role_id }})
 }

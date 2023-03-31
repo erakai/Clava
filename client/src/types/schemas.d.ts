@@ -130,7 +130,7 @@ interface ClubDocument {
   name: string,
   link: string,
   club_id: string
-  //role_ids: Array<string> // should actually be permisions
+  role_ids: Array<string> // should actually be permisions
 }
 
 interface AddDocumentRequest {
@@ -144,10 +144,23 @@ interface DeleteDocumentRequest {
   _id: string,
 }
 
+interface GetSingleDocumentRequest {
+  _id: string,
+}
+
 interface EditDocumentRequest {
   newName: string,
   newLink: string,
   _id: string,
+}
+
+interface GetDocumentRolesRequest {
+  _id: string
+}
+
+interface AddDeleteDocumentRoleRequest {
+  _id: string,
+  role_id: string
 }
 
 interface Event {

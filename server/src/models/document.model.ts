@@ -11,6 +11,7 @@ const DocumentSchema = new Schema<IClubDocument>({
     required: true,
   },
   club_id: SchemaTypes.ObjectId,
+  role_ids: [SchemaTypes.ObjectId],
 })
 
 const ClubDocument = model('document', DocumentSchema) as Model<IClubDocument>
