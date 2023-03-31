@@ -4,9 +4,8 @@ export default {
   extensionsToTreatAsEsm: ['.ts'],
   testTimeout: 30000,
   restoreMocks: true,
-  transformIgnorePatterns: ['node_modules/(?!@hocuspocus/)'],
   transform: {
-    'node_modules/@hocuspocus/.+\\.(j|t)sx?$': ['ts-jest', { useESM: true } ],
+    'node_modules/.+\\.(j|t)sx?$': ['ts-jest', { useESM: true } ],
   },
   testEnvironment: 'node',
   setupFiles: [],
