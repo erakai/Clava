@@ -52,7 +52,7 @@ export const getClub = async (req: Request, res: Response) => {
   const [errUserOfClub, _isUserOfClub] = await to(isUserOfClub(_user._id, club_id.toString()))
   if (errUserOfClub) return false 
   if (!_isUserOfClub) {
-    return res.status(403).json()
+    return res.status(403).send("error: not user of club")
   }
 
   return res.status(200).json({club})

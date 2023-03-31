@@ -26,23 +26,35 @@ export const requestAddOfficer = async (req: Request, res: Response) => {
 	let { name, email, club_id } = req.body
 
 
-	const user_id = null // null until invitation acceptence
+	let user_id = null // null until invitation acceptence
 	const expiration = new Date(new Date().getTime() + (24 * 60 * 60 * 1000)); // officer invitation will expire
 
 	if (!name || !club_id) {
 		return res.status(400).json({error: 'no name or club provided'})
 	}
 
+	User.findOne({email: email}, async (err, user) => {
+		if (err) {
+			res.status(500).send({err})
+		}
+
+		if (!user) {
+			res.status(500).send("can't find user from email")
+		}
+
+		user_id = user.user_id
+	})
+
 	// if member already exists, no need to add
 
-	Member.find({
+	Member.findOne({
       email: email
-    }, async (err, members) => {
+    }, async (err, member) => {
       if (err) {
         return res.status(500).send({err})
       }
 
-      if (members.length == 0) {
+      if (!member) {
       	// add to member 
 				Member.create({
 					name, email, club_id, expiration
@@ -53,19 +65,19 @@ export const requestAddOfficer = async (req: Request, res: Response) => {
 				}
     })
 
-	Officer.find({
-		name: name
+	Officer.findOne({
+		email: email
 	}, async (err, officer) => {
 		if (err) {
 		  return res.status(500).send({err})
 		}
 
-		if (officer.length != 0) {
+		if (officer) {
 		  return res.status(400).json({error: 'officer already exists'})
 		} else {
 		  // add to officer
 		  Officer.create({
-		    name, club_id, expiration, user_id
+		    name: name, club_id: club_id, expiration: expiration, user_id: user_id, email: email
 		  }, async (err, officer) => {
 		    if (err) {
 		      return res.status(500).send({err})
@@ -74,10 +86,7 @@ export const requestAddOfficer = async (req: Request, res: Response) => {
 				if (err) {
 					//TODO: Handle new user case
 				}
-				let clubs_arr = []
-				for (let club in user.club_ids) {
-					clubs_arr.push(club)
-				}
+				let clubs_arr = user.club_ids
 				clubs_arr.push(club_id)
 				user.$set({club_ids: clubs_arr})
 				user.save()

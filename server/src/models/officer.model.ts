@@ -6,6 +6,7 @@ const OfficerSchema = new Schema<IOfficer>({
     type: SchemaTypes.String,
     required: true,
   },
+  email: SchemaTypes.String,
   expiration: SchemaTypes.Date,
   club_id: SchemaTypes.ObjectId,
   user_id : SchemaTypes.ObjectId,

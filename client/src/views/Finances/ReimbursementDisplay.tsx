@@ -27,6 +27,10 @@ export default function ReimbursementDisplay({club_id} : DisplayProps) {
 
   const handleOpen = () => {
     setCreateReimbursementOpen(true)
+    setName('')
+    setAmount(0)
+    setCreditor('')
+    setLink('')
   }
 
   const handleClose = () => {
@@ -139,7 +143,7 @@ export default function ReimbursementDisplay({club_id} : DisplayProps) {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {"Create Club"}
+          {"Create Reimbursement"}
         </DialogTitle>
         <DialogContent>
           <Stack spacing={2}>

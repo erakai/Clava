@@ -3,6 +3,7 @@ import { intercepts } from "./config"
 import { getRefreshToken } from "./userApi"
 
 type GetOfficersResponse = { officers: Officer[] }
+type GetOfficeInviteResponse = { officer: Officer }
 
 const OfficerInstance = axios.create({
   baseURL: `http://localhost:8080/officers`,
@@ -17,5 +18,5 @@ export const getOfficers = (club_id: string) => {
 }
 
 export const _sendOfficerInvite = ({ name, email, club_id }: AddOfficerRequest) => {
-  return OfficerInstance.post('/', { name, email, club_id })
+  return OfficerInstance.post<GetOfficeInviteResponse>('/', { name: name, email: email, club_id: club_id })
 }
