@@ -60,12 +60,20 @@ export default function ReimbursementCard({_id, name, amount, creditor, link, pa
   const displayReceipt = () => {
     if(link.length == 0) {
       return (
-        <Typography>No link to render!</Typography>
+        <Box>
+          <Typography>Reimbursement for: {name}</Typography>
+          <Typography>Amount owed: {amount}</Typography>
+          <Typography>Owed to: {name}</Typography>
+          <Typography>No link to render!</Typography>
+        </Box>
       )
     }
     else {
       return (
         <Box>
+          <Typography>Reimbursement for: {name}</Typography>
+          <Typography>Amount owed: {amount}</Typography>
+          <Typography>Owed to: {name}</Typography>
           <Typography>{link}</Typography>
           <img src={link} alt="" onError={({ currentTarget }) => {
             currentTarget.onerror = null;
