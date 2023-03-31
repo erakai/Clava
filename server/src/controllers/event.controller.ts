@@ -23,6 +23,42 @@ export const getEvents = async (req: Request, res: Response) => {
   })
 }
 
+export const incrementAttendance = async (req: Request, res: Response) => {
+  const event_id = req.body._id
+
+  if (!event_id) {
+    return res.status(500).json({error: 'no event id'})
+  }
+
+  Event.findById(event_id, async (err, event: IEvent) => {
+    if (err || !event) {
+      return res.status(500).json("Error: Event Not Found")
+    }
+
+    const now = new Date();
+    if (event.date < now) {
+      return res.status(200).send("Event already passed")
+    }
+
+    const currentAttendanceCount = event.attendance
+    event.$set({attendance: currentAttendanceCount+1})
+    event.save()
+    return res.status(200).send("Attendance Recorded")
+  })
+}
+
+export const deleteEvents = async (req: Request, res: Response) => {
+  let { event_ids } = req.body
+
+  if (!event_ids || event_ids.length == 0) {
+    return res.status(500).json({error: 'no event_ids provided'})
+  }
+
+  const [err] = await to(Event.deleteMany({ '_id': { '$in': event_ids }}).exec())
+  if (err) return res.status(500).send({err})
+  return res.status(200).json({})
+}
+
 export const getEvent = async (req: Request, res: Response) => {
   let { event_id } = req.query
   

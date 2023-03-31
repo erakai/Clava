@@ -1,5 +1,5 @@
 import { verifyUser } from "config/auth";
-import { editTag, getTags, tagDelete, tagPost } from "controllers/tag.controller";
+import { tagPut, getTags, tagDelete, tagPost } from "controllers/tag.controller";
 import { Router } from "express";
 
 const tagRouter = Router()
@@ -17,6 +17,6 @@ Tag Routes:
 tagRouter.get('/', verifyUser, getTags)
 tagRouter.post('/', verifyUser, tagPost)
 tagRouter.delete('/', verifyUser, tagDelete)
-tagRouter.put('/', verifyUser, editTag)
+tagRouter.put('/', verifyUser, tagPut)
 
 export default tagRouter

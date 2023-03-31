@@ -79,7 +79,10 @@ export default function ClubComposite() {
       case 'events':
         return <EventView club_id={clubId}/>
       case 'documents':
-        return <DocumentView />
+        if (user == null) {
+          return <DocumentView club_id={clubId} state={state} />
+        }
+        return <DocumentView club_id={clubId} state={state} />
       case 'finances':
         return <FinanceView club_id={clubId}/>
       case 'settings':
