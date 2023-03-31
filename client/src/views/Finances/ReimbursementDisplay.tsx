@@ -21,12 +21,41 @@ export default function ReimbursementDisplay({club_id} : DisplayProps) {
 
   const { user, state, logout } = useUser()
 
+  useEffect(() => {
+    setDisableReimbursementCreation(name.length == 0 || amount == 0 || creditor.length == 0)
+  }, [name, amount, creditor, link])
+
   const handleOpen = () => {
     setCreateReimbursementOpen(true)
   }
 
   const handleClose = () => {
     setCreateReimbursementOpen(false)
+  }
+
+  const handleCreateAndClose = async () => {
+
+    setCreateReimbursementOpen(false)
+
+    setDisableReimbursementCreation(true)
+
+    const createRequest : CreateReimbursementRequest = {
+      name : name,
+      amount : amount,
+      creditor : creditor,
+      link : link,
+      paid : false,
+      club_id : club_id
+    }
+
+    const [err, res] = await to(_createReimbursement(createRequest))
+    if (err || !user) {
+      console.log(err)
+    } else if (res) {
+      setReimbursements([...reimbursements, res.data.reimbursement])
+    }
+
+    setDisableReimbursementCreation(false)
   }
 
   const updateReimbursementDisplay = (request: number, _id : string) => {
@@ -148,7 +177,7 @@ export default function ReimbursementDisplay({club_id} : DisplayProps) {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button disabled={disableReimbursementCreation} variant="contained" autoFocus>
+          <Button disabled={disableReimbursementCreation} onClick={handleCreateAndClose} variant="contained" autoFocus>
             Create
           </Button>
         </DialogActions>
