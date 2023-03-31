@@ -47,7 +47,7 @@ export default function MemberRow(
     }
 
     const style = (date: number | undefined) => {
-      if (!date) return {}
+      if (date?.valueOf()) return {}
       return { color: (moment(date).isAfter(moment()) && moment(date).isBefore(moment().add(1, 'w')) ? 'red' : (moment(date).isBefore(moment()) ? '#7a2828' : 'black')) }
     }
 
@@ -64,10 +64,9 @@ export default function MemberRow(
           </TableCell>
           <TableCell align="right" style={style(row.expiration)}>
             {(row.expiration) ? 
-              (moment(row.expiration).isBefore(moment()) ? "EXPIRED" :
-              ((Date.parse(row.expiration as unknown as string).valueOf() != 0) ? 
-              new Date(row.expiration).toLocaleDateString() : 'N/A'))
-            : "N/A"}
+             ((Date.parse(row.expiration as unknown as string).valueOf() != 0) ?
+              (moment(row.expiration).isBefore(moment()) ? "EXPIRED" : new Date(row.expiration).toLocaleDateString())
+              : "N/A") : "N/A"}
           </TableCell>
       </TableRow>
     )
