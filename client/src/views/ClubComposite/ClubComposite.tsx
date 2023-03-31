@@ -15,6 +15,7 @@ import FinanceView from '../Finances'
 import MemberView from '../Members'
 import { Settings } from '../Settings'
 import { Typography } from '@mui/material'
+import ActivityLogView from '../ActivityLog'
 
 export default function ClubComposite() {
   const { state, user, logout } = useUser()
@@ -83,6 +84,12 @@ export default function ClubComposite() {
         return <FinanceView club_id={clubId}/>
       case 'settings':
         return <Settings clubName={clubName} club_id={clubId}/>
+      case 'log':
+        if (user) {
+          return <ActivityLogView isOwner={(user._id) == clubOwnerId} />
+        } else {
+          return <div>Loading</div>
+        }
       default:
         return <UrlNotFound />
     }
@@ -98,6 +105,7 @@ export default function ClubComposite() {
           clubName={clubName} logout={logout}
           username={user.name || 'loading'}
           email={user.email || 'loading'}
+          isOwner={user._id == clubOwnerId}
         />
       </div>
       }

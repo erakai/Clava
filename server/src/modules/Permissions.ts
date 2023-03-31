@@ -68,8 +68,6 @@ export async function isUserOfClub(user_id : string, club_id : string) {
 		return false
 	}
 
-	console.log(officers[0].user_id.toString())
-	console.log(user_id.toString())
 	return (officers[0].user_id.toString() === user_id.toString())
 }
 
@@ -92,6 +90,31 @@ export async function hasPermission(perm : string, club_id, _user) {
 	var _flag = false
 	roles.forEach(role => {
 		if (role.perms.includes(perm)) {
+			_flag = true
+		}	
+	})
+	return _flag
+}
+
+export async function hasRole(role_id, club_id, _user) {
+	const [ownerErr, isUserOwner] = await to(isOwner(_user._id, club_id));
+	if (ownerErr) { return false; }
+	if (isUserOwner) {
+		return true
+	}
+
+	const [rolesErr, roles] = await to(getRolesFromUser(_user._id, club_id))
+	if (rolesErr) {
+		return false
+	}
+
+	if (!(roles instanceof Array<IRole>)) {
+		return false
+	}
+
+	var _flag = false
+	roles.forEach(role => {
+		if (role._id == role_id) {
 			_flag = true
 		}	
 	})

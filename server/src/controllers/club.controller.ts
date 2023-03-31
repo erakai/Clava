@@ -42,9 +42,9 @@ export const getClub = async (req: Request, res: Response) => {
   if (!club_id) {
     return res.status(500).json({error: 'no club id'})
   }
-    
-  const club: IClub = await Club.findById(club_id)
-
+  
+  const [clubErr, club] = await to(Club.findById(club_id).exec())
+  if (clubErr) return res.status(400).send()
   if(!club) return res.status(401).send('Unauthorized')
   
   // check if the user is a member of the club
