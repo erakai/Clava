@@ -8,6 +8,9 @@
         "test": "NODE_OPTIONS=--experimental-vm-modules npx jest"
     },
     "devDependencies": {
+        "@babel/core": "^7.21.3",
+        "@babel/preset-env": "^7.20.2",
+        "@babel/preset-typescript": "^7.21.0",
         "@types/cookie-parser": "^1.4.3",
         "@types/cors": "^2.8.13",
         "@types/express": "^4.17.17",

@@ -17,6 +17,7 @@ export default function DocumentView({ club_id, state }: DocumentViewProps) {
 
   const [addDocOpen, setAddDocOpen] = useState(false)
   const [documents, setDocuments] = useState<ClubDocument[]>([])
+  const [hasDocuments, setHasDocuments] = useState(documents.length != 0)
   const forceUpdate = useForceUpdate()
   // search stuff
   const [searchString, setSearchString] = useState("")
@@ -37,7 +38,7 @@ export default function DocumentView({ club_id, state }: DocumentViewProps) {
       setFilteredDocuments(useDocs)
     }
     setSearchString(searchString)
-    const filteredDocs = useDocs.filter((document) => document.name.indexOf(searchString) !== -1)
+    const filteredDocs = useDocs.filter((document) => document.name.toLowerCase().indexOf(searchString.toLowerCase()) !== -1)
     // console.log(filteredDocs)
     setFilteredDocuments(filteredDocs)
   }
@@ -56,6 +57,7 @@ export default function DocumentView({ club_id, state }: DocumentViewProps) {
     } else if (res) {
       setDocuments([...documents, res.data.document])
       setUpdate(update + 1)
+      setHasDocuments(documents.length != 0)
     }
   }
 
@@ -74,7 +76,7 @@ export default function DocumentView({ club_id, state }: DocumentViewProps) {
       })
       if (idx != -1) {
         const newDocuments = documents
-        newDocuments[idx] = {_id: retrieved._id, name: retrieved.name, link: retrieved.link, club_id: retrieved.club_id}
+        newDocuments[idx] = {_id: retrieved._id, name: retrieved.name, link: retrieved.link, club_id: retrieved.club_id, role_ids: retrieved.role_ids}
         setDocuments(newDocuments)
       }
     }
@@ -93,8 +95,7 @@ export default function DocumentView({ club_id, state }: DocumentViewProps) {
       const newDocs = documents.filter((document) => document.name !== retrieved.name)
       setDocuments(newDocs)
       setFilteredDocuments(newDocs)
-      console.log("newdocs:", newDocs)
-      console.log("docs", documents)
+      setHasDocuments(documents.length != 0)
       setUpdate(update + 1)
     }
   }
@@ -132,7 +133,6 @@ export default function DocumentView({ club_id, state }: DocumentViewProps) {
 
   return (
     <Box className="flex" flexDirection="column">
-      
       <AddDocumentModal
         club_id={club_id}
         open={addDocOpen}
@@ -141,16 +141,24 @@ export default function DocumentView({ club_id, state }: DocumentViewProps) {
         isUniqueDocumentName={isUniqueDocumentName}
         verifyUrl={verifyUrl}
         />
-
-      <Box className="m-4 flex justify-center items-center" flexDirection="row">
-        <Typography className="grow" variant="h4" position="relative">Documents</Typography>
-        <TextField className="m-4" size="small" label="Search" margin="none"
-          value={searchString} onChange={(e) => performSearch(e.target.value)}/>
-        <Button onClick={clearSearchField}>Clear</Button>
-      </Box>
+      <Grid container spacing={2}>
+        <Grid item xs={4}/>
+        <Grid item xs={4}>
+          <Box className="m-4 flex justify-center items-center" flexDirection="row">
+            <Typography className="" variant="h4" position="relative">Documents</Typography>
+          </Box>
+        </Grid>
+        <Grid item xs={4}>
+          <Box className="m-4 flex justify-end items-end" flexDirection="row">
+            <TextField className="m-4" size="small" label="Search Documents" margin="none"
+              value={searchString} onChange={(e: { target: { value: string; }; }) => performSearch(e.target.value)}/>
+            <Button onClick={clearSearchField}>Clear</Button>
+          </Box>
+        </Grid>
+      </Grid>
       <Box className="m-4">
         <Grid container spacing={2}>
-          {filteredDocuments.map(document => (
+          {filteredDocuments.length > 0 ? filteredDocuments.map(document => (
             <DocumentCard 
               docName={document.name} 
               docLink={document.link}
@@ -160,7 +168,10 @@ export default function DocumentView({ club_id, state }: DocumentViewProps) {
               isUniqueDocumentName={isUniqueDocumentName}
               verifyUrl={verifyUrl}
               key={document._id}/>
-          ))}
+          )): 
+          <Box margin={2}>
+            <Typography variant="h6">There are no documents to be displayed.</Typography>
+          </Box>}
         </Grid>
       </Box>
       <Fab onClick={() => setAddDocOpen(true)} color="secondary" sx={{
