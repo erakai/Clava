@@ -1,7 +1,9 @@
 import { Box, Menu, Grid, Button, Card, CardActions, CardContent, Typography, MenuItem, CardActionArea, IconButton, CardMedia, Link, Dialog, DialogContent, DialogContentText, DialogActions, Divider } from "@mui/material"
+import SmartDisplayIcon from '@mui/icons-material/SmartDisplay';
 import { useEffect, useState } from "react"
 import { MoreVert as MoreVertIcon, Article as ArticleIcon } from '@mui/icons-material/';
 import EditDocumentModal from "./EditDocumentModal";
+import SmartDisplay from "@mui/icons-material/SmartDisplay";
 
 type DocumentCardProps = {
   docName: string
@@ -62,7 +64,12 @@ export default function DocumentCard({ docName, docLink, _id, editDocument, dele
         {/* <Box className="flex shrink items-center"> */}
         <Link href={link} target="_blank" className="grow" underline="none">
           <Box className="m-4 flex items-center justify-start">
-            <ArticleIcon className="mr-4" color="secondary" />
+            {!link.includes("youtube") && 
+              <ArticleIcon className="mr-4" color="secondary" />
+            }
+            {link.includes("youtube") &&
+              <SmartDisplay className="mr-4" color="secondary" />
+            }
             <Typography className="shrink" noWrap color="black" variant="h6" component="div">
               {name}
             </Typography>

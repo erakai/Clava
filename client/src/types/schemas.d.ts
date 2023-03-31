@@ -169,3 +169,13 @@ interface CreateEventRequest {
 interface IncrementEventAttendanceRequest {
   _id: string
 }
+
+interface Log {
+  _id : string,
+  user_id : string,
+  club_id : string,
+  method : string,
+  route : string,
+  body : string,
+  date : Date
+}

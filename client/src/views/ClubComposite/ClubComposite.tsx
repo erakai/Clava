@@ -89,7 +89,10 @@ export default function ClubComposite() {
         return <Settings clubName={clubName} club_id={clubId}/>
       case 'log':
         if (user) {
-          return <ActivityLogView isOwner={(user._id) == clubOwnerId} />
+          return <ActivityLogView
+            isOwner={(user._id) == clubOwnerId} 
+            club_id={clubId}
+           />
         } else {
           return <div>Loading</div>
         }

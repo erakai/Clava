@@ -9,7 +9,8 @@ import mongoose from 'mongoose'
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import { JwtStrategy } from 'config/jwt';
-import { logRequest, RequestLog } from 'modules/Logger';
+import { logRequest, RequestLog, resolveClubId } from 'modules/Logger';
+import to from 'await-to-js';
 
 dotenv.config()
 
@@ -55,12 +56,21 @@ passport.deserializeUser(User.deserializeUser())
 
 const VALID_LOG_METHODS = ["PUT", "POST", "DELETE"]
 const INVALID_PATHS = ["/refresh"]
-const INVALID_BASEURL = ["/user"]
+const INVALID_BASEURL = ["/users"]
 
-app.use((req, res, next) => {
+app.use(async (req, res, next) => {
   console.log(req.method, 'request received at ' + req.path + 
     '\n\tBody:', JSON.stringify(req.body) + 
     '\n\tParams:', req.query)
+
+  if (!req.body.club_id) {
+    const [errClubId, res_club_id] = await to(resolveClubId(req.body))
+    console.log("adasd: ", res_club_id)
+    if (!errClubId) {
+      console.log(res_club_id)
+      req.body.club_id = res_club_id
+    }
+  }
 
   res.on('finish', () => {
     const user : any = req.user
@@ -70,11 +80,10 @@ app.use((req, res, next) => {
         method: req.method,
         baseUrl: req.baseUrl, 
         path: req.path, 
-        body: req.body,
+        _body: req.body,
         params: JSON.stringify(req.params),
         user_id: (req.user as any)._id
       }
-      console.log("Locals", req.originalUrl)
       logRequest(log);
     }
 

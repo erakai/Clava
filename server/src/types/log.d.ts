@@ -5,5 +5,6 @@ interface ILog extends Document {
 	club_id : number,
 	method : string,
 	route : string,
-	body : string
+	body : string,
+	date : Date
 }

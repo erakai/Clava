@@ -1,20 +1,74 @@
 import { Box, Typography } from "@mui/material";
+import to from "await-to-js";
 import { useEffect, useState } from "react"
 import { useNavigate } from 'react-router-dom';
-import { ClavaTable } from "../../components/ClavaTable";
+import { getLogs } from "../../api/logApi";
+import { ClavaTable, HeaderCell } from "../../components/ClavaTable";
+import ActivityLogRow from "./ActivityLogRow";
 
 type ActivityLogView = {
   isOwner : boolean
+  club_id : string
 }
 
-export default function ActivityLogView({isOwner} : ActivityLogView) {
+const headerCells: HeaderCell<Log>[] = [
+  {
+    id: 'method',
+    numeric: false,
+    disablePadding: true,
+    label: 'Method'
+  },
+  {
+    id: 'route',
+    numeric: false,
+    disablePadding: false,
+    label: 'Route'
+  },
+  {
+    id: 'user_id',
+    numeric: false,
+    disablePadding: false,
+    label: 'User'
+  },
+  {
+    id: 'date',
+    numeric: false,
+    disablePadding: false,
+    label: 'Date'
+  }
+]
+
+export default function ActivityLogView({isOwner, club_id} : ActivityLogView) {
   const navigate = useNavigate();
+
+  const [logs, setLogs] = useState<Log[]>([])
+  const [searchString, setSearchString] = useState('')
 
   useEffect(() => {
     if (!isOwner) {
       navigate('/');
     }
-  })
+    const fetchLogs = async () => {
+      if (!club_id) {
+        return;
+      }
+      const [err, res] = await to(getLogs(club_id))
+      if (err) {
+        console.log(err)
+        return;
+      }
+
+      if (!res) {
+        return;
+      }
+
+      setLogs(res.data.logs)
+      return
+    }
+
+    fetchLogs()
+  }, [])
+
 
   return (
     <Box
@@ -22,18 +76,15 @@ export default function ActivityLogView({isOwner} : ActivityLogView) {
       justifyContent="center"
       alignItems="center"
       height="100%">
-        <Typography variant="h4">Activity Log</Typography>
-        <ClavaTable<Member> defaultOrder="name" tableName={"Activity Log"}
-          data={filteredMembers} headerCells={headerCells} onDelete={onDelete}
+        <ClavaTable<Log> defaultOrder="date" tableName={"Activity Log"}
+          data={logs} headerCells={headerCells} onDelete={() => {}}
           RowDisplay={({rowSelected, onClick, row}) => 
-          <MemberRow rowSelected={rowSelected} onClick={onClick} row={row} allTags={tags} dense={dense}/>}          dense={dense} searchString={searchString} setSearchString={setSearchString}
+          <ActivityLogRow rowSelected={rowSelected} onClick={onClick} row={row}/>}          
+          dense={false} searchString={searchString} setSearchString={setSearchString}
           rowsPerPageOptions={[5, 10, 30, 100]} defaultRowsPerPage={10}
-          onEdit={onEditClicked} AlternateSelectedToolbar={
-            ({selected, setSelected}: AlternateSelectedToolbarProps<Member>) =>
-            <MemberToolbarExtension selected={selected} setSelected={setSelected} 
-              allTags={tags} members={members} setMembers={setMembers} forceUpdate={forceUpdate}/>
-          }
+          onEdit={() => {}}
         />
     </Box>
+
   )
 }

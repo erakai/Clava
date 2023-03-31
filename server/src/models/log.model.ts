@@ -6,7 +6,8 @@ const LogSchema = new Schema<ILog>({
 	club_id: SchemaTypes.ObjectId,
 	method: SchemaTypes.String,
 	route: SchemaTypes.String,
-	body: SchemaTypes.String
+	body: SchemaTypes.String,
+	date: SchemaTypes.Date
 })
 
 const Log = model('log', LogSchema) as Model<ILog>
