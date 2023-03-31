@@ -72,7 +72,7 @@ export default function DocumentView({ club_id, state }: DocumentViewProps) {
       })
       if (idx != -1) {
         const newDocuments = documents
-        newDocuments[idx] = {_id: retrieved._id, name: retrieved.name, link: retrieved.link, club_id: retrieved.club_id}
+        newDocuments[idx] = {_id: retrieved._id, name: retrieved.name, link: retrieved.link, club_id: retrieved.club_id, role_ids: retrieved.role_ids}
         setDocuments(newDocuments)
       }
     }
@@ -155,7 +155,7 @@ export default function DocumentView({ club_id, state }: DocumentViewProps) {
       </Grid>
       <Box className="m-4">
         <Grid container spacing={2}>
-          {filteredDocuments.map(document => (
+          {filteredDocuments.length > 0 ? filteredDocuments.map(document => (
             <DocumentCard 
               docName={document.name} 
               docLink={document.link}
@@ -165,7 +165,10 @@ export default function DocumentView({ club_id, state }: DocumentViewProps) {
               isUniqueDocumentName={isUniqueDocumentName}
               verifyUrl={verifyUrl}
               key={document._id}/>
-          ))}
+          )): 
+          <Box margin={2}>
+            <Typography variant="h6">There are no documents to be displayed.</Typography>
+          </Box>}
         </Grid>
       </Box>
       <Fab onClick={() => setAddDocOpen(true)} color="secondary" sx={{
