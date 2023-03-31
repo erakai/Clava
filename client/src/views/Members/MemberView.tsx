@@ -88,7 +88,9 @@ export default function MemberView({ club_id, state, user_id, owner_id }: Member
       console.log(err)
       setErrorMessage('Something went wrong.')
     } else if (res) {
-      setMembers([...members, res.data.member])
+      let newOfficers = officers;
+      newOfficers.push(res.data.officer);
+      setOfficers(newOfficers);
     }
   }
 
