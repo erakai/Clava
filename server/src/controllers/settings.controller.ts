@@ -1,7 +1,7 @@
 import to from 'await-to-js'
 import type { Request, Response } from 'express'
-import Settings from 'models/settings.model'
-import { ISettings } from 'types/settings'
+import Settings from '../models/settings.model'
+import { ISettings } from '../types/settings'
 
 export function defaultSettings() {
   return {

@@ -1,8 +1,8 @@
 import type { Request, Response } from 'express'
-import Tag from 'models/tag.model'
-import Club from 'models/club.model'
-import { IClub } from 'types/club'
-import Member from 'models/member.model'
+import Tag from '../models/tag.model'
+import Club from '../models/club.model'
+import { IClub } from '../types/club'
+import Member from '../models/member.model'
 
 export const getTags = async (req: Request, res: Response) => {
   let { club_id } = req.query

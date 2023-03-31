@@ -1,8 +1,8 @@
 import { Router } from 'express'
 
-import { getSelf, login, logout, refresh, register, resetrequest, reset} from 'controllers/user.controller'
+import { getSelf, login, logout, refresh, register, resetrequest, reset} from '../controllers/user.controller'
 import passport from 'passport'
-import { verifyUser } from 'config/auth'
+import { verifyUser } from '../config/auth'
 
 const userRouter = Router()
 

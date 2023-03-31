@@ -1,5 +1,5 @@
 import to from "await-to-js"
-import User from "models/user.model"
+import User from "../models/user.model"
 import { ExtractJwt, Strategy } from "passport-jwt"
 
 export const JwtStrategy = () => {

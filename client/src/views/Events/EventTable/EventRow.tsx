@@ -25,6 +25,11 @@ export default function EventRow({
   const [qrValue, setQrValue] = useState("");
   const [statsOpen, setStatsOpen] = useState(false);
   const [totalMembers, setTotalMembers] = useState(0);
+  const [attendanceCount, setAttendanceCount] = useState(row.attendance);
+
+  function sleep(ms: number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
 
   const getTotalMembers = async() => {
     const [errMem, resMem] = await to(getMembers(row.club_id))
@@ -33,10 +38,25 @@ export default function EventRow({
       return
     }
 
-    console.log(resMem.data.members.length)
-    setTotalMembers(resMem.data.members.length);
+    const totalNumMembers = resMem.data.members.length
+    setTotalMembers(totalNumMembers);
+    console.log("total members= " + totalNumMembers)
   }
 
+  const getAttendanceCount = async() => {
+    const [errEvent, resEvent] = await to(_getEvent(row._id))
+    if (errEvent) {
+      console.log(errEvent)
+      return
+    }
+
+    if (!resEvent) {
+      console.log("can't find event")
+      return
+    }
+
+    setAttendanceCount(resEvent.data.event.attendance)
+  }
 
   return (
     <>
@@ -55,12 +75,12 @@ export default function EventRow({
               Event: {row.name}
             </DialogContentText>
             <DialogContentText id="alert-dialog-description">
-              Attendance Count: {row.attendance}
+              Attendance Count: {attendanceCount}
             </DialogContentText>
             <DialogContentText id="alert-dialog-description">
-              Yield: {row.attendance / totalMembers * 100}%
+              Yield: {attendanceCount / totalMembers * 100}%
             </DialogContentText>
-            <EventPieChart attendance={row.attendance} totalMembers={totalMembers} />
+            <EventPieChart attendance={attendanceCount} totalMembers={totalMembers} />
           </Box>
         </DialogContent>
       </Dialog>
@@ -101,8 +121,11 @@ export default function EventRow({
       </TableCell>
       <TableCell>
         <Button variant="contained" onClick={() => {
+          getAttendanceCount()
           getTotalMembers()
-          setStatsOpen(true)
+          setTimeout(() => {
+            setStatsOpen(true)
+          }, 100)
         }}>View Stats</Button>
       </TableCell>
     </TableRow>

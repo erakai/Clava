@@ -77,6 +77,7 @@ interface AddTagToMemberRequest {
 interface Officer {
   _id: string,
   name: string,
+  email: string,
   expiration?: number,
   club_id: string,
   user_id: string,

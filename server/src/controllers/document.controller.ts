@@ -1,7 +1,7 @@
 import to from 'await-to-js'
 import type { Request, Response } from 'express'
-import Club from 'models/club.model'
-import ClubDocument from 'models/document.model'
+import Club from '../models/club.model'
+import ClubDocument from '../models/document.model'
 
 export const getDocuments = async (req: Request, res: Response) => {
   let { club_id } = req.query

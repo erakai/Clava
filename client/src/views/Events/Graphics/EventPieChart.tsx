@@ -18,6 +18,7 @@ export default function EventPieChart({ attendance, totalMembers }: PieChartProp
 
   const data = {
     labels: ["Attendees", "Non-Attendees"],
+    options: {animations: false},
     datasets: [
       {
         label: "#",

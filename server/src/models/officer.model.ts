@@ -1,11 +1,12 @@
 import { Model, model, Schema, SchemaTypes } from "mongoose";
-import { IOfficer } from "types/officer";
+import { IOfficer } from "../types/officer";
 
 const OfficerSchema = new Schema<IOfficer>({
   name: {
     type: SchemaTypes.String,
     required: true,
   },
+  email: SchemaTypes.String,
   expiration: SchemaTypes.Date,
   club_id: SchemaTypes.ObjectId,
   user_id : SchemaTypes.ObjectId,

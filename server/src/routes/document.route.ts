@@ -1,5 +1,5 @@
-import { verifyUser } from "config/auth";
-import { documentPost, documentDelete, documentPut, getDocuments, getDocument, documentRolePost, documentRoleDelete } from "controllers/document.controller";
+import { verifyUser } from "../config/auth";
+import { documentPost, documentDelete, documentPut, getDocuments, getDocument, documentRolePost, documentRoleDelete } from "../controllers/document.controller";
 import { Router } from "express";
 
 const documentRouter = Router()

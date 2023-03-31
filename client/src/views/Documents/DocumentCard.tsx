@@ -52,7 +52,7 @@ export default function DocumentCard({ docName, docLink, _id, editDocument, dele
 
 
   return (
-    <Grid item xs={6} sm={4} md={3} lg={3} xl={1}>
+    <Grid item xs={6} sm={4} md={3} lg={3} xl={3}>
       <Card 
         sx={{
           ':hover': {

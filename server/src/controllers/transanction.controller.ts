@@ -1,6 +1,6 @@
 import to from 'await-to-js'
 import type { Request, Response } from 'express'
-import Transaction from 'models/transanction.model'
+import Transaction from '../models/transanction.model'
 
 export const getTransactions = async (req: Request, res: Response) => {
   let { club_id } = req.query

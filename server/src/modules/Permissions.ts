@@ -1,9 +1,9 @@
-import Officer from 'models/officer.model';
-import Role from 'models/Role.model';
-import Club from 'models/club.model';
-import { IOfficer } from 'types/officer';
-import { IRole } from 'types/role';
-import { IClub } from "types/club";
+import Officer from '../models/officer.model';
+import Role from '../models/role.model';
+import Club from '../models/club.model';
+import { IOfficer } from '../types/officer';
+import { IRole } from '../types/role';
+import { IClub } from "../types/club";
 
 import to from 'await-to-js'
 
