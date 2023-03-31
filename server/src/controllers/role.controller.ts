@@ -1,11 +1,11 @@
 import to from 'await-to-js'
 import type { Request, Response } from 'express'
-import Club from 'models/club.model'
-import Officer from 'models/officer.model'
-import Role from 'models/Role.model'
-import Tag from 'models/tag.model'
-import { IClub } from 'types/club'
-import { IRole } from 'types/role'
+import Club from '../models/club.model'
+import Officer from '../models/officer.model'
+import Role from '../models/role.model'
+import Tag from '../models/tag.model'
+import { IClub } from '../types/club'
+import { IRole } from '../types/role'
 
 export const getRoles = async (req: Request, res: Response) => {
   let { club_id } = req.query

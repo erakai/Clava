@@ -1,13 +1,13 @@
 import to from 'await-to-js'
 import type { Request, Response } from 'express'
-import Club from 'models/club.model'
-import User from 'models/user.model'
-import { IUser } from 'types/user'
-import { IClub } from 'types/club'
-import Settings from 'models/settings.model'
+import Club from '../models/club.model'
+import User from '../models/user.model'
+import { IUser } from '../types/user'
+import { IClub } from '../types/club'
+import Settings from '../models/settings.model'
 import { getDefaultSettings } from 'http2'
 import { defaultSettings } from './settings.controller'
-import { isOwner, isUserOfClub } from 'modules/Permissions'
+import { isOwner, isUserOfClub } from '../modules/Permissions'
 
 export const getClubs = async (req: Request, res: Response) => {
   let { user_id } = req.query

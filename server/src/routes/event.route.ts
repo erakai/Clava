@@ -1,5 +1,5 @@
-import { verifyUser } from "config/auth";
-import { getClubs, getClub, createClub, addClubToUser, removeClubFromUser } from "controllers/club.controller";
+import { verifyUser } from "../config/auth";
+import { getClubs, getClub, createClub, addClubToUser, removeClubFromUser } from "../controllers/club.controller";
 import { Router } from "express";
 import {createEvent, getEvents, deleteEvents, incrementAttendance, getEvent} from "../controllers/event.controller";
 

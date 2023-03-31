@@ -113,6 +113,34 @@ export default function FinanceView(props: FinanceViewProps) {
           </Box>
         </Grid>
 
+        {/*Balance Overview and Buttons*/}
+        <Grid item xs={12} alignItems={"top"}>
+          <Paper style={{padding: 8, alignContent: 'center', textAlign: 'center', marginLeft: 8, marginRight: 8}} elevation={3}>
+            <Grid container>
+              <Grid item xs={4} container justifyContent="flex-start" alignItems="center">
+                <Stack alignItems={"center"} paddingLeft={1}>
+                  {/* <Typography variant="caption">Add Transaction</Typography> */}
+                  <Tooltip title={"Add Transaction"}>
+                    <Avatar sx={{ bgcolor: "secondary.main", mx:1, width:48, height:48 }}>
+                      <IconButton sx={{ color: 'white', display: 'block', width:48, height:48 }}
+                        onClick={() => setAddTransactionModalOpen(true)} >
+                        <AddShoppingCartIcon/>
+                      </IconButton>
+                    </Avatar>
+                  </Tooltip>
+                </Stack>
+              </Grid>
+              <Grid item xs={4}>
+                <Typography variant="h5">Current Balance</Typography>
+                <Typography variant="h6" sx={{ 'color': (balance >= 0) ? 'green' : 'red' }}>
+                  ${(Math.round(balance * 100) / 100).toFixed(2)}
+                </Typography>
+              </Grid>
+              <Grid item xs={4}/>
+            </Grid>
+          </Paper>
+        </Grid>
+
         <Grid item container marginX={2} xs={12} md={8} rowSpacing={2}>
           {/*Income/Expense (Transaction) Tables*/}
           <Grid item container xs={12} spacing={1}>
@@ -123,39 +151,10 @@ export default function FinanceView(props: FinanceViewProps) {
               <TransactionDisplay title="Expenses" transactions={expenses} settings={settings} onDelete={onTransactionDelete}/>
             </Grid>
           </Grid>
-
-          {/*Balance Overview and Buttons*/}
-          <Grid item xs={12}>
-            <Paper style={{padding: 8, alignContent: 'center', textAlign: 'center'}} elevation={3}>
-              <Grid container alignItems={"center"}>
-                <Grid item xs={4} container justifyContent="flex-start" alignItems="center">
-                  <Stack alignItems={"center"} paddingLeft={1}>
-                    {/* <Typography variant="caption">Add Transaction</Typography> */}
-                    <Tooltip title={"Add Transaction"}>
-                      <Avatar sx={{ bgcolor: "secondary.main", mx:1, width:48, height:48 }}>
-                        <IconButton sx={{ color: 'white', display: 'block', width:48, height:48 }}
-                          onClick={() => setAddTransactionModalOpen(true)} >
-                          <AddShoppingCartIcon/>
-                        </IconButton>
-                      </Avatar>
-                    </Tooltip>
-                  </Stack>
-                </Grid>
-                <Grid item xs={4}>
-                  <Typography variant="h5">Current Balance</Typography>
-                  <Typography variant="h6" sx={{ 'color': (balance >= 0) ? 'green' : 'red' }}>
-                    ${(Math.round(balance * 100) / 100).toFixed(2)}
-                  </Typography>
-                </Grid>
-                <Grid item xs={4}/>
-              </Grid>
-            </Paper>
-          </Grid>
         </Grid>
 
         {/*Reimbursements column*/}
-        <Grid item xs={12} md={3} margin={2} style={{ textAlign: 'center' }} border={2}>
-          
+        <Grid item xs={12} md={3} margin={2} style={{ textAlign: 'center' }}>
           <ReimbursementDisplay club_id={props.club_id}></ReimbursementDisplay>
         </Grid>
       </Grid>

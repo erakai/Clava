@@ -1,5 +1,5 @@
-import { verifyUser } from "config/auth";
-import { createMember, deleteMembers, getMembers, updateMember } from "controllers/member.controller";
+import { verifyUser } from "../config/auth";
+import { createMember, deleteMembers, getMembers, updateMember } from "../controllers/member.controller";
 import { Router } from "express";
 import tagRouter from "./tag.route";
 

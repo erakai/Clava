@@ -1,5 +1,5 @@
 import { Model, model, Schema, SchemaTypes } from "mongoose";
-import { IMember } from "types/member";
+import { IMember } from "../types/member";
 
 const MemberSchema = new Schema<IMember>({
   name: {

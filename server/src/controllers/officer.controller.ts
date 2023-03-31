@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express'
-import Member from 'models/member.model'
-import Officer from 'models/officer.model'
-import User from 'models/user.model'
+import Member from '../models/member.model'
+import Officer from '../models/officer.model'
+import User from '../models/user.model'
 import {sendOfficerInvitationEmail} from "../modules/Emailing";
 import * as async_hooks from "async_hooks";
 
