@@ -47,7 +47,7 @@ export default function MemberRow(
     }
 
     const style = (date: number | undefined) => {
-      if (date?.valueOf()) return {}
+      if (!(Date.parse(row.expiration as unknown as string).valueOf() != 0)) return {}
       return { color: (moment(date).isAfter(moment()) && moment(date).isBefore(moment().add(1, 'w')) ? 'red' : (moment(date).isBefore(moment()) ? '#7a2828' : 'black')) }
     }
 
