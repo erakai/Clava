@@ -4,6 +4,7 @@ import { intercepts } from './config';
 import { getRefreshToken } from "./userApi"
 
 export type GetEventsResponse = { events: Event[] }
+export type GetEventResponse = { event: Event}
 export type CreateEventResponse = { event: Event }
 export type DeleteEventResponse = {}
 export type IncrementEventAttendanceResponse = {}
@@ -22,6 +23,10 @@ export const _createEvent = ({ name, description, date, club_id }: CreateEventRe
     return EventInstance.post<CreateEventResponse>('/', { name, date, club_id })
   } 
   return EventInstance.post<CreateEventResponse>('/', { name, description, date, club_id })
+}
+
+export const _getEvent = (_id: string) => {
+  return EventInstance.get<GetEventResponse>('/single/', { params: { event_id: _id }})
 }
 
 export const _getEvents = (club_id: string) => {
