@@ -12,6 +12,10 @@ import {
 import { RowDisplayProps } from "../../../components/ClavaTable";
 import React, {useState} from "react";
 import QRCode from "react-qr-code"
+import to from "await-to-js";
+import {getMembers} from "../../../api/memberApi";
+import {_getEvent, _getEvents} from "../../../api/eventApi";
+import EventPieChart from "../Graphics/EventPieChart";
 
 export default function EventRow({
                                          rowSelected, onClick, row
@@ -19,9 +23,48 @@ export default function EventRow({
 
   const [qrOpen, setQrOpen] = useState(false);
   const [qrValue, setQrValue] = useState("");
+  const [statsOpen, setStatsOpen] = useState(false);
+  const [totalMembers, setTotalMembers] = useState(0);
+
+  const getTotalMembers = async() => {
+    const [errMem, resMem] = await to(getMembers(row.club_id))
+    if (errMem) {
+      console.log(errMem)
+      return
+    }
+
+    console.log(resMem.data.members.length)
+    setTotalMembers(resMem.data.members.length);
+  }
+
 
   return (
     <>
+      <Dialog
+        open={statsOpen}
+        onClose={e => {setStatsOpen(false)}}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Attendance Statistics"}
+        </DialogTitle>
+        <DialogContent>
+          <Box flexDirection="column" className="flex justify-center">
+            <DialogContentText id="alert-dialog-description">
+              Event: {row.name}
+            </DialogContentText>
+            <DialogContentText id="alert-dialog-description">
+              Attendance Count: {row.attendance}
+            </DialogContentText>
+            <DialogContentText id="alert-dialog-description">
+              Yield: {row.attendance / totalMembers * 100}%
+            </DialogContentText>
+            <EventPieChart attendance={row.attendance} totalMembers={totalMembers} />
+          </Box>
+        </DialogContent>
+      </Dialog>
+
       <Dialog
         open={qrOpen}
         onClose={e => {setQrOpen(false)}}
@@ -55,6 +98,12 @@ export default function EventRow({
           setQrValue("http://localhost:5173/IncrementAttendance/" + row._id)
           setQrOpen(true)
         }}>Generate</Button>
+      </TableCell>
+      <TableCell>
+        <Button variant="contained" onClick={() => {
+          getTotalMembers()
+          setStatsOpen(true)
+        }}>View Stats</Button>
       </TableCell>
     </TableRow>
     </>

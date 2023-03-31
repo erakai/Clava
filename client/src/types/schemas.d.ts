@@ -154,7 +154,9 @@ interface Event {
   _id: string,
   name: string,
   date: Date,
-  description: string
+  description: string,
+  attendance: number,
+  club_id: string
 }
 
 interface CreateEventRequest {

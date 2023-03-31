@@ -10,48 +10,30 @@ import to from 'await-to-js'
 
 export default function AttendanceView() {
   const {eventId} = useParams()
-  const [error, setError] = useState(0);
+  const [message, setMessage] = useState("Your attendance was successfully recorded.");
 
   useEffect(() => {
     const incrementAttendance = async () => {
       const [err, res] = await to(_incrementEventAttendance({_id: eventId!}))
 
       if (err) {
-        setError(1)
+        setMessage("Failed to record attendance. Please try again.")
         return
       }
 
       if (res.data == "Event already passed") {
-        setError(2)
+        setMessage("This event has already passed.")
       }
     }
 
     incrementAttendance()
   }, [])
 
-  if (error == 1) {
-    return (
-      <Box className="flex w-full items-center">
-        <Typography variant="h2" component="h1">
-          Failed to record attendance. Please try again.
-        </Typography>
-      </Box>
-    )
-  } else if (error == 2) {
-    return (
-      <Box className="flex w-full items-center">
-        <Typography variant="h2" component="h1">
-          This event has already passed.
-        </Typography>
-      </Box>
-    )
-  } else {
-    return (
-      <Box className="flex w-full items-center">
-        <Typography variant="h2" component="h1">
-          Your attendance was successfully recorded.
-        </Typography>
-      </Box>
-    )
-  }
+  return (
+    <Box className="flex w-full items-center">
+      <Typography variant="h2" component="h1">
+        {message}
+      </Typography>
+    </Box>
+  )
 }
