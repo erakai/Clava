@@ -27,10 +27,11 @@ type ClavaNavbarProps = {
   email : string
   clubId : string
   clubName : string
+  isOwner : boolean
   logout: () => Promise<void | undefined>
 }
 
-function ClavaNavbar({currentRoute, clubId, clubName, logout, username, email} : ClavaNavbarProps) {
+function ClavaNavbar({currentRoute, clubId, clubName, logout, username, email, isOwner} : ClavaNavbarProps) {
 	const navigate = useNavigate();
 
   // menu operations for transformations when window size is changed
@@ -53,6 +54,9 @@ function ClavaNavbar({currentRoute, clubId, clubName, logout, username, email} :
     if (typeof clicked == 'string') {
       if (clicked == 'Logout') {
         logout()
+      }
+      if (clicked == 'ActivityLog') {
+        navigate('/' + clubId + '/log')
       }
     }
   };
@@ -203,6 +207,11 @@ function ClavaNavbar({currentRoute, clubId, clubName, logout, username, email} :
                 <Typography>{email}</Typography>
               </MenuItem>
               <Divider />
+              {isOwner &&
+                <MenuItem key="log" onClick={() => handleCloseUserMenu("ActivityLog")}>
+                  <Typography textAlign="center">Activity Log</Typography>
+                </MenuItem>
+              }
               {settings.map((setting) => (
                 <MenuItem key={setting} onClick={() => handleCloseUserMenu(setting)}>
                   <Typography textAlign="center">{setting}</Typography>

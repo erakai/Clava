@@ -7,8 +7,8 @@ import officerRouter from "./officer.route"
 import eventRouter from "./event.route";
 import settingsRouter from "./settings.route"
 import transactionRouter from "./transaction.route"
+import logRouter from "./log.route"
 import { verifyUser } from "../config/auth"
-
 
 const rootRouter = Router()
 
@@ -25,5 +25,6 @@ rootRouter.use('/documents', documentRouter)
 rootRouter.use('/events', eventRouter)
 rootRouter.use('/settings', settingsRouter)
 rootRouter.use('/transactions', transactionRouter)
+rootRouter.use('/logs', logRouter)
 
 export default rootRouter

@@ -8,7 +8,9 @@ import User from './models/user.model';
 import mongoose from 'mongoose'
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
-import { JwtStrategy } from './config/jwt';
+import { JwtStrategy } from 'config/jwt';
+import { logRequest, RequestLog, resolveClubId } from 'modules/Logger';
+import to from 'await-to-js';
 
 dotenv.config()
 
@@ -31,14 +33,6 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(cookieParser(process.env.SESSION_SECRET as string))
 
-// print every request received
-app.use((req, _, next) => {
-  console.log(req.method, 'request received at ' + req.path + 
-    '\n\tBody:', JSON.stringify(req.body) + 
-    '\n\tParams:', req.query)
-  next()
-})
-
 // https://www.npmjs.com/package/cors
 app.use(cors({
   credentials: true,
@@ -59,6 +53,44 @@ passport.use(JwtStrategy())
 passport.use(User.createStrategy())
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser())
+
+const VALID_LOG_METHODS = ["PUT", "POST", "DELETE"]
+const INVALID_PATHS = ["/refresh"]
+const INVALID_BASEURL = ["/users"]
+
+app.use(async (req, res, next) => {
+  console.log(req.method, 'request received at ' + req.path + 
+    '\n\tBody:', JSON.stringify(req.body) + 
+    '\n\tParams:', req.query)
+
+  if (!req.body.club_id) {
+    const [errClubId, res_club_id] = await to(resolveClubId(req.body))
+    console.log("adasd: ", res_club_id)
+    if (!errClubId) {
+      console.log(res_club_id)
+      req.body.club_id = res_club_id
+    }
+  }
+
+  res.on('finish', () => {
+    const user : any = req.user
+    if (res.statusCode == 200 && VALID_LOG_METHODS.includes(req.method) 
+      && user && !INVALID_PATHS.includes(req.path) && !INVALID_BASEURL.includes(req.baseUrl)) {
+      const log : RequestLog = {
+        method: req.method,
+        baseUrl: req.baseUrl, 
+        path: req.path, 
+        _body: req.body,
+        params: JSON.stringify(req.params),
+        user_id: (req.user as any)._id
+      }
+      logRequest(log);
+    }
+
+  });
+
+  next()
+})
 
 // add all API routes
 app.use(rootRouter)
