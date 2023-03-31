@@ -6,8 +6,10 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import { Dialog, DialogActions, DialogTitle, DialogContent, Stack, TextField } from '@mui/material'
 import to from 'await-to-js'
-import { editReimbursement } from '../../api/reimbursementApi'
+import { editReimbursement, deleteReimbursement, } from '../../api/reimbursementApi'
+import NoImage from '../../assets/noimage.png'
 
 type Props = {
   _id : string,
@@ -17,12 +19,13 @@ type Props = {
   link : string,
   paid: boolean,
   club_id: string,
-  updateReimbursementDisplay : (_id : string) => void
+  updateReimbursementDisplay : (request : number, _id : string) => void
 }
 
 export default function ReimbursementCard({_id, name, amount, creditor, link, paid, club_id, updateReimbursementDisplay} : Props) {
 
   const [status, setStatus] = useState<boolean>(paid)
+  const [open, setReceiptDisplayOpen] = useState(false);
   
   const statusUpdate = async () => {
     let updateRequest : EditReimbursementRequest = {
@@ -32,10 +35,45 @@ export default function ReimbursementCard({_id, name, amount, creditor, link, pa
     if (err) {
       console.log(err)
     } else if (res) {
-      updateReimbursementDisplay(_id)
+      updateReimbursementDisplay(0, _id)
       setStatus(!status)
     }
-    
+  }
+
+  const handleDelete = async () => {
+    const [err, res] = await to(deleteReimbursement(_id))
+    if (err) {
+      console.log(err)
+    } else if (res) {
+      updateReimbursementDisplay(1, _id)
+    }
+  }
+
+  const handleOpen = () => {
+    setReceiptDisplayOpen(true)
+  }
+
+  const handleClose = () => {
+    setReceiptDisplayOpen(false)
+  }
+
+  const displayReceipt = () => {
+    if(link.length == 0) {
+      return (
+        <Typography>No link to render!</Typography>
+      )
+    }
+    else {
+      return (
+        <Box>
+          <Typography>{link}</Typography>
+          <img src={link} alt="" onError={({ currentTarget }) => {
+            currentTarget.onerror = null;
+            currentTarget.src="https://icons.veryicon.com/png/o/business/new-vision-2/picture-loading-failed-1.png";
+          }}></img>
+        </Box>
+      )
+    }
   }
 
 
@@ -58,10 +96,26 @@ export default function ReimbursementCard({_id, name, amount, creditor, link, pa
         </CardContent>
         <CardActions>
         <Button size="small" onClick={statusUpdate}>Mark as {status? "Pending" : "Completed"}</Button>
-				<Button size="small">Delete</Button>
-				<Button size="small">View Receipt</Button>
+				<Button size="small" onClick={handleDelete}>Delete</Button>
+				<Button size="small" onClick={handleOpen}>View Receipt</Button>
         </CardActions>
       </Card>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Receipt Display"}
+        </DialogTitle>
+        <DialogContent>
+          {displayReceipt()}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} variant="contained">Close</Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 }

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { Box, Grid, Typography } from '@mui/material'
+import { Box, Grid, Typography, Button, Dialog, DialogActions, DialogTitle, DialogContent, Stack, TextField } from '@mui/material'
 import { getReimbursements, createReimbursement as _createReimbursement } from '../../api/reimbursementApi'
 import to from 'await-to-js'
 import useUser from '../../hooks/useUser'
@@ -11,17 +11,74 @@ type DisplayProps = {
 
 export default function ReimbursementDisplay({club_id} : DisplayProps) {
   const [reimbursements, setReimbursements] = useState<Reimbursement[]>([])
+  const [open, setCreateReimbursementOpen] = useState(false);
+  const [disableReimbursementCreation, setDisableReimbursementCreation] = useState(false)
+
+  const [name, setName] = useState<string>('')
+  const [amount, setAmount] = useState<number>(0)
+  const [creditor, setCreditor] = useState<string>('')
+  const [link, setLink] = useState<string>('')
+
   const { user, state, logout } = useUser()
 
-  const updateReimbursementDisplay = (_id : string) => {
-    const updated = []
-    for(let i=0; i<reimbursements.length; i++) {
-      updated.push(reimbursements[i])
-      if(reimbursements[i]._id === _id ) {
-        updated[i].paid = !updated[i].paid
-      }
+  useEffect(() => {
+    setDisableReimbursementCreation(name.length == 0 || amount == 0 || creditor.length == 0)
+  }, [name, amount, creditor, link])
+
+  const handleOpen = () => {
+    setCreateReimbursementOpen(true)
+  }
+
+  const handleClose = () => {
+    setCreateReimbursementOpen(false)
+  }
+
+  const handleCreateAndClose = async () => {
+
+    setCreateReimbursementOpen(false)
+
+    setDisableReimbursementCreation(true)
+
+    const createRequest : CreateReimbursementRequest = {
+      name : name,
+      amount : amount,
+      creditor : creditor,
+      link : link,
+      paid : false,
+      club_id : club_id
     }
-    setReimbursements(updated)
+
+    const [err, res] = await to(_createReimbursement(createRequest))
+    if (err || !user) {
+      console.log(err)
+    } else if (res) {
+      setReimbursements([...reimbursements, res.data.reimbursement])
+    }
+
+    setDisableReimbursementCreation(false)
+  }
+
+  const updateReimbursementDisplay = (request: number, _id : string) => {
+    if(request == 0) {
+      const updated = []
+      for(let i=0; i<reimbursements.length; i++) {
+        updated.push(reimbursements[i])
+        if(reimbursements[i]._id === _id ) {
+          updated[i].paid = !updated[i].paid
+        }
+      }
+      setReimbursements(updated)
+    }
+    else if(request == 1) {
+      const updated = []
+      for(let i=0; i<reimbursements.length; i++) {
+        if(reimbursements[i]._id !== _id ) {
+          updated.push(reimbursements[i])
+        }
+      }
+      setReimbursements(updated)
+    }
+    
   }
 
   // Gets clubs and listens for new clubs added to the DB
@@ -71,7 +128,60 @@ export default function ReimbursementDisplay({club_id} : DisplayProps) {
             </Grid>
           
         ))}
+        <Grid item xs={12}>
+          <Button onClick={handleOpen} variant="contained">
+            Create Reimbursement
+          </Button>
+        </Grid>
       </Grid>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Create Club"}
+        </DialogTitle>
+        <DialogContent>
+          <Stack spacing={2}>
+            <TextField
+              required
+              id="name"
+              label="What is it for?"
+              variant="standard"
+              onChange={(e) => { setName(e.target.value) }}
+            />
+            <TextField
+              required
+              id="amount"
+              label="How much is owed?"
+              type="number"
+              variant="standard"
+              onChange={(e) => { setAmount(+e.target.value) }}
+            />
+            <TextField
+              required
+              id="name"
+              label="Who is it for?"
+              variant="standard"
+              onChange={(e) => { setCreditor(e.target.value) }}
+            />
+            <TextField
+              id="name"
+              label="Link to receipt?"
+              variant="standard"
+              onChange={(e) => { setLink(e.target.value) }}
+            />
+          </Stack>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button disabled={disableReimbursementCreation} onClick={handleCreateAndClose} variant="contained" autoFocus>
+            Create
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   )
 }
