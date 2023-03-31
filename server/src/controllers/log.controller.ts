@@ -1,7 +1,7 @@
 import to from 'await-to-js'
 import type { Request, Response } from 'express'
-import Log from 'models/log.model'
-import { ILog } from 'types/log'
+import Log from '../models/log.model'
+import { ILog } from '../types/log'
 
 export const getLogs = async (req: Request, res: Response) => {
 	let { club_id } = req.query

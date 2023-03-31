@@ -8,8 +8,8 @@ import User from './models/user.model';
 import mongoose from 'mongoose'
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
-import { JwtStrategy } from 'config/jwt';
-import { logRequest, RequestLog, resolveClubId } from 'modules/Logger';
+import { JwtStrategy } from './config/jwt';
+import { logRequest, RequestLog, resolveClubId } from './modules/Logger';
 import to from 'await-to-js';
 
 dotenv.config()

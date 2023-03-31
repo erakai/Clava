@@ -82,7 +82,6 @@ export default function ActivityLogView({isOwner, club_id} : ActivityLogView) {
           <ActivityLogRow rowSelected={rowSelected} onClick={onClick} row={row}/>}          
           dense={false} searchString={searchString} setSearchString={setSearchString}
           rowsPerPageOptions={[5, 10, 30, 100]} defaultRowsPerPage={10}
-          onEdit={() => {}}
         />
     </Box>
 

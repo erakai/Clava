@@ -1,5 +1,5 @@
-import { verifyUser } from "config/auth";
-import { getLogs } from "controllers/log.controller";
+import { verifyUser } from "../config/auth";
+import { getLogs } from "../controllers/log.controller";
 import { Router } from "express";
 
 const logRouter = Router()

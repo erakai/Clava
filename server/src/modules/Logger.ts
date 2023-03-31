@@ -1,7 +1,7 @@
 import to from "await-to-js";
-import Log from "models/log.model";
-import Member from "models/member.model";
-import Officer from "models/officer.model";
+import Log from "../models/log.model";
+import Member from "../models/member.model";
+import Officer from "../models/officer.model";
 
 type RequestLog = {
 	method : string,
