@@ -1,7 +1,7 @@
 import to from 'await-to-js'
 import type { Request, Response } from 'express'
-import Club from 'models/club.model'
-import ClubDocument from 'models/document.model'
+import Club from '../models/club.model'
+import ClubDocument from '../models/document.model'
 
 export const getDocuments = async (req: Request, res: Response) => {
   let { club_id } = req.query
@@ -30,8 +30,7 @@ export const documentPost = async (req: Request, res: Response) => {
 
   
   if (name == "" || link == "") {
-    console.log("no tag or color")
-    return res.status(500).json({error: 'no tag name or tag color provided'})
+    return res.status(500).json({error: 'no doc name or doc link provided'})
   }
   
   // verify that the club exists
@@ -61,7 +60,7 @@ export const documentPost = async (req: Request, res: Response) => {
 export const documentDelete = async (req: Request, res: Response) => {
   let { _id, } = req.body
   if (!_id) {
-    return res.status(500).json({error: 'no tag with _id exists'})
+    return res.status(500).json({error: 'no doc with _id exists'})
   }
 
 
@@ -76,6 +75,20 @@ export const documentDelete = async (req: Request, res: Response) => {
 }
 
 export const documentPut = async (req: Request, res: Response) => {
+  let { club_id,  } = req.query
+  if (!club_id) {
+    return res.status(500).json({error: 'no club id'})
+  }
+  
+  ClubDocument.find({
+    club_id: club_id
+  }, async (err, documents) => {
+    if (err) {
+      return res.status(500).send({err})
+    }
+
+    return res.status(200).json({documents})
+  })
   let { newName, newLink, _id } = req.body
   if (!newName || !newLink || !_id) {
     return res.status(500).json({error: 'invalid request format, missing id or newName or newLink'})
@@ -87,7 +100,50 @@ export const documentPut = async (req: Request, res: Response) => {
     if (err) {
       return res.status(500).send(err)
     }
-    console.log("printed from backend", document)
+    //console.log("printed from backend", document)
     return res.status(200).json({document})
+  })
+}
+
+// roles
+export const getDocument = async (req: Request, res: Response) => {
+  let { _id } = req.body
+  if (!_id) {
+    return res.status(500).json({error: 'no _id provided'})
+  }
+
+  ClubDocument.findById({
+    _id
+  }, async (err, document) => {
+    if (err) {
+      return res.status(500).send({err})
+    }
+    return res.status(200).json({document})
+  })
+}
+
+export const documentRolePost = async (req: Request, res: Response) => {
+  let { _id, role_id } = req.body
+  ClubDocument.findByIdAndUpdate(_id, { $push: {"role_ids": role_id} }, async (err, result) => {
+
+    if(err){
+      return res.status(500).send({err})
+    }
+    else{
+      return res.status(200).json({result})
+    }
+  })
+}
+
+export const documentRoleDelete = async (req: Request, res: Response) => {
+  let { _id, role_id } = req.body
+  ClubDocument.findByIdAndUpdate(_id, { $pull: {"role_ids": role_id} }, async (err, result) => {
+
+    if(err){
+      return res.status(500).send({err})
+    }
+    else{
+      return res.status(200).json({result})
+    }
   })
 }

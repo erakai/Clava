@@ -1,5 +1,5 @@
-import { verifyUser } from "config/auth";
-import { getOfficers, requestAddOfficer } from "controllers/officer.controller";
+import { verifyUser } from "../config/auth";
+import { getOfficers, requestAddOfficer } from "../controllers/officer.controller";
 import { Router } from "express";
 import tagRouter from "./tag.route";
 

@@ -27,6 +27,10 @@ export default function ReimbursementDisplay({club_id} : DisplayProps) {
 
   const handleOpen = () => {
     setCreateReimbursementOpen(true)
+    setName('')
+    setAmount(0)
+    setCreditor('')
+    setLink('')
   }
 
   const handleClose = () => {
@@ -106,18 +110,13 @@ export default function ReimbursementDisplay({club_id} : DisplayProps) {
   }, [state, user])
 
   return (
-    <Box mt={2}>
+    <Box>
       <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <Typography textAlign="center" variant="h6">Completed Reimbursements</Typography>
+      <Grid item xs={12}>
+          <Button onClick={handleOpen} variant="contained">
+            Create Reimbursement
+          </Button>
         </Grid>
-        {reimbursements.map((reimbursement) => (
-          reimbursement.paid &&
-            <Grid key={reimbursement._id} item xs={12}>
-              <ReimbursementCard _id={reimbursement._id} name={reimbursement.name} amount={reimbursement.amount} creditor={reimbursement.creditor} link={reimbursement.link} paid={reimbursement.paid} club_id={reimbursement.club_id} updateReimbursementDisplay={updateReimbursementDisplay}></ReimbursementCard>
-            </Grid>
-          
-        ))}
         <Grid item xs={12}>
           <Typography textAlign="center" variant="h6">Pending Reimbursements</Typography>
         </Grid>
@@ -126,13 +125,16 @@ export default function ReimbursementDisplay({club_id} : DisplayProps) {
             <Grid key={reimbursement._id} item xs={12}>
               <ReimbursementCard _id={reimbursement._id} name={reimbursement.name} amount={reimbursement.amount} creditor={reimbursement.creditor} link={reimbursement.link} paid={reimbursement.paid} club_id={reimbursement.club_id} updateReimbursementDisplay={updateReimbursementDisplay}></ReimbursementCard>
             </Grid>
-          
         ))}
         <Grid item xs={12}>
-          <Button onClick={handleOpen} variant="contained">
-            Create Reimbursement
-          </Button>
+          <Typography textAlign="center" variant="h6">Completed Reimbursements</Typography>
         </Grid>
+        {reimbursements.map((reimbursement) => (
+          reimbursement.paid &&
+            <Grid key={reimbursement._id} item xs={12}>
+              <ReimbursementCard _id={reimbursement._id} name={reimbursement.name} amount={reimbursement.amount} creditor={reimbursement.creditor} link={reimbursement.link} paid={reimbursement.paid} club_id={reimbursement.club_id} updateReimbursementDisplay={updateReimbursementDisplay}></ReimbursementCard>
+            </Grid>
+        ))}
       </Grid>
       <Dialog
         open={open}
@@ -141,7 +143,7 @@ export default function ReimbursementDisplay({club_id} : DisplayProps) {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {"Create Club"}
+          {"Create Reimbursement"}
         </DialogTitle>
         <DialogContent>
           <Stack spacing={2}>

@@ -2,9 +2,9 @@ import express from 'express'
 import dotenv from 'dotenv'
 import session from 'express-session';
 import cors from 'cors';
-import rootRouter from 'routes';
+import rootRouter from './routes';
 import passport from 'passport';
-import User from 'models/user.model';
+import User from './models/user.model';
 import mongoose from 'mongoose'
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
@@ -36,7 +36,7 @@ app.use(cookieParser(process.env.SESSION_SECRET as string))
 // https://www.npmjs.com/package/cors
 app.use(cors({
   credentials: true,
-  origin: [process.env.CLIENT_URL],
+  origin: [process.env.CLIENT_URL || 'http://localhost:8080'],
   optionsSuccessStatus: 200
 }))
 
@@ -97,7 +97,7 @@ app.use(rootRouter)
 
 // connect to MongoDB server
 mongoose.set('strictQuery', true)
-mongoose.connect(process.env.MONGO_URL)
+mongoose.connect(process.env.MONGO_URL || 'mongodb://127.0.0.1:27017/clava')
 mongoose.connection.once('open', () => {
   console.log('Server connected to mongodb at', process.env.MONGO_URL)
   app.listen(port, () => {

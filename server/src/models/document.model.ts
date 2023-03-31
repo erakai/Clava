@@ -1,5 +1,5 @@
 import { Model, model, Schema, SchemaTypes } from "mongoose";
-import { IClubDocument } from "types/document";
+import { IClubDocument } from "../types/document";
 
 const DocumentSchema = new Schema<IClubDocument>({
   name: {
@@ -11,6 +11,7 @@ const DocumentSchema = new Schema<IClubDocument>({
     required: true,
   },
   club_id: SchemaTypes.ObjectId,
+  role_ids: [SchemaTypes.ObjectId],
 })
 
 const ClubDocument = model('document', DocumentSchema) as Model<IClubDocument>

@@ -6,7 +6,7 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import { Dialog, DialogActions, DialogTitle, DialogContent, Stack, TextField } from '@mui/material'
+import { Dialog, DialogActions, DialogTitle, DialogContent, Stack, TextField, Paper } from '@mui/material'
 import to from 'await-to-js'
 import { editReimbursement, deleteReimbursement, } from '../../api/reimbursementApi'
 import NoImage from '../../assets/noimage.png'
@@ -60,12 +60,20 @@ export default function ReimbursementCard({_id, name, amount, creditor, link, pa
   const displayReceipt = () => {
     if(link.length == 0) {
       return (
-        <Typography>No link to render!</Typography>
+        <Box>
+          <Typography>Reimbursement for: {name}</Typography>
+          <Typography>Amount owed: {amount}</Typography>
+          <Typography>Owed to: {name}</Typography>
+          <Typography>No link to render!</Typography>
+        </Box>
       )
     }
     else {
       return (
         <Box>
+          <Typography>Reimbursement for: {name}</Typography>
+          <Typography>Amount owed: {amount}</Typography>
+          <Typography>Owed to: {name}</Typography>
           <Typography>{link}</Typography>
           <img src={link} alt="" onError={({ currentTarget }) => {
             currentTarget.onerror = null;
@@ -78,7 +86,7 @@ export default function ReimbursementCard({_id, name, amount, creditor, link, pa
 
 
   return (
-    <Box sx={{ minWidth: 275 }}>
+    <Paper elevation={5} sx={{ minWidth: 275 }}>
       <Card variant="outlined">
         <CardContent>
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
@@ -116,6 +124,6 @@ export default function ReimbursementCard({_id, name, amount, creditor, link, pa
           <Button onClick={handleClose} variant="contained">Close</Button>
         </DialogActions>
       </Dialog>
-    </Box>
+    </Paper>
   );
 }

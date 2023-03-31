@@ -1,5 +1,5 @@
-import { verifyUser } from "config/auth";
-import { getSettings, setSettings } from "controllers/settings.controller";
+import { verifyUser } from "../config/auth";
+import { getSettings, setSettings } from "../controllers/settings.controller";
 import { Router } from "express";
 
 const settingsRouter = Router()

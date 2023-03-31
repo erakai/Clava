@@ -1,5 +1,5 @@
  import { Model, model, Schema, SchemaTypes } from "mongoose";
-import { ITag } from "types/tag";
+import { ITag } from "../types/tag";
 
 const TagSchema = new Schema<ITag>({
   club_id: SchemaTypes.ObjectId,

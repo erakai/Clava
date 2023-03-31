@@ -1,6 +1,6 @@
 import { model, Schema, SchemaTypes } from "mongoose";
 import passportLocalMongoose from 'passport-local-mongoose'
-import { IUser } from "types/user";
+import { IUser } from "../types/user";
 
 const UserSchema = new Schema<IUser>({
   name: SchemaTypes.String,

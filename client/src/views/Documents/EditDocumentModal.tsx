@@ -67,7 +67,7 @@ export default function EditDocumentModal({ documentId, open, setOpen, oldName, 
             defaultValue={name}
             error={nameError != ""} 
             helperText={nameError}
-            onChange={(e) => {
+            onChange={(e: { target: { value: string } }) => {
             setNewName(e.target.value.trim())
             setNewNameError("")
           }}/>
@@ -75,7 +75,7 @@ export default function EditDocumentModal({ documentId, open, setOpen, oldName, 
             defaultValue={link}
             error={linkError != ""} 
             helperText={linkError}
-            onChange={(e) => {
+            onChange={(e: { target: { value: string } }) => {
             setNewLink(e.target.value.trim())
             setNewLinkError("")
           }}/>

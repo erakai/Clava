@@ -1,13 +1,13 @@
 import to from 'await-to-js'
 import type { Request, Response } from 'express'
-import Club from 'models/club.model'
-import User from 'models/user.model'
-import { IUser } from 'types/user'
-import { IClub } from 'types/club'
-import Settings from 'models/settings.model'
+import Club from '../models/club.model'
+import User from '../models/user.model'
+import { IUser } from '../types/user'
+import { IClub } from '../types/club'
+import Settings from '../models/settings.model'
 import { getDefaultSettings } from 'http2'
 import { defaultSettings } from './settings.controller'
-import { isOwner, isUserOfClub } from 'modules/Permissions'
+import { isOwner, isUserOfClub } from '../modules/Permissions'
 
 export const getClubs = async (req: Request, res: Response) => {
   let { user_id } = req.query
@@ -52,7 +52,7 @@ export const getClub = async (req: Request, res: Response) => {
   const [errUserOfClub, _isUserOfClub] = await to(isUserOfClub(_user._id, club_id.toString()))
   if (errUserOfClub) return false 
   if (!_isUserOfClub) {
-    return res.status(403).json()
+    return res.status(403).send("error: not user of club")
   }
 
   return res.status(200).json({club})

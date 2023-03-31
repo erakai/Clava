@@ -1,9 +1,9 @@
 import to from 'await-to-js'
 import type { Request, Response } from 'express'
-import Club from 'models/club.model'
-import Event from 'models/event.model'
-import { IEvent } from 'types/event'
-import { IClub } from 'types/club'
+import Club from '../models/club.model'
+import Event from '../models/event.model'
+import { IEvent } from '../types/event'
+import { IClub } from '../types/club'
 
 export const getEvents = async (req: Request, res: Response) => {
   let { club_id } = req.query
@@ -66,11 +66,15 @@ export const getEvent = async (req: Request, res: Response) => {
     return res.status(500).json({error: 'no event id'})
   }
     
-  const event: IEvent = await Event.findById(event_id)
-  
-  if(!event) return res.status(401).send('Unauthorized')
-    
-  return res.status(200).json({event})
+  Event.findById(event_id, async (err, event: IEvent) => {
+    if (err) {
+      return res.status(500).send({err})
+    }
+
+    if(!event) {return res.status(500).send('Cannot find event')}
+
+    return res.status(200).json({event})
+  })
 }
 
 export const createEvent = async (req: Request, res: Response) => {

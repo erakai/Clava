@@ -1,5 +1,5 @@
-import { verifyUser } from "config/auth"
-import { addTransaction, deleteTransactions, getTransactions } from "controllers/transanction.controller"
+import { verifyUser } from "../config/auth"
+import { addTransaction, deleteTransactions, getTransactions } from "../controllers/transanction.controller"
 import { Router } from "express"
 
 /**
