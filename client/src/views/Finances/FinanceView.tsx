@@ -156,7 +156,7 @@ export default function FinanceView(props: FinanceViewProps) {
         {/*Reimbursements column*/}
         <Grid item xs={12} md={3} margin={2} style={{ textAlign: 'center' }} border={2}>
           
-          <ReimbursementDisplay club_id={club_id}></ReimbursementDisplay>
+          <ReimbursementDisplay club_id={props.club_id}></ReimbursementDisplay>
         </Grid>
       </Grid>
 
