@@ -75,20 +75,24 @@ export const deleteMembers = async (req: Request, res: Response) => {
     return res.status(500).json({error: 'no member_ids provided'})
   }
 
+  // <permissions>
   const [membersErr, members] = await to(Member.find({'_id' : { $in: member_ids }}).exec())
   if (membersErr) { res.status(400).json({error: 'issue finding members'}) }
   var club_id = members[0].club_id
   for (let i = 1; i < members.length; i++) {
-    if (club_id !== members[i].club_id) {
+    console.log(club_id)
+    console.log(members[i].club_id)
+    if (club_id.toString() !== members[i].club_id.toString()) {
       return res.status(400).json({error: "requested members in different clubs"})
     }
   }
 
-  const [permLookupErr, canEditMembers] = await to(hasPermission("EDIT_MEMBERS", club_id, req.user));
+  const [permLookupErr, canDeleteMembers] = await to(hasPermission("EDIT_MEMBERS", club_id, req.user));
   if (permLookupErr) { return res.status(500); }
-  if (!canEditMembers) {
+  if (!canDeleteMembers) {
     return res.status(403);
   }
+  // </permissions>
 
   // attempts to delete all given, does nothing if invalid id exists
   await Member.deleteMany({'_id':{'$in':member_ids}})

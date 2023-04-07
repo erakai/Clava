@@ -65,9 +65,7 @@ app.use(async (req, res, next) => {
 
   if (!req.body.club_id) {
     const [errClubId, res_club_id] = await to(resolveClubId(req.body))
-    console.log("adasd: ", res_club_id)
     if (!errClubId) {
-      console.log(res_club_id)
       req.body.club_id = res_club_id
     }
   }

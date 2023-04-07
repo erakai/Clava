@@ -56,14 +56,12 @@ export async function resolveClubId(_body : any) {
 		return officer.club_id;
 	case "member_ids":
 		const [err3, members] = await to(Member.find({'_id' : { $in: value } }).exec());
-		console.log(members)
 		if (err3) {
 			return ""
 		}
 		return members[0].club_id;
 	case "member_id":
 		const [err4, member] = await to(Member.findById(value).exec());
-		console.log("a:", member, value)
 		if (err4) {
 			return ""
 		}
