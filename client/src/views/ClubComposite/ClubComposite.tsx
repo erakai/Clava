@@ -1,7 +1,6 @@
 import to from 'await-to-js'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { getClub } from '../../api/clubApi'
 
 import { ClavaNavbar } from '../../components/Navigation'
@@ -16,6 +15,7 @@ import MemberView from '../Members'
 import { Settings } from '../Settings'
 import { Typography } from '@mui/material'
 import ActivityLogView from '../ActivityLog'
+import ElectionView from '../Elections/ElectionView'
 
 export default function ClubComposite() {
   const { state, user, logout } = useUser()
@@ -85,6 +85,8 @@ export default function ClubComposite() {
         return <DocumentView club_id={clubId} state={state} />
       case 'finances':
         return <FinanceView club_id={clubId}/>
+      case 'elections':
+        return <ElectionView club_id={clubId}/>
       case 'settings':
         return <Settings clubName={clubName} club_id={clubId}/>
       case 'log':
