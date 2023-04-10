@@ -3,7 +3,7 @@ import { useState } from "react"
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
 import ElectionCreation from "./ElectionCreation/ElectionCreation";
-import ElectionManaging from "./ElectionCreation/ElectionManaging";
+import ElectionManaging from "./ElectionManaging/ElectionManaging";
 
 type ElectionViewProps = {
   club_id: string

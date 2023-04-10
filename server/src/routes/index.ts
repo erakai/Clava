@@ -9,6 +9,7 @@ import settingsRouter from "./settings.route"
 import transactionRouter from "./transaction.route"
 import logRouter from "./log.route"
 import { verifyUser } from "../config/auth"
+import electionRouter from "./election.route"
 
 const rootRouter = Router()
 
@@ -26,5 +27,6 @@ rootRouter.use('/events', eventRouter)
 rootRouter.use('/settings', settingsRouter)
 rootRouter.use('/transactions', transactionRouter)
 rootRouter.use('/logs', logRouter)
+rootRouter.use('/elections', electionRouter)
 
 export default rootRouter

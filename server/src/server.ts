@@ -12,6 +12,7 @@ import { JwtStrategy } from './config/jwt';
 import { logRequest, RequestLog, resolveClubId } from './modules/Logger';
 import to from 'await-to-js';
 
+// Load env variables
 dotenv.config()
 
 const app = express()
@@ -36,7 +37,7 @@ app.use(cookieParser(process.env.SESSION_SECRET as string))
 // https://www.npmjs.com/package/cors
 app.use(cors({
   credentials: true,
-  origin: [process.env.CLIENT_URL || 'http://localhost:8080'],
+  origin: [process.env.CLIENT_URL || 'http://localhost:5173'],
   optionsSuccessStatus: 200
 }))
 
@@ -54,6 +55,7 @@ passport.use(User.createStrategy())
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser())
 
+// Logger middleware (written by Alex)
 const VALID_LOG_METHODS = ["PUT", "POST", "DELETE"]
 const INVALID_PATHS = ["/refresh"]
 const INVALID_BASEURL = ["/users"]
@@ -98,6 +100,8 @@ mongoose.set('strictQuery', true)
 mongoose.connect(process.env.MONGO_URL || 'mongodb://127.0.0.1:27017/clava')
 mongoose.connection.once('open', () => {
   console.log('Server connected to mongodb at', process.env.MONGO_URL)
+
+  // Start listening for requests
   app.listen(port, () => {
     console.log('Server initialized and listening on port', port)
     console.log()
