@@ -20,7 +20,6 @@ import useSettings from "../../hooks/useSettings";
 type EventViewProps = {
   club_id: string
 }
-
 export default function EventView({ club_id }: EventViewProps) {
   const [errorMessage, setErrorMessage] = useState('');
   const [createEventOpen, setCreateEventOpen] = useState(false);
