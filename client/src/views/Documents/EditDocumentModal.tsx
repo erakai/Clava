@@ -58,7 +58,7 @@ export default function EditDocumentModal({ documentId, open, setOpen, oldName, 
         open={open}
         onClose={() => setOpen(false)}>
       <DialogTitle>
-        Add Document
+        Edit Document
       </DialogTitle>
       <DialogContent>
         <Stack
