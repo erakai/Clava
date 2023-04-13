@@ -7,7 +7,8 @@ import {
   DialogContentText,
   DialogTitle,
   Grid,
-  Typography
+  Typography,
+  Stack
 } from "@mui/material";
 import CreateEventModal from "./CreateEventModal";
 import moment, { Moment } from "moment"
@@ -122,16 +123,19 @@ export default function EventView({ club_id }: EventViewProps) {
         </Grid>
 
 
-        <Grid item container marginX={2} xs={12} md={8} rowSpacing={2}>
-          <Grid item xs={12} md={6} lg={3}>
-            <Box className="min-w-full flex-auto">
+        <Grid container marginX={2} xs={12} md={100} rowSpacing={2}>
+          <Grid item xs={12} md={6} lg={2}>
+            <Stack direction="row" spacing={3}>
               <Button className='h-full' variant="contained" color="secondary" onClick={() => setCreateEventOpen(true)}>
                 Create Event
               </Button>
-            </Box>
+              <Button className='h-full' variant="contained" color="secondary" onClick={() => setCreateEventOpen(true)}>
+                Send Event Schedule
+              </Button>
+            </Stack>
           </Grid>
-          <Grid item container xs={12} spacing={1}>
-            <Grid item xs={12} lg={9}>
+          <Grid item container xs={12} spacing={1} justifyContent="center">
+            <Grid item xs={12} lg={12}>
               <EventDisplay title="Event Masterlist" events={events} settings={settings} onDelete={onEventDelete}/>
             </Grid>
           </Grid>
