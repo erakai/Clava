@@ -16,7 +16,7 @@ eventRouter.get('/single', verifyUser, getEvent)
 eventRouter.post('/', verifyUser, createEvent)
 eventRouter.delete('/', verifyUser, deleteEvents)
 eventRouter.post('/increment/', incrementAttendance)
-eventRouter.post('/sendSchedule/', sendSchedule)
+eventRouter.post('/sendSchedule/', verifyUser, sendSchedule)
 
 
 export default eventRouter

@@ -13,10 +13,11 @@ import {
 import CreateEventModal from "./CreateEventModal";
 import SendEventScheduleModal from "./SendEventScheduleModal";
 import moment, { Moment } from "moment"
-import {_getEvents, _createEvent, _deleteEvents} from "../../api/eventApi";
+import {_getEvents, _createEvent, _deleteEvents, _sendEventSchedule} from "../../api/eventApi";
 import to from 'await-to-js'
 import EventDisplay from "./EventTable/EventDisplay"
 import useSettings from "../../hooks/useSettings";
+import { AxiosError } from "axios";
 
 
 type EventViewProps = {
@@ -29,6 +30,7 @@ export default function EventView({ club_id }: EventViewProps) {
 
   const [sendEventScheduleOpen, setSendEventScheduleOpen] = useState(false);
   const [scheduleErrorMessage, setScheduleErrorMessage] = useState('');
+  const [sendScheduleConfirmationOpen, setSendScheduleConfirmationOpen] = useState(false)
 
   const [events, setEvents] = useState<Event[]>([])
   const { settings, refreshSettings } = useSettings()
@@ -74,7 +76,15 @@ export default function EventView({ club_id }: EventViewProps) {
   }
 
   const notify = async (req: SendEventScheduleRequest) => {
+    const [err, res] = await to(_sendEventSchedule(req));
 
+    if (err && err instanceof AxiosError) {
+      setSendEventScheduleOpen(true)
+      setScheduleErrorMessage(err.response?.data)
+    } else {
+      setSendScheduleConfirmationOpen(true)
+      console.log("succcess!")
+    }
   }
 
   const onEventDelete = async (deleted: Event[]) => {
@@ -105,6 +115,22 @@ export default function EventView({ club_id }: EventViewProps) {
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
             The event was created successfully.
+          </DialogContentText>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog
+        open={sendScheduleConfirmationOpen}
+        onClose={e => {setSendScheduleConfirmationOpen(false)}}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Event Schedule Notifcation Success"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            All club members have been successfully notified.
           </DialogContentText>
         </DialogContent>
       </Dialog>

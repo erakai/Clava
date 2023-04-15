@@ -51,17 +51,26 @@ export function sendEmail(template_id, parameters) {
  */
 export function sendEventScheduleEmail(recipients, header, event_names, event_dates) {
   let header_to_use = "Event Schedule Update"
-  if (header != undefined) {
+  if (header != undefined && header != "") {
     header_to_use = header
   }
 
-  //TODO: Build email body here
+  let body = "========== Event Schedule ==========\n\n"
+
+  for (let i = 0; i < event_names.length; i++) {
+
+    const dateComponent = event_dates[i].toString().split(" ")
+    const dateString = dateComponent[0] + " " + dateComponent[1] + " " + dateComponent[2] + " " + dateComponent[3]
+
+    body += event_names[i] + " ----- " + dateString + "\n"
+  }
 
   const parameters = {
     subject: header_to_use,
-    body: "EVENT LIST GOES HERE!",
+    body: body,
     recipient: recipients,
-    recipient_name: "club members"
+    recipient_name: "club members",
+    sender: "Executive Team"
   }
 
   sendEmail(PLAIN_EMAIL, parameters)
@@ -80,7 +89,7 @@ export function sendResetRequestEmail(recipient, recipient_name, link) {
         action: "reset your password.",
         recipient: recipient,
         recipient_name: recipient_name,
-        link: link
+        link: link,
     }
     sendEmail(LINKED_EMAIL, parameters)
 }
@@ -95,7 +104,8 @@ export function sendResetConfirmationEmail(recipient, recipient_name) {
     subject: "Your password has been changed",
     body: "The password for your account linked to " + recipient + " has just been updated. If this was not done by you or someone you have authorized, please contact us immediately.",
     recipient: recipient,
-    recipient_name: recipient_name
+    recipient_name: recipient_name,
+    sender: "Clava Management Team"
   }
   sendEmail(PLAIN_EMAIL, parameters)
 }

@@ -1,9 +1,9 @@
 import to from 'await-to-js'
 import type { Request, Response } from 'express'
-import Club from '../models/club.model'
+import Member from '../models/member.model'
 import Event from '../models/event.model'
 import { IEvent } from '../types/event'
-import { IClub } from '../types/club'
+import { IMember } from '../types/member'
 import {sendEventScheduleEmail} from "../modules/Emailing";
 
 export const getEvents = async (req: Request, res: Response) => {
@@ -33,7 +33,7 @@ export const sendSchedule = async (req: Request, res: Response) => {
     return res.status(500).json({error: 'no club id'})
   }
 
-  Event.find({club_id: club_id}, async (err, events) => {
+  Event.find({club_id: club_id}).sort("date").find(async (err, events) => {
     if (err) {
       return res.status(500).send({err})
     }
@@ -48,21 +48,35 @@ export const sendSchedule = async (req: Request, res: Response) => {
     const now = new Date()
 
     events.forEach((e: IEvent) => {
-      if (e.date < date && e.date > now) {
+      if (e.date <= date && e.date > now) {
         eventNames.push(e.name)
         eventDates.push(e.date)
       }
     })
 
     if (eventNames.length == 0) {
-      return res.status(500).send("No events found in range")
+      return res.status(500).send( "No events found in range")
     }
 
-    //TODO: Sort eventNames and eventDates by event date
+    let recipients = ""
+    Member.find({club_id: club_id}, async (err, members) => {
+      if (err) {
+        return res.status(500).send({err})
+      }
 
-    //TODO: Format member email string here (e.g. "kris@gmail.com, boon@gmail.com)
-    sendEventScheduleEmail("kris.leungwattanakij@gmail.com", header, eventNames, eventDates)
-    return res.status(200).send("Members were successfully notified")
+      members.forEach((e: IMember) => {
+        recipients += e.email + ", "
+      })
+
+      if (recipients == "") {
+        return res.status(500).send("No members found")
+      }
+
+      recipients = recipients.slice(0, -2)
+
+      sendEventScheduleEmail(recipients, header, eventNames, eventDates)
+      return res.status(200).send("Members were successfully notified")
+    })
   })
 }
 
