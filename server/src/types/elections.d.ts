@@ -10,6 +10,7 @@ interface IElection extends Document {
   name: string,
   club_id: string,
   description: string,
+  running: boolean,
   start: Date,
   end: Date,
   questions: Array<string>,

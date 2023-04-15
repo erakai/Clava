@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { AuthResponse, Token } from './config';
+import { AuthResponse } from './config';
 import { intercepts } from './config';
 
 

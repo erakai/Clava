@@ -10,8 +10,20 @@ interface Election {
   name: string,
   club_id: string,
   description: string,
-  start: Date,
-  end: Date,
-  questions: string[]
-  candidates: Candidate[]
+  running?: boolean,
+  start?: Date,
+  end?: Date,
+  questions?: string[]
+  candidates?: Candidate[]
+}
+
+interface ElectionUpdateRequest {
+  name?: string,
+  club_id?: string,
+  description?: string,
+  running?: boolean,
+  start?: Date,
+  end?: Date,
+  questions?: string[]
+  candidates?: Candidate[]
 }

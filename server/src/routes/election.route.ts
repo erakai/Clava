@@ -6,10 +6,10 @@ const electionRouter = Router()
 
 /*
 Election Routes:
-  - /elections GET (club id): returns all elections for a club
-  - /elections POST (election, new election info): update election
-  - /elections POST (all election info): create election
-  - /elections DELETE (election_ids): deletes elecltions
+  - /elections GET (club_id): returns all elections for a club
+  - /elections POST (election_id, election: {new info}): update election
+  - /elections POST (election: {all info}): create election
+  - /elections DELETE (election_ids): deletes elections
 */
 
 electionRouter.get('/', verifyUser, getElections)
