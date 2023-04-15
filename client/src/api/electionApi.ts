@@ -8,7 +8,7 @@ type UpdateElectionResponse = { election: Election }
 type DeleteElectionsResponse = {}
 
 const ElectionInstance = axios.create({
-  baseURL: `http://localhost:8080/members`,
+  baseURL: `http://localhost:8080/elections`,
   timeout: 1000,
   withCredentials: true,
 })

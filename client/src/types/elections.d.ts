@@ -6,7 +6,7 @@ interface Candidate {
 }
 
 interface Election {
-  _id: string,
+  _id?: string,
   name: string,
   club_id: string,
   description: string,

@@ -4,21 +4,63 @@ import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import { useState } from "react";
 import DeleteIcon from '@mui/icons-material/Delete';
 import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
-import { ElectionSelect } from "./useElectionLogic";
+import useElectionLogic from "./useElectionLogic";
+import to from "await-to-js";
+import { addElection as _addElection, updateElection as _updateElection } from "../../../api/electionApi";
+import CloseIcon from '@mui/icons-material/Close';
 
 type ElectionFormProps = {
-  /*
-    New represents a new election being created, but if one is passed in
-    then the form acts as a way to update it.
-  */
-  election: ElectionSelect
+  addElection: (e: Election) => void
+  updateElection: (e: Election) => void
+  club_id: string
+  ele: ReturnType<typeof useElectionLogic>
 }
 
-export default function ElectionForm({ election }: ElectionFormProps) {
-  const [newQuestion, setNewQuestion] = useState("")
-  const [questions, setQuestions] = useState<string[]>([])
+export default function ElectionForm({addElection, club_id, ele, updateElection}: ElectionFormProps) {
+  const { name, setName,
+          description, setDescription,
+          start, setStart,
+          end, setEnd,
+          newQuestion, setNewQuestion,
+          questions, setQuestions, selected,
+          updating, selectAndClear } = ele
 
-  const updating = election != "new"
+  const save = async () => {
+    if (updating) {
+      let election_id = (selected as Election)._id as string
+      let ereq: Election = {
+        name, description, questions, club_id
+      }
+
+      if (start) ereq.start = start.toDate()
+      if (end) ereq.end = end.toDate()
+
+      const [err, e] = await to(_updateElection(election_id, ereq))
+      if (err) {
+        console.log(err)
+        return
+      }
+
+      if (e.data.election) updateElection(e.data.election)
+    } else {
+      let ereq: Election = {
+        name, description, questions, club_id
+      }
+
+      if (start) ereq.start = start.toDate()
+      if (end) ereq.end = end.toDate()
+
+      const [err, e] = await to(_addElection(ereq))
+      if (err) {
+        console.log(err)
+        return
+      }
+      
+      if (e.data.election) addElection(e.data.election)
+    }
+
+    selectAndClear(null)
+  }
 
   const addQuestion = () => {
     let q = newQuestion
@@ -36,15 +78,20 @@ export default function ElectionForm({ election }: ElectionFormProps) {
     <FormControl sx={{width: "90%", marginTop: 3, marginBottom: 3}}>
       <Grid container mx={2} rowSpacing={1}>
         <Grid item xs={12} mb={2} container justifyContent={"center"} alignItems={"center"}>
+          <IconButton onClick={() => selectAndClear(null)}>
+            <CloseIcon/> 
+          </IconButton>
           <Typography mr={2} variant="h5">
             {updating ? "Updating Election:" : "Creating Election:"}
           </Typography>
-          <TextField required sx={{width: "50%"}} 
+          <TextField required sx={{width: "50%"}} value={name}
+            onChange={(e) => setName(e.target.value)}
             size="small" variant="outlined" label="Name"/>
         </Grid>
 
         <Grid item xs={12}>
-          <TextField required multiline rows={3} maxRows={8} 
+          <TextField required multiline rows={3} value={description}
+            onChange={(e) => setDescription(e.target.value)}
             variant="outlined" fullWidth label="Description"/>
         </Grid>
 
@@ -52,12 +99,12 @@ export default function ElectionForm({ election }: ElectionFormProps) {
           <Grid item xs={12} md={5}>
             <DatePicker label="Start Date" 
                 renderInput={(params) => <TextField fullWidth size="small" {...params} />} 
-                value={null} onChange={() => {}}/>
+                value={start} onChange={(newDate) => {setStart(newDate)}}/>
           </Grid>
           <Grid item xs={10} md={5}>
             <DatePicker label="End Date" 
                 renderInput={(params) => <TextField fullWidth size="small" {...params} />} 
-                value={null} onChange={() => {}}/>
+                value={end} onChange={(newDate) => {setEnd(newDate)}}/>
           </Grid>
           <Grid item xs={2} border={2} borderColor="#ffffff">
             <Box display="flex" justifyContent="start" 
@@ -118,7 +165,7 @@ export default function ElectionForm({ election }: ElectionFormProps) {
         </Grid>
 
         <Grid item container xs={12} mt={4} display="flex" justifyContent="center" alignItems="center">
-          <Button variant="contained">
+          <Button variant="contained" onClick={save}>
             Save Election
           </Button>
         </Grid>

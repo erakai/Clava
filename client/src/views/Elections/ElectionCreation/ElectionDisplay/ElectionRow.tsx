@@ -1,5 +1,6 @@
 import { Button, Checkbox, TableCell, TableRow } from "@mui/material";
 import { HeaderCell, RowDisplayProps } from "../../../../components/ClavaTable";
+import { ElectionSelect } from "../useElectionLogic";
 
 export const headerCells: HeaderCell<Election>[] = [
   {
@@ -15,6 +16,12 @@ export const headerCells: HeaderCell<Election>[] = [
     label: 'Start'
   },
   {
+    id: 'end',
+    numeric: false,
+    disablePadding: false,
+    label: 'End'
+  },
+  {
     id: '_id',
     numeric: false,
     disablePadding: false,
@@ -28,9 +35,14 @@ export const headerCells: HeaderCell<Election>[] = [
   }
 ]
 
+interface ElectionRowProps extends RowDisplayProps<Election> {
+  selectAndClear: (e: ElectionSelect | null) => void
+}
+
 export default function ElectionRow({
-  rowSelected, onClick, row
-}: RowDisplayProps<Election>) {
+  rowSelected, onClick, row, selectAndClear
+}: ElectionRowProps) {
+
   return (
     <TableRow hover onClick={onClick} selected={rowSelected} tabIndex={-1}>
       <TableCell padding="checkbox">
@@ -39,16 +51,24 @@ export default function ElectionRow({
       <TableCell component="th" scope="row" padding="none">
         {row.name}
       </TableCell>
-      <TableCell align="right">
-        {(row.start) ? row.start?.toLocaleDateString() : "N/A"}
+      <TableCell align="left">
+        {(row.start) ? new Date(row.start).toLocaleDateString() : "N/A"}
       </TableCell>
-      <TableCell>
-        <Button variant="contained">
+      <TableCell align="left">
+        {(row.end) ? new Date(row.end).toLocaleDateString() : "N/A"}
+      </TableCell>
+      <TableCell align="right">
+        <Button variant="contained" onClick={(e) => {
+          selectAndClear(row)
+          e.stopPropagation()
+        }}>
           Edit
         </Button>
       </TableCell>
       <TableCell>
-        <Button variant="contained">
+        <Button variant="contained" onClick={(e) => {
+          e.stopPropagation()
+        }}>
           Start
         </Button>
       </TableCell>
