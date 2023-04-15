@@ -42,9 +42,16 @@ export function sendEmail(template_id, parameters) {
    )
 }
 
+/*
+ * sendEventScheduleEmail(recipients, header, event_names, event_dates)
+ * recipients = list of recipients in string form (e.g. "josh@gmail.com, ryan@gmail.com")
+ * header = custom header to overwrite template header (optional)
+ * event_names = list of event names
+ * event_dates = list of event dates
+ */
 export function sendEventScheduleEmail(recipients, header, event_names, event_dates) {
   let header_to_use = "Event Schedule Update"
-  if (!header && header != "") {
+  if (header != undefined) {
     header_to_use = header
   }
 
@@ -56,6 +63,8 @@ export function sendEventScheduleEmail(recipients, header, event_names, event_da
     recipient: recipients,
     recipient_name: "club members"
   }
+
+  sendEmail(PLAIN_EMAIL, parameters)
 }
 
 /*

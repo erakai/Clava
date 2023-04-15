@@ -26,7 +26,7 @@ export const getEvents = async (req: Request, res: Response) => {
 
 export const sendSchedule = async (req: Request, res: Response) => {
   const club_id = req.body.club_id
-  const date = req.body.date
+  const date = new Date(req.body.date)
   const header = req.body.header
 
   if (!club_id) {
@@ -44,8 +44,11 @@ export const sendSchedule = async (req: Request, res: Response) => {
 
     let eventNames = []
     let eventDates = []
+
+    const now = new Date()
+
     events.forEach((e: IEvent) => {
-      if (e.date < date) {
+      if (e.date < date && e.date > now) {
         eventNames.push(e.name)
         eventDates.push(e.date)
       }
@@ -55,8 +58,11 @@ export const sendSchedule = async (req: Request, res: Response) => {
       return res.status(500).send("No events found in range")
     }
 
+    //TODO: Sort eventNames and eventDates by event date
+
     //TODO: Format member email string here (e.g. "kris@gmail.com, boon@gmail.com)
     sendEventScheduleEmail("kris.leungwattanakij@gmail.com", header, eventNames, eventDates)
+    return res.status(200).send("Members were successfully notified")
   })
 }
 
