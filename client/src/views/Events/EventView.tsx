@@ -11,6 +11,7 @@ import {
   Stack
 } from "@mui/material";
 import CreateEventModal from "./CreateEventModal";
+import SendEventScheduleModal from "./SendEventScheduleModal";
 import moment, { Moment } from "moment"
 import {_getEvents, _createEvent, _deleteEvents} from "../../api/eventApi";
 import to from 'await-to-js'
@@ -24,7 +25,10 @@ type EventViewProps = {
 export default function EventView({ club_id }: EventViewProps) {
   const [errorMessage, setErrorMessage] = useState('');
   const [createEventOpen, setCreateEventOpen] = useState(false);
-  const [confirmationOpen, setConfirmationOpen] = useState(false);
+  const [createConfirmationOpen, setCreateConfirmationOpen] = useState(false);
+
+  const [sendEventScheduleOpen, setSendEventScheduleOpen] = useState(false);
+  const [scheduleErrorMessage, setScheduleErrorMessage] = useState('');
 
   const [events, setEvents] = useState<Event[]>([])
   const { settings, refreshSettings } = useSettings()
@@ -64,9 +68,13 @@ export default function EventView({ club_id }: EventViewProps) {
         newEvents.push(event);
         setEvents(newEvents);
       }
-      setConfirmationOpen(true)
+      setCreateConfirmationOpen(true)
       console.log("success!")
     }
+  }
+
+  const notify = async (req: SendEventScheduleRequest) => {
+
   }
 
   const onEventDelete = async (deleted: Event[]) => {
@@ -86,8 +94,8 @@ export default function EventView({ club_id }: EventViewProps) {
   return (
     <>
       <Dialog
-        open={confirmationOpen}
-        onClose={e => {setConfirmationOpen(false)}}
+        open={createConfirmationOpen}
+        onClose={e => {setCreateConfirmationOpen(false)}}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
@@ -110,6 +118,14 @@ export default function EventView({ club_id }: EventViewProps) {
         club_id={club_id}
       />
 
+      <SendEventScheduleModal
+        notify={notify}
+        open={sendEventScheduleOpen}
+        setOpen={setSendEventScheduleOpen}
+        errorMessage={scheduleErrorMessage}
+        setErrorMessage={setScheduleErrorMessage}
+        club_id={club_id}
+      />
 
       <Grid container marginY={0} rowSpacing={2}>
         <Grid item xs={12}>
@@ -126,10 +142,10 @@ export default function EventView({ club_id }: EventViewProps) {
         <Grid container marginX={2} xs={12} md={100} rowSpacing={2}>
           <Grid item xs={12} md={6} lg={2}>
             <Stack direction="row" spacing={3}>
-              <Button className='h-full' variant="contained" color="secondary" onClick={() => setCreateEventOpen(true)}>
+              <Button sx={{ whiteSpace: 'nowrap', minWidth: '140px' }} className='h-full' variant="contained" color="secondary" onClick={() => setCreateEventOpen(true)}>
                 Create Event
               </Button>
-              <Button className='h-full' variant="contained" color="secondary" onClick={() => setCreateEventOpen(true)}>
+              <Button sx={{ whiteSpace: 'nowrap', minWidth: '200px'}} className='h-full' variant="contained" color="secondary" onClick={() => setSendEventScheduleOpen(true)}>
                 Send Event Schedule
               </Button>
             </Stack>

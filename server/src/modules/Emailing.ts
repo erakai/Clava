@@ -39,7 +39,24 @@ export function sendEmail(template_id, parameters) {
      function (error) {
        console.log('FAILED...', error)
      }
-   ) }
+   )
+}
+
+export function sendEventScheduleEmail(recipients, header, event_names, event_dates) {
+  let header_to_use = "Event Schedule Update"
+  if (!header && header != "") {
+    header_to_use = header
+  }
+
+  //TODO: Build email body here
+
+  const parameters = {
+    subject: header_to_use,
+    body: "EVENT LIST GOES HERE!",
+    recipient: recipients,
+    recipient_name: "club members"
+  }
+}
 
 /*
  * sendResetRequestEmail(recipient, recipient_name, link)

@@ -8,6 +8,7 @@ export type GetEventResponse = { event: Event}
 export type CreateEventResponse = { event: Event }
 export type DeleteEventResponse = {}
 export type IncrementEventAttendanceResponse = {}
+export type SendEventScheduleResponse = {}
 
 const EventInstance = axios.create({
   baseURL: `http://localhost:8080/events`,
@@ -39,4 +40,8 @@ export const _deleteEvents = (event_ids: string[]) => {
 
 export const _incrementEventAttendance = ({ _id } : IncrementEventAttendanceRequest ) => {
   return EventInstance.post<IncrementEventAttendanceResponse>('/increment/', { _id })
+}
+
+export const _sendEventSchedule = ({ header, date, club_id }: SendEventScheduleRequest) => {
+  return EventInstance.post<SendEventScheduleResponse>('/sendSchedule', { header, date, club_id })
 }

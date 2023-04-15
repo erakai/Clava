@@ -4,6 +4,7 @@ import Club from '../models/club.model'
 import Event from '../models/event.model'
 import { IEvent } from '../types/event'
 import { IClub } from '../types/club'
+import {sendEventScheduleEmail} from "../modules/Emailing";
 
 export const getEvents = async (req: Request, res: Response) => {
   let { club_id } = req.query
@@ -20,6 +21,42 @@ export const getEvents = async (req: Request, res: Response) => {
     }
 
     return res.status(200).json({events})
+  })
+}
+
+export const sendSchedule = async (req: Request, res: Response) => {
+  const club_id = req.body.club_id
+  const date = req.body.date
+  const header = req.body.header
+
+  if (!club_id) {
+    return res.status(500).json({error: 'no club id'})
+  }
+
+  Event.find({club_id: club_id}, async (err, events) => {
+    if (err) {
+      return res.status(500).send({err})
+    }
+
+    if (events.length == 0) {
+      return res.status(500).send("No created events")
+    }
+
+    let eventNames = []
+    let eventDates = []
+    events.forEach((e: IEvent) => {
+      if (e.date < date) {
+        eventNames.push(e.name)
+        eventDates.push(e.date)
+      }
+    })
+
+    if (eventNames.length == 0) {
+      return res.status(500).send("No events found in range")
+    }
+
+    //TODO: Format member email string here (e.g. "kris@gmail.com, boon@gmail.com)
+    sendEventScheduleEmail("kris.leungwattanakij@gmail.com", header, eventNames, eventDates)
   })
 }
 
