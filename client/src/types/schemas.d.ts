@@ -180,6 +180,12 @@ interface CreateEventRequest {
   club_id: string
 }
 
+interface SendEventScheduleRequest {
+  header?: string,
+  date?: Date,
+  club_id: string
+}
+
 interface IncrementEventAttendanceRequest {
   _id: string
 }

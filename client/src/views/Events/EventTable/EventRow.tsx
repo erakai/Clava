@@ -26,6 +26,7 @@ export default function EventRow({
   const [statsOpen, setStatsOpen] = useState(false);
   const [totalMembers, setTotalMembers] = useState(0);
   const [attendanceCount, setAttendanceCount] = useState(row.attendance);
+  const [attendanceDiff, setAttendanceDiff] = useState(0);
 
   function sleep(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -39,8 +40,29 @@ export default function EventRow({
     }
 
     const totalNumMembers = resMem.data.members.length
-    setTotalMembers(totalNumMembers);
+    setTotalMembers(totalNumMembers)
     console.log("total members= " + totalNumMembers)
+  }
+
+  const getAttendanceDiff = async() => {
+    const [err, res] = await to(_getEvents(row.club_id))
+
+    if (err) {
+      console.log(err)
+      return
+    }
+
+    let totalAttendance = 0
+    let totalEvents = 0
+
+    res.data.events.forEach((e: Event) => {
+      if (e.date < row.date) {
+        totalAttendance += e.attendance
+        totalEvents += 1
+      }
+    }, [])
+
+    setAttendanceDiff(row.attendance - totalAttendance/totalEvents)
   }
 
   const getAttendanceCount = async() => {

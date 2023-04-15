@@ -1,9 +1,10 @@
 import to from 'await-to-js'
 import type { Request, Response } from 'express'
-import Club from '../models/club.model'
+import Member from '../models/member.model'
 import Event from '../models/event.model'
 import { IEvent } from '../types/event'
-import { IClub } from '../types/club'
+import { IMember } from '../types/member'
+import {sendEventScheduleEmail} from "../modules/Emailing";
 
 export const getEvents = async (req: Request, res: Response) => {
   let { club_id } = req.query
@@ -20,6 +21,62 @@ export const getEvents = async (req: Request, res: Response) => {
     }
 
     return res.status(200).json({events})
+  })
+}
+
+export const sendSchedule = async (req: Request, res: Response) => {
+  const club_id = req.body.club_id
+  const date = new Date(req.body.date)
+  const header = req.body.header
+
+  if (!club_id) {
+    return res.status(500).json({error: 'no club id'})
+  }
+
+  Event.find({club_id: club_id}).sort("date").find(async (err, events) => {
+    if (err) {
+      return res.status(500).send({err})
+    }
+
+    if (events.length == 0) {
+      return res.status(500).send("No created events")
+    }
+
+    let eventNames = []
+    let eventDates = []
+
+    const now = new Date()
+
+    events.forEach((e: IEvent) => {
+      if (e.date <= date && e.date > now) {
+        eventNames.push(e.name)
+        eventDates.push(e.date)
+      }
+    })
+
+    if (eventNames.length == 0) {
+      return res.status(500).send( "No events found in range")
+    }
+
+    let recipients = ""
+    Member.find({club_id: club_id}, async (err, members) => {
+      if (err) {
+        return res.status(500).send({err})
+      }
+
+      members.forEach((e: IMember) => {
+        recipients += e.email + ", "
+      })
+
+      if (recipients == "") {
+        return res.status(500).send("No members found")
+      }
+
+      recipients = recipients.slice(0, -2)
+
+      sendEventScheduleEmail(recipients, header, eventNames, eventDates)
+      return res.status(200).send("Members were successfully notified")
+    })
   })
 }
 

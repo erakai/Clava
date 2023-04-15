@@ -1,11 +1,11 @@
-import { Box, Button, Grid, IconButton, Modal, Stack, TextField, Typography } from "@mui/material"
+import { Box, Button, Grid, IconButton, Modal, TextField, Typography } from "@mui/material"
 import { DatePicker } from "@mui/x-date-pickers"
 import moment, { Moment } from "moment"
 import { Dispatch, useState } from "react"
 import CloseIcon from '@mui/icons-material/Close';
 
-type CreateEventProps = {
-  createEvent: (event: CreateEventRequest) => void
+type SendEventScheduleProps = {
+  notify: (schedule: SendEventScheduleRequest) => void
   open: boolean,
   setOpen: Dispatch<React.SetStateAction<boolean>>
   errorMessage: string
@@ -26,16 +26,14 @@ const style = {
   color: "primary"
 }
 
-export default function CreateEventModal({
-                                           createEvent, open, setOpen, errorMessage, setErrorMessage, club_id
-                                         }: CreateEventProps) {
-  const [name, setName] = useState('')
+export default function SendEventScheduleModal({
+                                           notify, open, setOpen, errorMessage, setErrorMessage, club_id
+                                         }: SendEventScheduleProps) {
+  const [header, setHeader] = useState('')
   const [date, setDate] = useState<Moment | null>(null)
-  const [description, setDesc] = useState('')
 
   const clearFields = () => {
-    setName('')
-    setDesc('')
+    setHeader('')
     setDate(null)
   }
 
@@ -45,35 +43,24 @@ export default function CreateEventModal({
     setOpen(false)
   }
 
-  const handleCreate = () => {
-    if (!name && !date) {
-      setErrorMessage('Please enter a name and a date for the event')
-      return
-    }
-
-    if (!name) {
-      setErrorMessage('Please enter a name for the event.')
-      return
-    }
-
+  const handleNotify = () => {
     if (!date) {
-      setErrorMessage('Please enter a date for the event.')
+      setErrorMessage('Please enter a date.')
       return
     }
 
-    if (date && date.isBefore(moment())) {
+    if (date.isBefore(moment())) {
       setErrorMessage('Invalid date.')
       return
     }
 
-    let newEvent: CreateEventRequest = {
-      name: name,
-      description: description,
+    let newSchedule: SendEventScheduleRequest = {
+      header: header,
       date: date?.toDate(),
       club_id: club_id
     }
 
-    createEvent(newEvent)
+    notify(newSchedule)
     close()
   }
 
@@ -90,7 +77,7 @@ export default function CreateEventModal({
               </Grid>
               <Grid item xs={10}>
                 <Box textAlign="center" className='h-[100%] flex-col justify-content-center'>
-                  <Typography className='' variant="h6" fontWeight={"bold"}>New Event</Typography>
+                  <Typography className='' variant="h6" fontWeight={"bold"}>Send Schedule</Typography>
                 </Box>
               </Grid>
             </Grid>
@@ -102,15 +89,9 @@ export default function CreateEventModal({
               </Box>
             </Grid> : <></>}
           <Grid item>
-            <TextField className="w-[100%]" size="small" value={name}
-                       label="Name" variant="outlined" type="text" required
-                       onChange={(e) => { setName(e.target.value); setErrorMessage('')}}/>
-          </Grid>
-          <Grid item>
-            <TextField className="w-[100%]" size="small" value={description}
-                       label="Description (optional)" variant="outlined" type="text" id="description-text-field"
-                       onChange={(e) => { setDesc(e.target.value); setErrorMessage('')}}
-                       />
+            <TextField className="w-[100%]" size="small" value={header}
+                       label="Email Header (optional)" variant="outlined" type="text"
+                       onChange={(e) => { setHeader(e.target.value); setErrorMessage('')}}/>
           </Grid>
           <Grid item>
             <Grid container direction="row" spacing={1}>
@@ -138,7 +119,7 @@ export default function CreateEventModal({
           </Grid>
           <Grid item>
             <Button color="secondary" variant="contained" className="w-[100%]"
-                    onClick={handleCreate}>Create Event</Button>
+                    onClick={handleNotify}>Notify Members</Button>
           </Grid>
         </Grid>
       </Box>
