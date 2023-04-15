@@ -7,7 +7,7 @@ type ElectionManagingProps = {
 export default function ElectionManaging({ club_id } : ElectionManagingProps) {
   return (
     <Grid item xs={12} className="text-center">
-      <Typography variant="h1" >Management</Typography>
+      <Typography variant="h3">Manage ur elections</Typography>
     </Grid>
   )
 }

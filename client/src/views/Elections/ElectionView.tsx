@@ -1,9 +1,10 @@
 import { Box, Button, Grid, Typography } from "@mui/material"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
 import ElectionCreation from "./ElectionCreation/ElectionCreation";
 import ElectionManaging from "./ElectionManaging/ElectionManaging";
+import useSettings from "../../hooks/useSettings";
 
 type ElectionViewProps = {
   club_id: string
@@ -17,12 +18,17 @@ The election hub is split into two parts:
 
 export default function ElectionView({ club_id }: ElectionViewProps) {
   const [mode, setMode] = useState<'Creation' | 'Management'>('Creation')
+  const { settings, refreshSettings } = useSettings()
 
   const isCreation = mode == 'Creation'
   const changeMode = () => {
     if (mode == 'Creation') setMode('Management')
     if (mode == 'Management') setMode('Creation')
   }
+
+  useEffect(() => {
+    refreshSettings(club_id)
+  }, [])
 
   return (
   <>
@@ -51,7 +57,7 @@ export default function ElectionView({ club_id }: ElectionViewProps) {
       {/*Mode Display*/}
       {
       isCreation ?
-        <ElectionCreation club_id={club_id}/> 
+        <ElectionCreation club_id={club_id} settings={settings}/> 
         : 
         <ElectionManaging club_id={club_id}/>
       }
