@@ -1,7 +1,8 @@
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
-import { Box, Button, Fab, Grid, Typography } from '@mui/material'
+import {Box, Button, Dialog, DialogContent, DialogContentText, DialogTitle, Fab, Grid, Typography} from '@mui/material'
 import to from 'await-to-js'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { AxiosError } from "axios"
 
 import AddMemberModal from './MemberDisplay/AddMemberModal'
 import AddRoleModal from './RolesEditor/AddRoleModal'
@@ -37,6 +38,7 @@ export default function MemberView({ club_id, state, user_id, owner_id }: Member
   const [roleViewOpen, setRoleViewOpen] = useState(false)
   const [tags, setTags] = useState<Tag[]>([])
   const [officerOpen, setOfficerOpen] = useState(false)
+  const [officerCreationConfirmation, setOfficerCreationConfirmation] = useState(false)
   const [disableAddingMember, setDisableAddingMember] = useState(false)
   const [disableAddingRole, setDisableAddingRole] = useState(false)
   const { settings, refreshSettings } = useSettings()
@@ -50,7 +52,7 @@ export default function MemberView({ club_id, state, user_id, owner_id }: Member
     const [err, res] = await to(_createMember(member))
     if (err) {
       console.log(err)
-      setErrorMessage('Something went wrong.')
+      setErrorMessage("Someting went wrong.")
     } else if (res) {
       setMembers([...members, res.data.member])
     }
@@ -84,13 +86,15 @@ export default function MemberView({ club_id, state, user_id, owner_id }: Member
 
   const createOfficer = async (officer: AddOfficerRequest) => {
     const [err, res] = await to(_sendOfficerInvite(officer))
-    if (err) {
+    if (err && err instanceof AxiosError) {
       console.log(err)
-      setErrorMessage('Something went wrong.')
+      setErrorMessage(err.response?.data)
     } else if (res) {
       let newOfficers = officers;
       newOfficers.push(res.data.officer);
       setOfficers(newOfficers);
+      setOfficerOpen(false)
+      setOfficerCreationConfirmation(true)
     }
   }
 
@@ -145,6 +149,22 @@ export default function MemberView({ club_id, state, user_id, owner_id }: Member
 
   return (
     <Box>
+      <Dialog
+        open={officerCreationConfirmation}
+        onClose={e => {setOfficerCreationConfirmation(false)}}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Officer Addition Success"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            The officer was successfully added.
+          </DialogContentText>
+        </DialogContent>
+      </Dialog>
+
       <AddOfficerModal
           createOfficer={createOfficer}
           open={officerOpen}
