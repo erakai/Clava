@@ -55,6 +55,7 @@ export default function OfficerRow(
           <TableCell align="left" sx={(dense) ? {} : roleRowStyle}>
             <RoleRowDisplay dense={dense} roles={officerRoles} allRoles={allRoles} onDelete={onDeleteRole} onAdd={onAddRole} />
           </TableCell>
+        <TableCell component="th" scope="row" padding="none">{row.email}</TableCell>
           <TableCell align="right">
             {(row.expiration) ? 
               ((Date.parse(row.expiration as unknown as string).valueOf() != 0) ? 

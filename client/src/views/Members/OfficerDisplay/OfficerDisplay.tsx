@@ -8,6 +8,9 @@ import { UserState } from "../../../store/user/userSlice"
 import { AlternateSelectedToolbarProps } from "../../../components/ClavaTable/TableToolbar"
 import OfficerRow from "./OfficerRow"
 import OfficerToolbarExtension from "./OfficerToolbarExtension"
+import to from "await-to-js";
+import {_deleteEvents} from "../../../api/eventApi";
+import {_deleteOfficers} from "../../../api/officerApi";
 
 const headerCells: HeaderCell<Officer>[] = [
   {
@@ -21,6 +24,12 @@ const headerCells: HeaderCell<Officer>[] = [
     numeric: false,
     disablePadding: false,
     label: 'Roles'  
+  },
+  {
+    id: 'email',
+    numeric: false,
+    disablePadding: false,
+    label: 'Email'
   },
   {
     id: 'expiration',
@@ -46,8 +55,18 @@ export default function OfficerDisplay({ officers, setOfficers, title, club_id, 
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [editing, setEditing] = useState<Officer>(officers[0])
 
-  const onDelete = async (deleted: Officer[]) => { 
-    console.log("Do Delete")
+  const onDelete = async (deleted: Officer[]) => {
+    const officer_ids: string[] =  deleted.map(e => e._id)
+    const [err, res]= await to(_deleteOfficers(officer_ids))
+    if (err) {
+      console.log(err)
+      return
+    }
+
+    let newOfficers = officers.filter(e => {
+      return deleted.indexOf(e) == -1
+    })
+    setOfficers(newOfficers)
   }
 
   const onEdit = async (edited: Officer) => {
