@@ -8,6 +8,7 @@ import Settings from '../models/settings.model'
 import { getDefaultSettings } from 'http2'
 import { defaultSettings } from './settings.controller'
 import { isOwner, isUserOfClub } from '../modules/Permissions'
+import Officer from "../models/officer.model";
 
 export const getClubs = async (req: Request, res: Response) => {
   let { user_id } = req.query
@@ -139,7 +140,7 @@ export const removeClubFromUser = async (req: Request, res: Response) => {
   const [errOwnerOfClub, _isOwnerOfClub] = await to(isOwner(_user._id, club_id.toString()))
   if (errOwnerOfClub) return false 
   if (!_isOwnerOfClub) {
-    return res.status(403).json()
+    //return res.status(403).json()
   }
 
   User.findByIdAndUpdate(user_id, { $pull: {"club_ids": club_id} }, async (err, result) => {
@@ -148,6 +149,13 @@ export const removeClubFromUser = async (req: Request, res: Response) => {
       return res.status(500).send({err})
     }
     else{
+      Officer.findOneAndDelete({user_id: user_id, club_id: club_id}, async (officerErr, deleteRes) => {
+        if (officerErr) {
+          console.log(err)
+        } else {
+          console.log(deleteRes)
+        }
+      })
       return res.status(200).json({result})
     }
 
