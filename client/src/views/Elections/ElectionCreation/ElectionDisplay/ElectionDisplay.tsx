@@ -2,12 +2,14 @@ import { useState } from "react"
 import { ClavaTable } from "../../../../components/ClavaTable"
 import ElectionRow, { headerCells } from "./ElectionRow"
 import { ElectionSelect } from "../useElectionLogic"
+import { startElection } from "../../../../api/electionApi"
 
 type ElectionDisplayProps = {
   settings: Settings | null
   elections: Election[]
   onDelete: (e: Election[]) => void
   selectAndClear: (e: ElectionSelect | null) => void
+  startElection: (e: Election) => void
 }
 
 export default function ElectionDisplay(props: ElectionDisplayProps) {
@@ -25,7 +27,7 @@ export default function ElectionDisplay(props: ElectionDisplayProps) {
     <ClavaTable<Election> defaultOrder="start" tableName="Elections"
       data={filteredEvents} headerCells={headerCells} onDelete={props.onDelete}
       RowDisplay={({rowSelected, onClick, row}) => 
-        <ElectionRow rowSelected={rowSelected} onClick={onClick} row={row} selectAndClear={props.selectAndClear}/>} 
+        <ElectionRow rowSelected={rowSelected} onClick={onClick} row={row} selectAndClear={props.selectAndClear} startElection={props.startElection}/>} 
       dense={(props.settings) ? props.settings.dense : false}
       searchString={searchString} setSearchString={setSearchString}
       rowsPerPageOptions={[5, 10, 20, 100]} defaultRowsPerPage={5}

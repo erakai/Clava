@@ -37,10 +37,11 @@ export const headerCells: HeaderCell<Election>[] = [
 
 interface ElectionRowProps extends RowDisplayProps<Election> {
   selectAndClear: (e: ElectionSelect | null) => void
+  startElection: (e: Election) => void
 }
 
 export default function ElectionRow({
-  rowSelected, onClick, row, selectAndClear
+  rowSelected, onClick, row, selectAndClear, startElection
 }: ElectionRowProps) {
 
   return (
@@ -67,6 +68,7 @@ export default function ElectionRow({
       </TableCell>
       <TableCell>
         <Button variant="contained" onClick={(e) => {
+          startElection(row)
           e.stopPropagation()
         }}>
           Start

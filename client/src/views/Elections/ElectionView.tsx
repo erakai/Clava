@@ -5,6 +5,8 @@ import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
 import ElectionCreation from "./ElectionCreation/ElectionCreation";
 import ElectionManaging from "./ElectionManaging/ElectionManaging";
 import useSettings from "../../hooks/useSettings";
+import { getElections } from "../../api/electionApi";
+import to from "await-to-js";
 
 type ElectionViewProps = {
   club_id: string
@@ -17,6 +19,7 @@ The election hub is split into two parts:
 */
 
 export default function ElectionView({ club_id }: ElectionViewProps) {
+  const [elections, setElections] = useState<Election[]>([])
   const [mode, setMode] = useState<'Creation' | 'Management'>('Creation')
   const { settings, refreshSettings } = useSettings()
 
@@ -27,6 +30,20 @@ export default function ElectionView({ club_id }: ElectionViewProps) {
   }
 
   useEffect(() => {
+    const fetchElections = async () => {
+      const [err, fetched] = await to(getElections(club_id))
+      if (err) {
+        console.log(err)
+        return
+      }
+
+      if (fetched.data.elections) {
+        let newElections = fetched.data.elections
+        setElections(newElections)
+      }
+    }
+
+    fetchElections()
     refreshSettings(club_id)
   }, [])
 
@@ -57,7 +74,8 @@ export default function ElectionView({ club_id }: ElectionViewProps) {
       {/*Mode Display*/}
       {
       isCreation ?
-        <ElectionCreation club_id={club_id} settings={settings}/> 
+        <ElectionCreation club_id={club_id} settings={settings}
+          elections={elections} setElections={setElections}/> 
         : 
         <ElectionManaging club_id={club_id}/>
       }

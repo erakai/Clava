@@ -25,8 +25,14 @@ const useElectionLogic = () => {
   const [description, setDescription] = useState("")
   const [start, setStart]= useState<Moment | null>(null)
   const [end, setEnd] = useState<Moment | null>(null)
+
   const [newQuestion, setNewQuestion] = useState("")
   const [questions, setQuestions] = useState<string[]>([])
+
+  const [candidates, setCandidates] = useState<Candidate[]>([])
+  const [newCandName, setNewCandName] = useState("")
+  const [newCandDesc, setNewCandDesc] = useState("")
+  const [newCandAns, setNewCandAns] = useState<string[]>([])
 
   const updating = selected !== "new"
 
@@ -46,6 +52,23 @@ const useElectionLogic = () => {
       : [])
     setNewQuestion("")
 
+    setCandidates(clear ? 
+      ((e as Election).candidates ? (e as Election).candidates as Candidate[] : [])
+      : [])
+    setNewCandName("")
+    setNewCandDesc("")
+    setNewCandAns([])
+
+    if (clear && (e as Election).questions) {
+      let a = []
+      let ele: any = e
+      for (let i = 0; i < ele.questions?.length; i++) {
+        a.push("")
+      }
+      setNewCandAns(a)
+    }
+
+
     setSelected(e)
   }
 
@@ -53,6 +76,8 @@ const useElectionLogic = () => {
     name, setName, description, setDescription,
     start, setStart, end, setEnd,
     newQuestion, setNewQuestion, questions, setQuestions,
+    candidates, setCandidates, newCandName, setNewCandName,
+    newCandDesc, setNewCandDesc, newCandAns, setNewCandAns,
     selected, setSelected,
     updating, selectAndClear
   }
