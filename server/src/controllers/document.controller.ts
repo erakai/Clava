@@ -2,7 +2,9 @@ import to from 'await-to-js'
 import type { Request, Response } from 'express'
 import Club from '../models/club.model'
 import ClubDocument from '../models/document.model'
+import Role from '../models/role.model'
 import { hasRole, isOwner } from '../modules/Permissions'
+import { IClubDocument } from '../types/document'
 
 export const getDocuments = async (req: Request, res: Response) => {
   let { club_id } = req.query
@@ -127,8 +129,9 @@ export const documentPut = async (req: Request, res: Response) => {
 }
 
 // roles
-export const getDocument = async (req: Request, res: Response) => {
-  let { _id } = req.body
+export const getDocumentRoles = async (req: Request, res: Response) => {
+  let { _id } = req.query
+
   if (!_id) {
     return res.status(500).json({error: 'no _id provided'})
   }
@@ -139,7 +142,13 @@ export const getDocument = async (req: Request, res: Response) => {
     if (err) {
       return res.status(500).send({err})
     }
-    return res.status(200).json({document})
+    const role_ids = (document as IClubDocument).role_ids
+    const [rolesErr, roles] = await to(Role.find({ '_id': { $in: role_ids } }).exec())
+    if (rolesErr) {
+      return res.status(500).send({err})
+    }
+
+    return res.status(200).json({roles})
   })
 }
 

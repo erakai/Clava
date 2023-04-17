@@ -1,9 +1,11 @@
-import { Dialog, DialogTitle, DialogContent, DialogActions, Stack, TextField, Button, Typography, Box, Divider, Container } from "@mui/material"
+import { Dialog, DialogTitle, DialogContent, DialogActions, Stack, TextField, Button, Typography, Box, Divider, Container, IconButton } from "@mui/material"
 import React, { Dispatch, useState, useEffect } from "react"
 import DocumentRoleChip from "./DocumentRoleChip"
+import AddIcon from '@mui/icons-material/Add';
 
 import { getRoles } from '../../api/roleApi'
 import to from "await-to-js"
+import { addDocumentRole, getDocumentRoles, getDocuments } from "../../api/documentApi";
 
 const style = {
   position: 'absolute',
@@ -37,11 +39,41 @@ export default function EditDocumentModal({ documentId, open, setOpen, oldName, 
   const [nameError, setNewNameError] = useState("")
   const [link, setNewLink] = useState(oldLink)
   const [linkError, setNewLinkError] = useState("")
-  const [roles, setRoles] = useState<Role[]>([])
+  const [docRoles, setDocRoles] = useState<Role[]>([])
+  const [avaliableRoles, setAvaliableRoles] = useState<Role[]>([])
 
-  const useEffect = () => {
+  useEffect(() => {
+    const fetchRoles = async () => {
+      const [errDocRoles, resDocRoles] = await to(getDocumentRoles(documentId))
+      if (errDocRoles) {
+        console.log(errDocRoles)
+        return
+      }
+      const retrievedDocRoles = resDocRoles.data.roles
+      if (retrievedDocRoles) {
+        setDocRoles(retrievedDocRoles)
+      }
+      const [errClubRoles, resClubRoles] = await to(getRoles(club_id))
+      if (errClubRoles) {
+        console.log(errClubRoles)
+        return
+      }
 
-  }
+      const retrievedClubRoles = resClubRoles.data.roles
+      if (retrievedClubRoles && retrievedDocRoles) {
+        var _aRoles : Role[] = []
+        retrievedClubRoles.forEach((clubRole) => {
+          if (retrievedDocRoles.includes(clubRole)) { // fix this
+            _aRoles.push(clubRole)
+          }
+        })
+        setAvaliableRoles(_aRoles)
+      }
+      
+    }
+
+    fetchRoles()
+  }, [])
 
   const handleEdit = () => {
     let badInput = false
@@ -110,12 +142,12 @@ export default function EditDocumentModal({ documentId, open, setOpen, oldName, 
         <Stack>
           <Stack direction="row">
             <Typography variant="h6">Permissions:</Typography>
-            <AddRoleToDocumentModal club_id={club_id} />
+            <AddRoleToDocumentModal document_id={documentId} club_id={club_id} avaliableRoles={avaliableRoles} />
           </Stack>
           <Stack flexWrap="wrap" direction="row">
-            {roles.length > 0 ?
+            {docRoles.length > 0 ?
               <div>
-              {roles.map(role=> (
+              {docRoles.map(role=> (
                 <DocumentRoleChip 
                   role={role}
                   deleteDocRole={(_id : string) => {}}
@@ -141,11 +173,12 @@ export default function EditDocumentModal({ documentId, open, setOpen, oldName, 
 
 type AddRoleToDocumentModalProps = {
   club_id : string
+  document_id : string
+  avaliableRoles : Role[]
 }
 
-function AddRoleToDocumentModal({club_id} : AddRoleToDocumentModalProps) {
+function AddRoleToDocumentModal({club_id, document_id, avaliableRoles} : AddRoleToDocumentModalProps) {
   const [open, setOpen] = React.useState(false);
-  const [roles, setRoles] = React.useState<Role[]>([]);
 
   const handleOpen = () => {
     setOpen(true);
@@ -154,24 +187,28 @@ function AddRoleToDocumentModal({club_id} : AddRoleToDocumentModalProps) {
     setOpen(false);
   };
 
-  useEffect(() => {
-    const fetchRoles = async () => {
-      const [errRoles, resRoles] = await to(getRoles(club_id))
-      if (errRoles) {
-        console.log(errRoles)
+  const handleAdd = (role_id : string) => {
+    const addRole = async () => {
+      const _id = document_id
+      const [errAddDocRole, addDocRole] = await to(addDocumentRole({_id, role_id}))
+      if (errAddDocRole) {
+        console.log(errAddDocRole)
         return
       }
-      const retrievedRoles = resRoles.data.roles
-      if (retrievedRoles) {
-        setRoles(retrievedRoles)
-      }
     }
-    fetchRoles()
-  }, [])
+    addRole();
+    handleClose();
+  }
 
   return (
     <React.Fragment>
-      <Button onClick={handleOpen}>Add</Button>
+      <IconButton 
+        color="primary" 
+        onClick={handleOpen}
+        sx={{backgroundColor: "primary"}}
+      >
+          <AddIcon/>
+      </IconButton>
       <Dialog
         open={open}
         onClose={handleClose}
@@ -181,13 +218,13 @@ function AddRoleToDocumentModal({club_id} : AddRoleToDocumentModalProps) {
         <DialogContent>
           <Typography variant="h5" mb={2}>Add Role:</Typography>
           <Stack flexWrap="wrap" direction="row">
-            {roles.length > 0 ?
+            {avaliableRoles.length > 0 ?
               <div>
-              {roles.map(role=> (
+              {avaliableRoles.map(role=> (
                 <DocumentRoleChip
                   key={role._id} 
                   role={role}
-                  clickDocRole={() => {}}
+                  clickDocRole={handleAdd}
                 />
               ))}
               </div>

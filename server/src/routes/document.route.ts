@@ -1,5 +1,5 @@
 import { verifyUser } from "../config/auth";
-import { documentPost, documentDelete, documentPut, getDocuments, getDocument, documentRolePost, documentRoleDelete } from "../controllers/document.controller";
+import { documentPost, documentDelete, documentPut, getDocuments, getDocumentRoles, documentRolePost, documentRoleDelete } from "../controllers/document.controller";
 import { Router } from "express";
 
 const documentRouter = Router()
@@ -18,9 +18,9 @@ documentRouter.delete('/', verifyUser, documentDelete);
 documentRouter.put('/', verifyUser, documentPut);
 
 // for roles
-documentRouter.get('/', verifyUser, getDocument);
-documentRouter.post('/', verifyUser, documentRolePost);
-documentRouter.delete('/', verifyUser, documentRoleDelete);
+documentRouter.get('/roles', verifyUser, getDocumentRoles);
+documentRouter.post('/roles', verifyUser, documentRolePost);
+documentRouter.delete('/roles', verifyUser, documentRoleDelete);
 
 
 export default documentRouter
