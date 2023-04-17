@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { getElections, postElection, removeElection } from "../controllers/election.controller";
 import { verifyUser } from "../config/auth";
+import { getResults, vote } from "../controllers/electionresults.controller";
 
 const electionRouter = Router()
 
@@ -10,10 +11,16 @@ Election Routes:
   - /elections POST (election_id, election: {new info}): update election
   - /elections POST (election: {all info}): create election
   - /elections DELETE (election_ids): deletes elections
+
+  - /elections/votes GET (election_id): returns the corresponding election results
+  - /elections/votes POST (election_id, candidate name, amount): updates votes for that candidate
 */
 
-electionRouter.get('/', verifyUser, getElections)
+electionRouter.get('/', getElections)
 electionRouter.post('/', verifyUser, postElection)
 electionRouter.delete('/', verifyUser, removeElection)
+
+electionRouter.get('/votes', verifyUser, getResults)
+electionRouter.post('/votes', vote)
 
 export default electionRouter

@@ -1,5 +1,5 @@
 import type { Request, Response } from 'express'
-import Election from '../models/election.model'
+import { Election } from '../models/election.model'
 import to from 'await-to-js'
 
 export const getElections = async (req: Request, res: Response) => {

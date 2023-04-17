@@ -15,7 +15,7 @@ import MemberView from '../Members'
 import { Settings } from '../Settings'
 import { Typography } from '@mui/material'
 import ActivityLogView from '../ActivityLog'
-import ElectionView from '../Elections/ElectionView'
+import { ElectionView } from '../Elections'
 
 export default function ClubComposite() {
   const { state, user, logout } = useUser()

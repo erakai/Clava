@@ -17,3 +17,14 @@ interface IElection extends Document {
   questions: Array<string>,
   candidates: Array<ICandidate>
 }
+
+interface ICanRes extends Document { // Candidate Results Interface
+  name: string,
+  votes: number
+}
+
+interface IEleRes extends Document { // Election Results
+  election_id: string,
+  name: string,
+  candidates: Array<ICanRes>
+}

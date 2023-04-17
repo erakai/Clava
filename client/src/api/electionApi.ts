@@ -6,6 +6,8 @@ type GetElectionsResponse = { elections: Election[] }
 type AddElectionResponse = { election: Election }
 type UpdateElectionResponse = { election: Election }
 type DeleteElectionsResponse = {}
+type VoteResponse = {}
+type GetResultsResponse = { results: EleRes }
 
 const ElectionInstance = axios.create({
   baseURL: `http://localhost:8080/elections`,
@@ -37,4 +39,12 @@ export const startElection = (election_id: string) => {
 
 export const endElection = (election_id: string) => {
   return updateElection(election_id, { running: false, ended: true })
+}
+
+export const getResults = (election_id: string) => {
+  return ElectionInstance.get<GetResultsResponse>('/votes', { params: { election_id } })
+}
+
+export const vote = (election_id: string, candidate: string, amount: number) => {
+  return ElectionInstance.post<VoteResponse>('/votes', { election_id, name: candidate, amount})
 }

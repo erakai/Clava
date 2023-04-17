@@ -1,5 +1,5 @@
 import { Model, Schema, SchemaTypes, model } from "mongoose";
-import { ICandidate, IElection } from "../types/elections";
+import { ICanRes, ICandidate, IEleRes, IElection } from "../types/elections";
 
 const CandidateSchema = new Schema<ICandidate>({
   name: SchemaTypes.String,
@@ -27,4 +27,17 @@ const ElectionSchema = new Schema<IElection>({
 
 const Election = model('election', ElectionSchema) as Model<IElection>
 
-export default Election
+const CandidateResultsSchema = new Schema<ICanRes>({
+  name: SchemaTypes.String,
+  votes: SchemaTypes.Number
+})
+
+const ElectionResultsSchema = new Schema<IEleRes>({
+  election_id: SchemaTypes.ObjectId,
+  name: SchemaTypes.String,
+  candidates: [CandidateResultsSchema]
+})
+
+const ElectionResults = model('electionresults', ElectionResultsSchema) as Model<IEleRes>
+
+export { Election, ElectionResults} 

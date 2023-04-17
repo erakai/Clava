@@ -29,3 +29,16 @@ interface ElectionUpdateRequest {
   questions?: string[]
   candidates?: Candidate[]
 }
+
+interface CanRes { // Candidate Results Interface
+  _id: string,
+  name: string,
+  votes: number
+}
+
+interface EleRes { // Election Results
+  id: string,
+  election_id: string,
+  name: string,
+  candidates: Array<CanRes>
+}
