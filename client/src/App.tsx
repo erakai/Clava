@@ -29,6 +29,9 @@ function App() {
       background: {
         default: "#ffe194"
       }
+    },
+    typography: {
+      fontFamily: 'monospace',
     }
   })
 

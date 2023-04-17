@@ -1,6 +1,22 @@
-import { Dialog, DialogTitle, DialogContent, DialogActions, Stack, TextField, Button, Typography, Box } from "@mui/material"
-import React, { Dispatch, useState } from "react"
+import { Dialog, DialogTitle, DialogContent, DialogActions, Stack, TextField, Button, Typography, Box, Divider, Container } from "@mui/material"
+import React, { Dispatch, useState, useEffect } from "react"
+import DocumentRoleChip from "./DocumentRoleChip"
 
+import { getRoles } from '../../api/roleApi'
+import to from "await-to-js"
+
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '4px solid #ffb500',
+  boxShadow: 24,
+  p: 4,
+  color: "primary"
+}
 
 type EditDocumentProps = {
   documentId: string // null if adding, should be an id if editing
@@ -13,13 +29,19 @@ type EditDocumentProps = {
   editDocument: (document: EditDocumentRequest) => void
   isUniqueDocumentName: (name: string, _id?: string) => boolean
   verifyUrl: (url: string) => boolean
+  club_id : string
 }
 
-export default function EditDocumentModal({ documentId, open, setOpen, oldName, oldLink, setName, setLink, editDocument, isUniqueDocumentName, verifyUrl}: EditDocumentProps) {
+export default function EditDocumentModal({ documentId, open, setOpen, oldName, oldLink, setName, setLink, editDocument, isUniqueDocumentName, verifyUrl, club_id}: EditDocumentProps) {
   const [name, setNewName] = useState(oldName)
   const [nameError, setNewNameError] = useState("")
   const [link, setNewLink] = useState(oldLink)
   const [linkError, setNewLinkError] = useState("")
+  const [roles, setRoles] = useState<Role[]>([])
+
+  const useEffect = () => {
+
+  }
 
   const handleEdit = () => {
     let badInput = false
@@ -56,13 +78,18 @@ export default function EditDocumentModal({ documentId, open, setOpen, oldName, 
   return (
     <Dialog
         open={open}
-        onClose={() => setOpen(false)}>
+        onClose={() => setOpen(false)}
+        maxWidth='sm'
+      >
       <DialogTitle>
         Edit Document
       </DialogTitle>
       <DialogContent>
+        <Container>
         <Stack
-          spacing={2}>
+          spacing={2}
+          mb={5}
+        >
           <TextField label="Name" variant="standard" size="small" 
             defaultValue={name}
             error={nameError != ""} 
@@ -80,7 +107,29 @@ export default function EditDocumentModal({ documentId, open, setOpen, oldName, 
             setNewLinkError("")
           }}/>
         </Stack>
-        
+        <Stack>
+          <Stack direction="row">
+            <Typography variant="h6">Permissions:</Typography>
+            <AddRoleToDocumentModal club_id={club_id} />
+          </Stack>
+          <Stack flexWrap="wrap" direction="row">
+            {roles.length > 0 ?
+              <div>
+              {roles.map(role=> (
+                <DocumentRoleChip 
+                  role={role}
+                  deleteDocRole={(_id : string) => {}}
+                />
+              ))}
+              </div>
+              :
+              <div>
+                None
+              </div>
+            }
+          </Stack>
+      </Stack>
+      </Container>
       </DialogContent>
       <DialogActions>
         <Button onClick={() => setOpen(false)}>Cancel</Button>
@@ -88,4 +137,71 @@ export default function EditDocumentModal({ documentId, open, setOpen, oldName, 
       </DialogActions>
       </Dialog>
   )
+}
+
+type AddRoleToDocumentModalProps = {
+  club_id : string
+}
+
+function AddRoleToDocumentModal({club_id} : AddRoleToDocumentModalProps) {
+  const [open, setOpen] = React.useState(false);
+  const [roles, setRoles] = React.useState<Role[]>([]);
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  useEffect(() => {
+    const fetchRoles = async () => {
+      const [errRoles, resRoles] = await to(getRoles(club_id))
+      if (errRoles) {
+        console.log(errRoles)
+        return
+      }
+      const retrievedRoles = resRoles.data.roles
+      if (retrievedRoles) {
+        setRoles(retrievedRoles)
+      }
+    }
+    fetchRoles()
+  }, [])
+
+  return (
+    <React.Fragment>
+      <Button onClick={handleOpen}>Add</Button>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="child-modal-title"
+        aria-describedby="child-modal-description"
+      >
+        <DialogContent>
+          <Typography variant="h5" mb={2}>Add Role:</Typography>
+          <Stack flexWrap="wrap" direction="row">
+            {roles.length > 0 ?
+              <div>
+              {roles.map(role=> (
+                <DocumentRoleChip
+                  key={role._id} 
+                  role={role}
+                  clickDocRole={() => {}}
+                />
+              ))}
+              </div>
+              :
+              <div>
+                None
+              </div>
+            }
+          </Stack>
+        </DialogContent>
+        <DialogActions>  
+          <Button onClick={handleClose}>Close</Button>
+        </DialogActions>
+      </Dialog>
+    </React.Fragment>
+  );
 }

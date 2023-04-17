@@ -2,6 +2,7 @@ import to from 'await-to-js'
 import type { Request, Response } from 'express'
 import Club from '../models/club.model'
 import ClubDocument from '../models/document.model'
+import { hasRole, isOwner } from '../modules/Permissions'
 
 export const getDocuments = async (req: Request, res: Response) => {
   let { club_id } = req.query
@@ -16,7 +17,27 @@ export const getDocuments = async (req: Request, res: Response) => {
       return res.status(500).send({err})
     }
 
-    return res.status(200).json({documents})
+    const [errOwner, isUserOwner] = await to(isOwner((req.user as any)._id, club_id.toString()))
+    if (errOwner) { return res.status(400).json({errOwner})}
+    
+    if (isUserOwner) {
+      return res.status(200).json({documents})
+    }
+
+    // O(d*r) doc search
+    var _docs : Document[] = []
+    for (let i = 0; i < documents.length; i++) {
+      const doc = documents[i]
+      for (let j = 0; j < doc.role_ids.length; i++) {
+        const role_id = doc.role_ids[j]
+        const [errRole, hasUserRole] = await to(hasRole(role_id, club_id, req.user))
+        if (hasUserRole) {
+          console.log(doc);
+          _docs.push(doc)
+        }
+      }
+    }
+    console.log(_docs)
   })
 }
 

@@ -167,6 +167,7 @@ export default function DocumentView({ club_id, state }: DocumentViewProps) {
               deleteDocument={deleteDocument}
               isUniqueDocumentName={isUniqueDocumentName}
               verifyUrl={verifyUrl}
+              club_id={club_id}
               key={document._id}/>
           )): 
           <Box margin={2}>
