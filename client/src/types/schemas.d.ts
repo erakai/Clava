@@ -190,6 +190,15 @@ interface IncrementEventAttendanceRequest {
   _id: string
 }
 
+interface MassCreateEventRequest {
+  name: string,
+  description?: string,
+  start_date: Date,
+  end_date: Date,
+  days: string[],
+  club_id: string
+}
+
 interface Log {
   _id : string,
   user_id : string,
