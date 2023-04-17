@@ -1,4 +1,4 @@
-import { Avatar, Button, Card, CardActions, CardContent, CardHeader, Collapse, IconButton, IconButtonProps, Typography, styled } from "@mui/material";
+import { Avatar, Box, Button, Card, CardActions, CardContent, CardHeader, Collapse, IconButton, IconButtonProps, Typography, styled } from "@mui/material";
 import PersonIcon from '@mui/icons-material/Person';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useState } from "react";
@@ -7,6 +7,7 @@ type CandidateCardProps = {
   candidate: Candidate,
   questions: string[]
   voteFor: (n: string) => void
+  currentVote: boolean
 }
 
 interface ExpandMoreProps extends IconButtonProps {
@@ -25,7 +26,7 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 }));
 
 export default function CandidateCard({
-  candidate, questions, voteFor
+  candidate, questions, voteFor, currentVote
 }: CandidateCardProps) {
   const [expanded, setExpanded] = useState(false)
 
@@ -34,7 +35,8 @@ export default function CandidateCard({
   }
 
   return (
-    <Card sx={{ maxWidth: 345, marginTop: 2, flex: "auto" }}>
+    <Card sx={{ maxWidth: 345, marginTop: 2, flex: "auto",
+      border: (currentVote ? 3 : 0), borderColor: "green"}}>
       <CardHeader avatar={
         <Avatar>
           <PersonIcon/>
@@ -46,7 +48,7 @@ export default function CandidateCard({
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        <Button variant="text">Vote</Button>
+        <Button variant="text" onClick={() => voteFor(candidate.name)} >Vote</Button>
         <ExpandMore expand={expanded} onClick={expandClick}>
           <ExpandMoreIcon/>
         </ExpandMore>
@@ -54,10 +56,10 @@ export default function CandidateCard({
       <Collapse in={expanded} unmountOnExit>
         <CardContent>
           {questions.map((q, i) => 
-            <>
+            <Box key={q}>
               <Typography variant="h6">q</Typography>
               <Typography variant="body1">{candidate.answers[i]}</Typography>
-            </>
+            </Box>
           )}
         </CardContent>
       </Collapse>

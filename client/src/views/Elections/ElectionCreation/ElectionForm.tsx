@@ -130,6 +130,13 @@ export default function ElectionForm({addElection, club_id,
     setNewCandAns(a)
   }
 
+  const getAnswerVal = (i: number) => {
+    while (i >= newCandAns.length) {
+      newCandAns.push("")
+    }
+    return newCandAns[i]
+  }
+
   const handleCloseDialog = () => {
     setErrMsg("")
     setOpen(false)
@@ -279,11 +286,11 @@ export default function ElectionForm({addElection, club_id,
 
         <Grid item container xs={12} spacing={1}>
           <Grid item xs={12} md={4}>
-            <TextField size="small" fullWidth variant="outlined" 
+            <TextField size="small" fullWidth required variant="outlined" 
               label="New Candidate Name" value={newCandName} onChange={(e) => setNewCandName(e.target.value)}/>
           </Grid>
           <Grid item xs={12} md={5}>
-            <TextField size="small" fullWidth variant="outlined" 
+            <TextField size="small" fullWidth required variant="outlined" 
               label="New Candidate Description" value={newCandDesc} onChange={(e) => setNewCandDesc(e.target.value)}/>
           </Grid>
           <Grid item xs={12} md={3}>
@@ -299,7 +306,7 @@ export default function ElectionForm({addElection, club_id,
               </Grid>
               <Grid item xs={10}>
                 <TextField size="small" fullWidth variant="outlined"
-                  label="Answer" onChange={
+                  label="Answer" value={getAnswerVal(i)} onChange={
                     (e) => updateAnswer(i, e.target.value)
                   }/>
               </Grid>

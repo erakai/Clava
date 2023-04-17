@@ -1,7 +1,7 @@
 import { Box, CircularProgress, Grid, Paper, Stack, Typography } from "@mui/material"
 import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
-import { getElectionById } from "../../../api/electionApi"
+import { getElectionById, vote } from "../../../api/electionApi"
 import to from "await-to-js"
 import CandidateCard from "./CandidateCard"
 
@@ -9,15 +9,33 @@ export default function VotingFormView() {
   const navigate = useNavigate()
   const { election_id } = useParams()
   const [election, setElection] = useState<Election | null>()
+  const [currVote, setCurrVote] = useState("None")
 
   useEffect(() => {
+    if (!election_id) navToError()
+
     const fetch = async () => {
       if (!election_id) navToError()
       const [err, res] = await to(getElectionById(election_id as string))
       if (err || !res.data.election) navToError()
 
-      setElection(res?.data.election)
+      let ele: Election = res?.data.election as Election
+      setElection(ele)
+
+      let vote = localStorage.getItem('vote')
+      let exists = false
+      if (ele.candidates && vote) {
+        ele.candidates.forEach(c => {
+          if (c.name == vote) exists = true
+        })
+      }
+      if (!exists && vote) {
+        localStorage.removeItem('vote')
+      } else if (exists) {
+        setCurrVote(vote as string)
+      }
     }
+
 
     fetch()
   }, [])
@@ -26,8 +44,19 @@ export default function VotingFormView() {
     navigate('/error')
   }
 
-  const voteFor = (name: string) => {
-    console.log('Voted for', name)
+  const voteFor = async (name: string) => {
+    // remove prev vote
+    let prev = currVote
+    if (prev != "None") {
+      const [err] = await to(vote(election_id as string, prev, -1))
+      if (err) console.log(err)
+    }
+
+    // update new vote
+    localStorage.setItem('vote', name)
+    setCurrVote(name)
+    const [err2] = await to(vote(election_id as string, name, 1))
+    if (err2) console.log(err2)
   }
 
   return <>
@@ -51,8 +80,9 @@ export default function VotingFormView() {
             <Grid item xs={12} container spacing={2}>
                 {(election.candidates && election.candidates.length > 0) ?
                   election.candidates.map(c => 
-                    <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                      <CandidateCard candidate={c} questions={election.questions || []} voteFor={voteFor}/>
+                    <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={c._id}>
+                      <CandidateCard candidate={c} questions={election.questions || []} 
+                        voteFor={voteFor} currentVote={currVote == c.name}/>
                     </Grid>
                   )
                 :
@@ -90,7 +120,7 @@ export default function VotingFormView() {
                 border={4}
                 sx={{ backgroundColor: "secondary.main", paddingY: 2 }}>
                 <Typography variant="h5">Current Vote</Typography>
-                <Typography variant="body1">Local Storage!</Typography>
+                <Typography variant="body1">{currVote}</Typography>
               </Grid>
             </Grid>
           </Paper>
