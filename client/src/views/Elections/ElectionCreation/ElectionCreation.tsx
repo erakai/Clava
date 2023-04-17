@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import ElectionForm from "./ElectionForm"
 import to from "await-to-js"
 import { getElections, deleteElections as _deleteElections, startElection as _startElection } from "../../../api/electionApi"
-import { ElectionDisplay } from "./ElectionDisplay"
+import { ElectionDisplay } from "./CreateElectionDisplay"
 import useElectionLogic from "./useElectionLogic"
 
 type ElectionCreationProps = {
@@ -98,7 +98,7 @@ export default function ElectionCreation({ club_id, settings, elections, setElec
           startElection={startElection}/>
       </Grid>
 
-      {/* Event Creation / Editing Form*/}
+      {/*  Creation / Editing Form*/}
       <Grid item xs={12} md={6}>
         {(ele.selected) ? 
           <Paper elevation={4}>

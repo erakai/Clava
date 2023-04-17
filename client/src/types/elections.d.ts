@@ -11,6 +11,7 @@ interface Election {
   club_id: string,
   description: string,
   running?: boolean,
+  ended?: boolean,
   start?: Date,
   end?: Date,
   questions?: string[]
@@ -22,6 +23,7 @@ interface ElectionUpdateRequest {
   club_id?: string,
   description?: string,
   running?: boolean,
+  ended?: boolean,
   start?: Date,
   end?: Date,
   questions?: string[]

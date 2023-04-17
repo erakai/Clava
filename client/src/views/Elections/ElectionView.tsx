@@ -77,7 +77,8 @@ export default function ElectionView({ club_id }: ElectionViewProps) {
         <ElectionCreation club_id={club_id} settings={settings}
           elections={elections} setElections={setElections}/> 
         : 
-        <ElectionManaging club_id={club_id}/>
+        <ElectionManaging club_id={club_id} settings={settings}
+          elections={elections} setElections={setElections}/>
       }
 
     </Grid>

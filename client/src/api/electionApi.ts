@@ -36,5 +36,5 @@ export const startElection = (election_id: string) => {
 }
 
 export const endElection = (election_id: string) => {
-  return updateElection(election_id, { running: false })
+  return updateElection(election_id, { running: false, ended: true })
 }

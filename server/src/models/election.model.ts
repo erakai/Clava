@@ -15,6 +15,10 @@ const ElectionSchema = new Schema<IElection>({
     type: SchemaTypes.Boolean,
     default: false
   },
+  ended: {
+    type: SchemaTypes.Boolean,
+    default: false
+  },
   start: SchemaTypes.Date,
   end: SchemaTypes.Date,
   questions: [SchemaTypes.String],

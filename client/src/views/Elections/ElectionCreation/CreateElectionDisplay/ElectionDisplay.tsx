@@ -2,7 +2,6 @@ import { useState } from "react"
 import { ClavaTable } from "../../../../components/ClavaTable"
 import ElectionRow, { headerCells } from "./ElectionRow"
 import { ElectionSelect } from "../useElectionLogic"
-import { startElection } from "../../../../api/electionApi"
 
 type ElectionDisplayProps = {
   settings: Settings | null
