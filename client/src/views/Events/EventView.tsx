@@ -8,10 +8,11 @@ import {
   DialogTitle,
   Grid,
   Typography,
-  Stack
+  Stack,
 } from "@mui/material";
 import CreateEventModal from "./CreateEventModal";
 import SendEventScheduleModal from "./SendEventScheduleModal";
+import MassCreateEventModal from "./MassCreateEventModal"
 import moment, { Moment } from "moment"
 import {_getEvents, _createEvent, _deleteEvents, _sendEventSchedule} from "../../api/eventApi";
 import to from 'await-to-js'
@@ -30,10 +31,13 @@ export default function EventView({ club_id }: EventViewProps) {
 
   const [sendEventScheduleOpen, setSendEventScheduleOpen] = useState(false);
   const [scheduleErrorMessage, setScheduleErrorMessage] = useState('');
-  const [sendScheduleConfirmationOpen, setSendScheduleConfirmationOpen] = useState(false)
+  const [sendScheduleConfirmationOpen, setSendScheduleConfirmationOpen] = useState(false);
 
-  const [events, setEvents] = useState<Event[]>([])
-  const { settings, refreshSettings } = useSettings()
+  const [massCreateEventOpen, setMassCreateEventOpen] = useState(false);
+  const [massCreateError, setMassCreateError] = useState('');
+
+  const [events, setEvents] = useState<Event[]>([]);
+  const { settings, refreshSettings } = useSettings();
 
   // Loading data on render
   useEffect(() => {
@@ -85,6 +89,10 @@ export default function EventView({ club_id }: EventViewProps) {
       setSendScheduleConfirmationOpen(true)
       console.log("succcess!")
     }
+  }
+
+  const massCreate = async (req: MassCreateEventRequest) => {
+
   }
 
   const onEventDelete = async (deleted: Event[]) => {
@@ -153,6 +161,15 @@ export default function EventView({ club_id }: EventViewProps) {
         club_id={club_id}
       />
 
+      <MassCreateEventModal
+        massCreate={massCreate}
+        open={massCreateEventOpen}
+        setOpen={setMassCreateEventOpen}
+        errorMessage={massCreateError}
+        setErrorMessage={setMassCreateError}
+        club_id={club_id}
+      />
+
       <Grid container marginY={0} rowSpacing={2}>
         <Grid item xs={12}>
           <Box
@@ -173,6 +190,9 @@ export default function EventView({ club_id }: EventViewProps) {
               </Button>
               <Button sx={{ whiteSpace: 'nowrap', minWidth: '200px'}} className='h-full' variant="contained" color="secondary" onClick={() => setSendEventScheduleOpen(true)}>
                 Send Event Schedule
+              </Button>
+              <Button sx={{ whiteSpace: 'nowrap', minWidth: '210px'}} className='h-full' variant="contained" color="secondary" onClick={() => setMassCreateEventOpen(true)}>
+                Setup Weekly Meetings
               </Button>
             </Stack>
           </Grid>
