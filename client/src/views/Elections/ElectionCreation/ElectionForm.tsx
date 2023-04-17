@@ -195,7 +195,7 @@ export default function ElectionForm({addElection, club_id,
               <Tooltip title='Setting a start and end date is optional. If set, then
                               when the start date passes, the election will be higlighted
                               to indicate that a link should be generated immediately. When
-                              the end date passes, the election will automatically close next time
+                              the end date passes (at 12:00am the next day), the election will automatically close next time
                               an officer views the running elections.' placement="top">
                 <IconButton size="small">
                   <InfoOutlinedIcon />

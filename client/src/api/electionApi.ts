@@ -41,6 +41,10 @@ export const endElection = (election_id: string) => {
   return updateElection(election_id, { running: false, ended: true })
 }
 
+export const getElectionById = (election_id: string) => {
+  return ElectionInstance.get<UpdateElectionResponse>('/id', { params: { election_id }})
+}
+
 export const getResults = (election_id: string) => {
   return ElectionInstance.get<GetResultsResponse>('/votes', { params: { election_id } })
 }

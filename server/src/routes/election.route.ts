@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getElections, postElection, removeElection } from "../controllers/election.controller";
+import { getElectionById, getElections, postElection, removeElection } from "../controllers/election.controller";
 import { verifyUser } from "../config/auth";
 import { getResults, vote } from "../controllers/electionresults.controller";
 
@@ -12,6 +12,8 @@ Election Routes:
   - /elections POST (election: {all info}): create election
   - /elections DELETE (election_ids): deletes elections
 
+  - /elections/id GET (election_id): returns the election with the id
+
   - /elections/votes GET (election_id): returns the corresponding election results
   - /elections/votes POST (election_id, candidate name, amount): updates votes for that candidate
 */
@@ -19,6 +21,8 @@ Election Routes:
 electionRouter.get('/', getElections)
 electionRouter.post('/', verifyUser, postElection)
 electionRouter.delete('/', verifyUser, removeElection)
+
+electionRouter.get('/id', getElectionById)
 
 electionRouter.get('/votes', verifyUser, getResults)
 electionRouter.post('/votes', vote)

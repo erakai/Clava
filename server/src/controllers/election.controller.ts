@@ -12,6 +12,16 @@ export const getElections = async (req: Request, res: Response) => {
   return res.status(200).json({elections})
 }
 
+export const getElectionById = async (req: Request, res: Response) => {
+  let { election_id } = req.query
+  if (!election_id) return res.status(400).json({error: 'no election id'})
+
+  const [err, election] = await to(Election.findById(election_id).exec())
+  if (err) return res.status(500).send({err})
+
+  return res.status(200).json({election})
+}
+
 export const postElection = async (req: Request, res: Response) => {
   if (req.body.election_id) return updateElection(req, res)
   return addElection(req, res)

@@ -4,7 +4,7 @@ export default function UrlNotFound() {
   return (
     <div className="p-4 items-center">
       <Typography variant="h2">404: Page Not Found! Sorry :(</Typography>
-      <Typography variant="h5">Clava? I barely know her!</Typography>
+      <Typography variant="h5">Please check your the url and your internet connection.</Typography>
     </div>
   )
 }
