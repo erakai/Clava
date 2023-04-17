@@ -142,7 +142,7 @@ export default function MemberView({ club_id, state, user_id, owner_id }: Member
         setOfficers(retrievedOff)
       }
     }
-    setInterval(fetchAll, 3000)
+    setInterval(fetchAll, 5000)
     refreshSettings(club_id)
     fetchAll()
   }, [state])

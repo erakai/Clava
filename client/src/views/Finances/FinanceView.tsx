@@ -51,6 +51,7 @@ export default function FinanceView(props: FinanceViewProps) {
       setExpenses(expensesTemp)
     }
 
+    setInterval(fetchData, 5000)
     fetchData()
     refreshSettings(props.club_id)
   }, [])

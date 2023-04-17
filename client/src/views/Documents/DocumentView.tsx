@@ -149,7 +149,7 @@ export default function DocumentView({ club_id, state }: DocumentViewProps) {
         }
       }
     }
-    setInterval(fetchDocuments, 3000)
+    setInterval(fetchDocuments, 5000)
     fetchDocuments()
   }, [update])
 
