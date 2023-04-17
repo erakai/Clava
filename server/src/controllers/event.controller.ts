@@ -5,6 +5,7 @@ import Event from '../models/event.model'
 import { IEvent } from '../types/event'
 import { IMember } from '../types/member'
 import {sendEventScheduleEmail} from "../modules/Emailing";
+import {create} from "domain";
 
 export const getEvents = async (req: Request, res: Response) => {
   let { club_id } = req.query
@@ -103,6 +104,35 @@ export const incrementAttendance = async (req: Request, res: Response) => {
     return res.status(200).send("Attendance Recorded")
   })
 }
+export const massCreateEvents = async (req: Request, res: Response) => {
+  let { name, description, start_date, end_date, days, club_id } = req.body
+
+  if (!description || description == undefined || description == "") {
+    description = "No event description provided"
+  }
+
+  start_date = new Date(start_date)
+  end_date = new Date(end_date)
+  for (let date = start_date; date <= end_date; date.setDate(date.getDate() + 1)) {
+    let dateToSet = new Date(date)
+    const day = date.toString().split(" ")[0]
+    if (days.includes(day)) {
+      Event.create({
+        name: name,
+        description: description,
+        date: dateToSet,
+        started: false,
+        attendance: 0,
+        club_id: club_id
+      }, async (err, event) => {
+        if (err) {
+          return res.status(500).send("Something went wrong.")
+        }
+      })
+    } //IF
+  } // FOR
+  return res.status(200).send("Mass Create Success!")
+}
 
 export const deleteEvents = async (req: Request, res: Response) => {
   let { event_ids } = req.body
@@ -118,7 +148,7 @@ export const deleteEvents = async (req: Request, res: Response) => {
 
 export const getEvent = async (req: Request, res: Response) => {
   let { event_id } = req.query
-  
+
   if (!event_id) {
     return res.status(500).json({error: 'no event id'})
   }

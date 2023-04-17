@@ -14,7 +14,7 @@ import CreateEventModal from "./CreateEventModal";
 import SendEventScheduleModal from "./SendEventScheduleModal";
 import MassCreateEventModal from "./MassCreateEventModal"
 import moment, { Moment } from "moment"
-import {_getEvents, _createEvent, _deleteEvents, _sendEventSchedule} from "../../api/eventApi";
+import {_getEvents, _createEvent, _deleteEvents, _sendEventSchedule, _massCreateEvent} from "../../api/eventApi";
 import to from 'await-to-js'
 import EventDisplay from "./EventTable/EventDisplay"
 import useSettings from "../../hooks/useSettings";
@@ -35,6 +35,7 @@ export default function EventView({ club_id }: EventViewProps) {
 
   const [massCreateEventOpen, setMassCreateEventOpen] = useState(false);
   const [massCreateError, setMassCreateError] = useState('');
+  const [confirmMassCreateOpen, setConfirmMassCreateOpen] = useState(false);
 
   const [events, setEvents] = useState<Event[]>([]);
   const { settings, refreshSettings } = useSettings();
@@ -92,7 +93,28 @@ export default function EventView({ club_id }: EventViewProps) {
   }
 
   const massCreate = async (req: MassCreateEventRequest) => {
+    const [err, res] = await to(_massCreateEvent(req))
 
+    if (err) {
+      console.log(err)
+      setMassCreateEventOpen(true)
+      setMassCreateError("Something went wrong.")
+    } else {
+      const [errT, eventList] = await to(_getEvents(club_id))
+      if (errT) {
+        console.log(errT)
+        return
+      }
+
+      let eventsTemp: Event[] = []
+      eventList.data.events.forEach((e: Event) => {
+        if (moment().isBefore(e.date)) {
+          eventsTemp.push(e);
+        }
+      })
+      setEvents(eventsTemp);
+      setConfirmMassCreateOpen(true)
+    }
   }
 
   const onEventDelete = async (deleted: Event[]) => {
@@ -139,6 +161,22 @@ export default function EventView({ club_id }: EventViewProps) {
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
             All club members have been successfully notified.
+          </DialogContentText>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog
+        open={confirmMassCreateOpen}
+        onClose={e => {setConfirmMassCreateOpen(false)}}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Weekly Meeting Setup Success"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Meetings have been created.
           </DialogContentText>
         </DialogContent>
       </Dialog>

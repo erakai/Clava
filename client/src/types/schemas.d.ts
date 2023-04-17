@@ -195,7 +195,7 @@ interface MassCreateEventRequest {
   description?: string,
   start_date: Date,
   end_date: Date,
-  days: string,
+  days: string[],
   club_id: string
 }
 

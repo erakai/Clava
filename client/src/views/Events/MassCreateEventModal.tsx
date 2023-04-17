@@ -101,7 +101,7 @@ export default function SendEventScheduleModal({
       description: description,
       start_date: startDate?.toDate(),
       end_date: endDate?.toDate(),
-      days: "",
+      days: days,
       club_id: club_id
     }
 
