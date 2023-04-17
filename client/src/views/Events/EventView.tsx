@@ -53,6 +53,7 @@ export default function EventView({ club_id }: EventViewProps) {
       setEvents(eventsTemp);
     }
 
+    setInterval(fetchData, 3000)
     fetchData()
     refreshSettings(club_id)
   }, [])
