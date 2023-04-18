@@ -114,7 +114,7 @@ export async function hasRole(role_id, club_id, _user) {
 
 	var _flag = false
 	roles.forEach(role => {
-		if (role._id == role_id) {
+		if (role._id.toString() === role_id.toString()) {
 			_flag = true
 		}	
 	})

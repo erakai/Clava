@@ -13,6 +13,7 @@ type DocumentCardProps = {
   deleteDocument: (_id: string) => void
   isUniqueDocumentName: (name: string, _id?: string) => boolean
   club_id: string
+  clubRoles : Role[]
   verifyUrl: (url: string) => boolean
 }
 
@@ -23,7 +24,7 @@ const iconSize = {
   }
 }
 
-export default function DocumentCard({ docName, docLink, _id, editDocument, deleteDocument, isUniqueDocumentName, verifyUrl, club_id }: DocumentCardProps) {
+export default function DocumentCard({ docName, docLink, _id, editDocument, deleteDocument, isUniqueDocumentName, verifyUrl, club_id, clubRoles }: DocumentCardProps) {
 
   const [name, setName] = useState(docName)
   const [link, setLink] = useState(docLink)
@@ -112,7 +113,6 @@ export default function DocumentCard({ docName, docLink, _id, editDocument, dele
             </Dialog>
           </Box>
       </Card>
-      
       <EditDocumentModal 
         documentId={_id}
         open={editOpen}
@@ -125,6 +125,7 @@ export default function DocumentCard({ docName, docLink, _id, editDocument, dele
         isUniqueDocumentName={isUniqueDocumentName}
         verifyUrl={verifyUrl}
         club_id={club_id}
+        clubRoles={clubRoles}
         />
     </Grid>
   )

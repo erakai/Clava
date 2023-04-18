@@ -5,7 +5,7 @@ import AddIcon from '@mui/icons-material/Add';
 
 import { getRoles } from '../../api/roleApi'
 import to from "await-to-js"
-import { addDocumentRole, getDocumentRoles, getDocuments } from "../../api/documentApi";
+import { addDocumentRole, deleteDocument, deleteDocumentRole, getDocumentRoles, getDocuments } from "../../api/documentApi";
 
 const style = {
   position: 'absolute',
@@ -32,9 +32,10 @@ type EditDocumentProps = {
   isUniqueDocumentName: (name: string, _id?: string) => boolean
   verifyUrl: (url: string) => boolean
   club_id : string
+  clubRoles : Role[]
 }
 
-export default function EditDocumentModal({ documentId, open, setOpen, oldName, oldLink, setName, setLink, editDocument, isUniqueDocumentName, verifyUrl, club_id}: EditDocumentProps) {
+export default function EditDocumentModal({ documentId, open, setOpen, oldName, oldLink, setName, setLink, editDocument, isUniqueDocumentName, verifyUrl, club_id, clubRoles}: EditDocumentProps) {
   const [name, setNewName] = useState(oldName)
   const [nameError, setNewNameError] = useState("")
   const [link, setNewLink] = useState(oldLink)
@@ -53,27 +54,20 @@ export default function EditDocumentModal({ documentId, open, setOpen, oldName, 
       if (retrievedDocRoles) {
         setDocRoles(retrievedDocRoles)
       }
-      const [errClubRoles, resClubRoles] = await to(getRoles(club_id))
-      if (errClubRoles) {
-        console.log(errClubRoles)
-        return
-      }
-
-      const retrievedClubRoles = resClubRoles.data.roles
-      if (retrievedClubRoles && retrievedDocRoles) {
-        var _aRoles : Role[] = []
-        retrievedClubRoles.forEach((clubRole) => {
-          if (retrievedDocRoles.includes(clubRole)) { // fix this
-            _aRoles.push(clubRole)
-          }
-        })
+      
+      if (clubRoles && retrievedDocRoles) {
+        const _aRoles : Role[] = clubRoles.filter((el) => {
+          return retrievedDocRoles.every((f) => {
+            return f._id !== el._id;
+          });
+        });
         setAvaliableRoles(_aRoles)
       }
       
     }
 
     fetchRoles()
-  }, [])
+  }, [clubRoles])
 
   const handleEdit = () => {
     let badInput = false
@@ -105,6 +99,18 @@ export default function EditDocumentModal({ documentId, open, setOpen, oldName, 
     setName(name)
     setLink(link)
     setOpen(false)
+  }
+
+  const handleDelete = (role_id : string) => {
+    const deleteRole = async () => {
+      const _id = documentId
+      const [errDeleteRole, resDeleteRole] = await to(deleteDocumentRole({_id, role_id}))
+      if (errDeleteRole) {
+        console.log(errDeleteRole)
+        return
+      }
+    }
+    deleteRole()
   }
 
   return (
@@ -149,8 +155,9 @@ export default function EditDocumentModal({ documentId, open, setOpen, oldName, 
               <div>
               {docRoles.map(role=> (
                 <DocumentRoleChip 
+                  key={role._id+documentId+"perm"}
                   role={role}
-                  deleteDocRole={(_id : string) => {}}
+                  deleteDocRole={handleDelete}
                 />
               ))}
               </div>
@@ -222,7 +229,7 @@ function AddRoleToDocumentModal({club_id, document_id, avaliableRoles} : AddRole
               <div>
               {avaliableRoles.map(role=> (
                 <DocumentRoleChip
-                  key={role._id} 
+                  key={role._id+document_id+"add"} 
                   role={role}
                   clickDocRole={handleAdd}
                 />
