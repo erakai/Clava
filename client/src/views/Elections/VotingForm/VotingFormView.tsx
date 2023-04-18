@@ -15,11 +15,21 @@ export default function VotingFormView() {
     if (!election_id) navToError()
 
     const fetch = async () => {
-      if (!election_id) navToError()
+      if (!election_id) {
+        navToError()
+        return
+      }
       const [err, res] = await to(getElectionById(election_id as string))
-      if (err || !res.data.election) navToError()
+      if (err || !res.data.election) {
+        navToError()
+        return
+      }
 
       let ele: Election = res?.data.election as Election
+      if (ele.ended || !ele.running) {
+        navToError()
+        return
+      }
       setElection(ele)
 
       let vote = localStorage.getItem('vote')

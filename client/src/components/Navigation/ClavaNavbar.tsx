@@ -130,7 +130,7 @@ function ClavaNavbar({currentRoute, clubId, clubName, logout, username, email, i
               }}
             >
               {pages.map((page) => (
-                ((page != 'elections' ||  isOwner) ?
+                ((page != 'Elections' ||  isOwner) ?
                 <MenuItem key={page} onClick={handleCloseNavMenu}>
                   <Typography textAlign="center">{page}</Typography>
                 </MenuItem> : <></>)
@@ -170,7 +170,7 @@ function ClavaNavbar({currentRoute, clubId, clubName, logout, username, email, i
             sx={{ display: { xs: 'none', md: 'flex' } }}
           >
             {pages.map((page) => (
-              ((page != 'elections' ||  isOwner) ?
+              ((page != 'Elections' ||  isOwner) ?
               <NavButton 
                 key={page} title={page as any} 
                 isSelected={page.toLowerCase() === currentRoute.toLowerCase()} 
