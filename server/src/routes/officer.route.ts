@@ -1,5 +1,5 @@
 import { verifyUser } from "../config/auth";
-import { getOfficers, requestAddOfficer } from "../controllers/officer.controller";
+import {deleteOfficers, getOfficers, requestAddOfficer} from "../controllers/officer.controller";
 import { Router } from "express";
 import tagRouter from "./tag.route";
 
@@ -14,6 +14,7 @@ Officer Routes:
 
 officerRouter.get('/', verifyUser, getOfficers)
 officerRouter.post('/', verifyUser, requestAddOfficer)
+officerRouter.delete('/', verifyUser, deleteOfficers)
 // TODO: Implement finalizeAddOfficer
 
 export default officerRouter

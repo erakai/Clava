@@ -7,20 +7,21 @@ import GroupsIcon from '@mui/icons-material/Groups'; // Members
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday'; // Events
 import InsertDriveFileOutlinedIcon from '@mui/icons-material/InsertDriveFileOutlined'; // Documents
 import PaidOutlinedIcon from '@mui/icons-material/PaidOutlined'; // Finances
+import BallotIcon from '@mui/icons-material/Ballot';
 
 import { useNavigate } from "react-router-dom";
 
 import { ReactNode } from 'react';
 
 type ButtonParams = {
-	name: 'Members' | 'Events' | 'Documents' | 'Finances';
+	name: 'Members' | 'Events' | 'Documents' | 'Finances' | 'Elections';
 	icon?: ReactNode;
 	onClick? : () => any;
 	route?: string
 }
 
 function getButtonParams(title : string) : ButtonParams {
-	var buttonParams : ButtonParams = { name : title as 'Members' | 'Events' | 'Documents' | 'Finances' }
+	var buttonParams : ButtonParams = { name : title as 'Members' | 'Events' | 'Documents' | 'Finances' |  'Elections'}
 	switch (title) {
 		case 'Members': {
 			buttonParams.icon = <GroupsIcon />;
@@ -42,12 +43,16 @@ function getButtonParams(title : string) : ButtonParams {
 			buttonParams.route = "/finances";
 			break;
 		}  
+		case 'Elections' : {
+			buttonParams.icon = <BallotIcon />
+			buttonParams.route = "/elections";
+		}
 	}
 	return buttonParams;
 }
 
 type NavButtonProps = {
-	title: 'Members' | 'Events' | 'Documents' | 'Finances';
+	title: 'Members' | 'Events' | 'Documents' | 'Finances' | 'Elections';
 	isSelected: boolean;
 	clubId : string;
 }

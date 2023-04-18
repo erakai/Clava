@@ -18,7 +18,7 @@ import NavButton from './NavButton';
 import { Stack } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
-const pages = ['Members', 'Events', 'Documents', 'Finances'];
+const pages = ['Members', 'Events', 'Documents', 'Finances', 'Elections'];
 const settings = ['Logout'];
 
 type ClavaNavbarProps = {
@@ -130,9 +130,10 @@ function ClavaNavbar({currentRoute, clubId, clubName, logout, username, email, i
               }}
             >
               {pages.map((page) => (
+                ((page != 'Elections' ||  isOwner) ?
                 <MenuItem key={page} onClick={handleCloseNavMenu}>
                   <Typography textAlign="center">{page}</Typography>
-                </MenuItem>
+                </MenuItem> : <></>)
               ))}
             </Menu>
           </Box>
@@ -169,11 +170,12 @@ function ClavaNavbar({currentRoute, clubId, clubName, logout, username, email, i
             sx={{ display: { xs: 'none', md: 'flex' } }}
           >
             {pages.map((page) => (
+              ((page != 'Elections' ||  isOwner) ?
               <NavButton 
                 key={page} title={page as any} 
                 isSelected={page.toLowerCase() === currentRoute.toLowerCase()} 
                 clubId={clubId}
-              />
+              /> : <></>)
             ))}
           </Stack>
           {/* === END OF MENU ITEMS AS BUTTONS === */}
