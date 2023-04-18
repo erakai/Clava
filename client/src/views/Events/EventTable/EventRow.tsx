@@ -7,7 +7,7 @@ import {
   DialogTitle,
   DialogContent,
   DialogContentText,
-  Box
+  Box, Typography
 } from "@mui/material";
 import { RowDisplayProps } from "../../../components/ClavaTable";
 import React, {useState} from "react";
@@ -16,6 +16,7 @@ import to from "await-to-js";
 import {getMembers} from "../../../api/memberApi";
 import {_getEvent, _getEvents} from "../../../api/eventApi";
 import EventPieChart from "../Graphics/EventPieChart";
+import EventBarChart from "../Graphics/EventBarChart";
 
 export default function EventRow({
                                          rowSelected, onClick, row
@@ -27,6 +28,10 @@ export default function EventRow({
   const [totalMembers, setTotalMembers] = useState(0);
   const [attendanceCount, setAttendanceCount] = useState(row.attendance);
   const [attendanceDiff, setAttendanceDiff] = useState(0);
+  const [attendanceDiffColor, setAttendanceDiffColor] = useState("grey")
+  const [diffPrefix, setDiffPrefix] = useState("")
+  const [attendanceArr, setAttendanceArr] = useState([0])
+  const [eventNameArr, setEventNameArr] = useState([""])
 
   function sleep(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -41,28 +46,6 @@ export default function EventRow({
 
     const totalNumMembers = resMem.data.members.length
     setTotalMembers(totalNumMembers)
-    console.log("total members= " + totalNumMembers)
-  }
-
-  const getAttendanceDiff = async() => {
-    const [err, res] = await to(_getEvents(row.club_id))
-
-    if (err) {
-      console.log(err)
-      return
-    }
-
-    let totalAttendance = 0
-    let totalEvents = 0
-
-    res.data.events.forEach((e: Event) => {
-      if (e.date < row.date) {
-        totalAttendance += e.attendance
-        totalEvents += 1
-      }
-    }, [])
-
-    setAttendanceDiff(row.attendance - totalAttendance/totalEvents)
   }
 
   const getAttendanceCount = async() => {
@@ -77,7 +60,55 @@ export default function EventRow({
       return
     }
 
-    setAttendanceCount(resEvent.data.event.attendance)
+    const currAttendanceCount = resEvent.data.event.attendance
+    setAttendanceCount(currAttendanceCount)
+
+    const [err, res] = await to(_getEvents(row.club_id))
+
+    if (err) {
+      console.log(err)
+      return
+    }
+
+    let totalAttendance = 0
+    let totalEvents = 0
+
+    let eventNames = [row.name]
+    let eventAttendances = [currAttendanceCount]
+
+    res.data.events.forEach((e: Event) => {
+      if (e.date < row.date) {
+        eventNames.push(e.name)
+        eventAttendances.push(e.attendance)
+        totalAttendance += e.attendance
+        totalEvents += 1
+      }
+    }, [])
+
+    if (eventNames.length > 5) {
+      eventNames = eventNames.slice(0,5)
+      eventAttendances = eventAttendances.slice(0,5)
+    }
+
+    setEventNameArr(eventNames)
+    setAttendanceArr(eventAttendances)
+
+    let diff = currAttendanceCount - totalAttendance/totalEvents
+    let color = ""
+
+    if (totalEvents == 0 || diff == 0) {
+      color = "grey"
+      setDiffPrefix(" ")
+    } else if (diff > 0) {
+      color = "green"
+      setDiffPrefix(" +")
+    } else {
+      color = "red"
+      setDiffPrefix(" ")
+    }
+
+    setAttendanceDiffColor(color)
+    setAttendanceDiff(diff)
   }
 
   return (
@@ -100,9 +131,17 @@ export default function EventRow({
               Attendance Count: {attendanceCount}
             </DialogContentText>
             <DialogContentText id="alert-dialog-description">
+              Attendance Differential:
+              <Typography variant="button" sx={{ 'color': attendanceDiffColor }}>
+                {diffPrefix}{(Math.round(attendanceDiff * 100) / 100).toFixed(2)}
+              </Typography>
+            </DialogContentText>
+            <DialogContentText id="alert-dialog-description">
               Yield: {attendanceCount / totalMembers * 100}%
             </DialogContentText>
             <EventPieChart attendance={attendanceCount} totalMembers={totalMembers} />
+            <EventBarChart attendanceArr={attendanceArr} eventNameArr={eventNameArr} />
+
           </Box>
         </DialogContent>
       </Dialog>
