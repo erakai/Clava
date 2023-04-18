@@ -136,18 +136,20 @@ export default function EventRow({
         {new Date(row.date).toLocaleDateString()}
       </TableCell>
       <TableCell>
-        <Button variant="contained" onClick={() => {
+        <Button variant="contained" onClick={(e) => {
           setQrValue("http://localhost:5173/IncrementAttendance/" + row._id)
           setQrOpen(true)
+          e.stopPropagation()
         }}>Generate</Button>
       </TableCell>
       <TableCell>
-        <Button variant="contained" onClick={() => {
+        <Button variant="contained" onClick={(e) => {
           getAttendanceCount()
           getTotalMembers()
           setTimeout(() => {
             setStatsOpen(true)
           }, 100)
+          e.stopPropagation()
         }}>View Stats</Button>
       </TableCell>
     </TableRow>
