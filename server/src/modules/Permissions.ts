@@ -7,7 +7,7 @@ import { IClub } from "../types/club";
 
 import to from 'await-to-js'
 
-const permString = ['VIEW_FINANCES', 'EDIT_FINANCES', 'VIEW_MEMBERS', 'EDIT_MEMBERS']
+const permString = ['VIEW_FINANCES', 'EDIT_FINANCES', 'VIEW_MEMBERS', 'EDIT_MEMBERS', 'EDIT_DOCUMENTS']
 
 async function getRolesFromUser(user_id : string, club_id : string) {
 	// get officer from email + club_id

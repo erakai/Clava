@@ -7,7 +7,7 @@ type CreateDocumentResponse = { document: ClubDocument }
 type DeleteDocumentResponse = { document: ClubDocument }
 type EditDocumentResponse = { document: ClubDocument }
 type GetDocumentRolesResponse = { roles: Role[] }
-type AddDocumentRoleResponse = { }
+type AddDocumentRoleResponse = { role : Role }
 type DeleteDocumentRoleResponse = { }
 
 

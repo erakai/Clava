@@ -67,7 +67,7 @@ export default function EditDocumentModal({ documentId, open, setOpen, oldName, 
     }
 
     fetchRoles()
-  }, [clubRoles])
+  }, [clubRoles, docRoles])
 
   const handleEdit = () => {
     let badInput = false
@@ -148,7 +148,11 @@ export default function EditDocumentModal({ documentId, open, setOpen, oldName, 
         <Stack>
           <Stack direction="row">
             <Typography variant="h6">Permissions:</Typography>
-            <AddRoleToDocumentModal document_id={documentId} club_id={club_id} avaliableRoles={avaliableRoles} />
+            <AddRoleToDocumentModal 
+              document_id={documentId} 
+              club_id={club_id} 
+              avaliableRoles={avaliableRoles} 
+            />
           </Stack>
           <Stack flexWrap="wrap" direction="row">
             {docRoles.length > 0 ?
