@@ -16,6 +16,7 @@ import { Settings } from '../Settings'
 import { Typography } from '@mui/material'
 import ActivityLogView from '../ActivityLog'
 import { ElectionView } from '../Elections'
+import { ClavaAlertList } from '../../components/Alert'
 
 export default function ClubComposite() {
   const { state, user, logout } = useUser()
@@ -117,6 +118,7 @@ export default function ClubComposite() {
         />
       </div>
       }
+      <ClavaAlertList />
       {getRoute()}
     </div>
   )
