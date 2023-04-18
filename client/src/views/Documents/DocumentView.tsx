@@ -130,6 +130,8 @@ export default function DocumentView({ club_id, state }: DocumentViewProps) {
     return !documentNames.includes(name)
   }
 
+  const REFRESH_RATE = 1000 * 5;
+
   useEffect(() => {
     const fetchDocuments = async () => {
       const [err, res] = await to(getDocuments(club_id))
@@ -149,8 +151,13 @@ export default function DocumentView({ club_id, state }: DocumentViewProps) {
         }
       }
     }
-    setInterval(fetchDocuments, 5000)
+    
     fetchDocuments()
+
+    const interval = setInterval(() => {
+      fetchDocuments()
+    }, REFRESH_RATE)
+    return () => clearInterval(interval)
   }, [update])
 
   return (

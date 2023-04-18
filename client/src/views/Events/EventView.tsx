@@ -36,6 +36,9 @@ export default function EventView({ club_id }: EventViewProps) {
   const { settings, refreshSettings } = useSettings()
 
   // Loading data on render
+
+  const REFRESH_RATE = 1000 * 5;
+
   useEffect(() => {
     const fetchData = async () => {
       const [errT, eventList] = await to(_getEvents(club_id))
@@ -52,10 +55,14 @@ export default function EventView({ club_id }: EventViewProps) {
       })
       setEvents(eventsTemp);
     }
-
-    setInterval(fetchData, 5000)
+    
     fetchData()
     refreshSettings(club_id)
+
+    const interval = setInterval(() => {
+      fetchData()
+    }, REFRESH_RATE)
+    return () => clearInterval(interval)
   }, [])
 
   const createEvent = async (req: CreateEventRequest) => {

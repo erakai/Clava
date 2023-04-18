@@ -98,6 +98,8 @@ export default function MemberView({ club_id, state, user_id, owner_id }: Member
     }
   }
 
+  const REFRESH_RATE = 1000 * 5;
+
   useEffect(() => {
     const fetchAll = async () => {
       const [errMem, resMem] = await to(getMembers(club_id))
@@ -142,9 +144,13 @@ export default function MemberView({ club_id, state, user_id, owner_id }: Member
         setOfficers(retrievedOff)
       }
     }
-    setInterval(fetchAll, 5000)
     refreshSettings(club_id)
     fetchAll()
+
+    const interval = setInterval(() => {
+      fetchAll()
+    }, REFRESH_RATE)
+    return () => clearInterval(interval)
   }, [state])
 
   return (
