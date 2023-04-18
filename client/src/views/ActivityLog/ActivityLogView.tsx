@@ -75,7 +75,7 @@ export default function ActivityLogView({isOwner, club_id} : ActivityLogView) {
       display="flex"
       justifyContent="center"
       alignItems="center"
-      height="100%">
+      height="100%" >
         <ClavaTable<Log> defaultOrder="date" tableName={"Activity Log"}
           data={logs} headerCells={headerCells} onDelete={() => {}}
           RowDisplay={({rowSelected, onClick, row}) => 

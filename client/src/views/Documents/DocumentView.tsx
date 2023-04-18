@@ -7,6 +7,7 @@ import AddDocumentModal from "./AddDocumentModal"
 import useForceUpdate from '../../hooks/useForceUpdate'
 import DocumentCard from "./DocumentCard"
 import { deleteDocument as _deleteDocument, createDocument as _createDocument, editDocument as _editDocument, getDocuments } from '../../api/documentApi'
+import { getRoles } from "../../api/roleApi";
 
 type DocumentViewProps = {
   club_id: string
@@ -23,6 +24,7 @@ export default function DocumentView({ club_id, state }: DocumentViewProps) {
   const [searchString, setSearchString] = useState("")
   const [filteredDocuments, setFilteredDocuments] = useState<ClubDocument[]>([])
   const [update, setUpdate] = useState(0)
+  const [clubRoles, setClubRoles] = useState<Role[]>([])
 
   const clearSearchField = () => {
     performSearch("")
@@ -113,7 +115,7 @@ export default function DocumentView({ club_id, state }: DocumentViewProps) {
   }
 
   useEffect(() => {
-    const fetchDocuments = async () => {
+    const fetchAll = async () => {
       const [err, res] = await to(getDocuments(club_id))
       if (err) {
         console.log(err)
@@ -125,9 +127,19 @@ export default function DocumentView({ club_id, state }: DocumentViewProps) {
         setDocuments(retrieved)
         performSearch(searchString, retrieved)
       }
+
+      const [errClubRoles, resClubRoles] = await to(getRoles(club_id))
+      if (errClubRoles) {
+        console.log(errClubRoles)
+        return
+      }
+
+      if (resClubRoles) {
+        setClubRoles(resClubRoles.data.roles)
+      }
     }
     
-    fetchDocuments()
+    fetchAll()
     //setFilteredDocuments(documents)
   }, [update])
 
@@ -167,7 +179,10 @@ export default function DocumentView({ club_id, state }: DocumentViewProps) {
               deleteDocument={deleteDocument}
               isUniqueDocumentName={isUniqueDocumentName}
               verifyUrl={verifyUrl}
-              key={document._id}/>
+              club_id={club_id}
+              key={document._id}
+              clubRoles={clubRoles}
+            />
           )): 
           <Box margin={2}>
             <Typography variant="h6">There are no documents to be displayed.</Typography>

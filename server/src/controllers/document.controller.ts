@@ -2,6 +2,9 @@ import to from 'await-to-js'
 import type { Request, Response } from 'express'
 import Club from '../models/club.model'
 import ClubDocument from '../models/document.model'
+import Role from '../models/role.model'
+import { hasPermission, hasRole, isOwner } from '../modules/Permissions'
+import { IClubDocument } from '../types/document'
 
 export const getDocuments = async (req: Request, res: Response) => {
   let { club_id } = req.query
@@ -16,7 +19,33 @@ export const getDocuments = async (req: Request, res: Response) => {
       return res.status(500).send({err})
     }
 
-    return res.status(200).json({documents})
+    const [errOwner, isUserOwner] = await to(isOwner((req.user as any)._id, club_id.toString()))
+    if (errOwner) { return res.status(500).json({errOwner})}
+    if (isUserOwner) {
+      return res.status(200).json({documents})
+    }
+
+    // O(d*r) doc search
+    // Only give up documents that the user requesting has a role too
+    var _docs : IClubDocument[] = []
+    for (let i = 0; i < documents.length; i++) {
+      const doc = documents[i]
+      for (let j = 0; j < doc.role_ids.length; j++) {
+        const role_id = doc.role_ids[j]
+        const [errRole, hasUserRole] = await to(hasRole(role_id, club_id, req.user))
+        if (errRole) {return res.status(500).json({errRole})}
+        if ((hasUserRole && !_docs.includes(doc))) {
+          _docs.push(doc)
+        }
+      }
+    }
+
+    documents = documents.filter((el : IClubDocument) => {
+      return _docs.some((f : IClubDocument) => {
+        return f._id.toString() === el._id.toString();
+      });
+    });
+    res.status(200).json({documents})
   })
 }
 
@@ -31,6 +60,11 @@ export const documentPost = async (req: Request, res: Response) => {
   
   if (name == "" || link == "") {
     return res.status(500).json({error: 'no doc name or doc link provided'})
+  }
+
+  const [errUserHasPerm, userHasPerm] = await to(hasPermission("EDIT_DOCUMENTS", club_id, req.user))
+  if (!userHasPerm) {
+    return res.status(401).json({error: 'user does not have permission to do this.'})
   }
   
   // verify that the club exists
@@ -106,8 +140,9 @@ export const documentPut = async (req: Request, res: Response) => {
 }
 
 // roles
-export const getDocument = async (req: Request, res: Response) => {
-  let { _id } = req.body
+export const getDocumentRoles = async (req: Request, res: Response) => {
+  let { _id } = req.query
+
   if (!_id) {
     return res.status(500).json({error: 'no _id provided'})
   }
@@ -118,7 +153,13 @@ export const getDocument = async (req: Request, res: Response) => {
     if (err) {
       return res.status(500).send({err})
     }
-    return res.status(200).json({document})
+    const role_ids = (document as IClubDocument).role_ids
+    const [rolesErr, roles] = await to(Role.find({ '_id': { $in: role_ids } }).exec())
+    if (rolesErr) {
+      return res.status(500).send({err})
+    }
+
+    return res.status(200).json({roles})
   })
 }
 
