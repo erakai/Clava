@@ -37,10 +37,11 @@ export const headerCells: HeaderCell<Election>[] = [
 
 interface ElectionRowProps extends RowDisplayProps<Election> {
   generate: (e: Election) => void
+  endElection: (e: Election) => void
 }
 
 export default function ElectionRow({
-  rowSelected, onClick, row, generate
+  rowSelected, onClick, row, generate, endElection
 }: ElectionRowProps) {
   return (
     <TableRow hover onClick={onClick} selected={rowSelected} tabIndex={-1}>
@@ -71,6 +72,7 @@ export default function ElectionRow({
       </TableCell>
       <TableCell>
         <Button variant="contained" onClick={(e) => {
+          endElection(row)
           e.stopPropagation()
         }}>
           End

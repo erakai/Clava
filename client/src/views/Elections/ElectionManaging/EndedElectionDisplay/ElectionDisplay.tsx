@@ -6,6 +6,7 @@ type ElectionDisplayProps = {
   settings: Settings | null
   elections: Election[]
   onDelete: (e: Election[]) => void
+  selectRes: (e: Election | null) => void
 }
 
 export function ElectionDisplay(props: ElectionDisplayProps) {
@@ -23,7 +24,7 @@ export function ElectionDisplay(props: ElectionDisplayProps) {
     <ClavaTable<Election> defaultOrder="name" tableName="Elections (Ended)"
     data={filteredEvents} headerCells={headerCells} onDelete={props.onDelete}
     RowDisplay={({rowSelected, onClick, row}) => 
-      <ElectionRow rowSelected={rowSelected} onClick={onClick} row={row}/>} 
+      <ElectionRow rowSelected={rowSelected} onClick={onClick} row={row} selectRes={props.selectRes}/>} 
     dense={(props.settings) ? props.settings.dense : false}
     searchString={searchString} setSearchString={setSearchString}
     rowsPerPageOptions={[5, 10, 20, 100]} defaultRowsPerPage={5}

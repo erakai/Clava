@@ -17,10 +17,11 @@ export const headerCells: HeaderCell<Election>[] = [
 ]
 
 interface ElectionRowProps extends RowDisplayProps<Election> {
+  selectRes: (e: Election | null) => void
 }
 
 export default function ElectionRow({
-  rowSelected, onClick, row
+  rowSelected, onClick, row, selectRes
 }: ElectionRowProps) {
   return (
     <TableRow hover onClick={onClick} selected={rowSelected} tabIndex={-1}>
@@ -32,6 +33,7 @@ export default function ElectionRow({
       </TableCell>
       <TableCell>
         <Button variant="contained" onClick={(e) => {
+          selectRes(row)
           e.stopPropagation()
         }}>
           View Results

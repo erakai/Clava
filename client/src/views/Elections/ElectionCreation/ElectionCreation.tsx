@@ -20,7 +20,7 @@ export default function ElectionCreation({ club_id, settings, elections, setElec
   useEffect(() => {
     let e: Election[] = []
     elections.forEach(m => {
-      if (!m.running) {
+      if (!m.running && !m.ended) {
         e.push(m)
       }
     })
