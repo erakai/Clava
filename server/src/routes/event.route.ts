@@ -1,7 +1,7 @@
 import { verifyUser } from "../config/auth";
 import { getClubs, getClub, createClub, addClubToUser, removeClubFromUser } from "../controllers/club.controller";
 import { Router } from "express";
-import {createEvent, getEvents, deleteEvents, incrementAttendance, getEvent, sendSchedule} from "../controllers/event.controller";
+import {createEvent, getEvents, deleteEvents, incrementAttendance, getEvent, sendSchedule, massCreateEvents} from "../controllers/event.controller";
 
 const eventRouter = Router()
 
@@ -17,6 +17,7 @@ eventRouter.post('/', verifyUser, createEvent)
 eventRouter.delete('/', verifyUser, deleteEvents)
 eventRouter.post('/increment/', incrementAttendance)
 eventRouter.post('/sendSchedule/', verifyUser, sendSchedule)
+eventRouter.post('/massCreate/', verifyUser, massCreateEvents)
 
 
 export default eventRouter

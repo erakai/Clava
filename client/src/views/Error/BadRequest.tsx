@@ -4,7 +4,7 @@ export default function BadRequest() {
   return (
     <div className="p-4 items-center">
       <Typography variant="h2">400: Bad Request!</Typography>
-      <Typography variant="h5">Gaga, ooh-la-la - Want your bad request</Typography>
+      <Typography variant="h5">Please check your internet connection and reload the page.</Typography>
     </div>
   )
 }

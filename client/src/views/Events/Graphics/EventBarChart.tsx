@@ -20,7 +20,7 @@ export default function EventBarChart({ attendanceArr, eventNameArr }: BarChartP
       },
       title: {
         display: true,
-        text: 'Attendance Count',
+        text: '',
       },
     },
   };
@@ -31,13 +31,19 @@ export default function EventBarChart({ attendanceArr, eventNameArr }: BarChartP
     labels,
     datasets: [
       {
+        label: "Attendance",
         data: attendanceArr,
-        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+        backgroundColor: 'rgba(53, 162, 235, 0.5)',
       },
     ],
   };
 
-  return (
-    <Bar options={options} data={data} />
-  );
+  if (attendanceArr.length == 1) {
+    return (null)
+  } else {
+    return (
+      <Bar options={options} data={data} />
+    )
+  }
+
 }

@@ -2,21 +2,21 @@ import { Chip, Box } from "@mui/material/"
 
 
 type RoleChipProps = {
-  name: string
-  _id: string
-  deleteDocRole: (_id: string) => void
+  role : Role
+  deleteDocRole?: (_id: string) => void
+  clickDocRole?: (_id: string) => void
 }
 
-function DocumentRoleChip({ name, _id, deleteDocRole }: RoleChipProps) {
-  // const [currName, setCurrName] = React.useState(name)
-  
+function DocumentRoleChip({ role, deleteDocRole, clickDocRole }: RoleChipProps) {  
   return (
-    <Box>
-      <Chip 
-        className=""
-        label={name}
-        onDelete={() => {deleteDocRole(_id)}}/>
-    </Box>
+    <Chip 
+      className=""
+      label={role.name}
+      key={role._id}
+      onDelete={deleteDocRole ? () => {deleteDocRole(role._id)} : undefined}
+      onClick={clickDocRole ? () => {clickDocRole(role._id)} : undefined}
+      style={ (role.color) ? { backgroundColor: role.color } : {}}
+    />
   )
 }
 

@@ -7,7 +7,7 @@ import { IClub } from "../types/club";
 
 import to from 'await-to-js'
 
-const permString = ['VIEW_FINANCES', 'EDIT_FINANCES', 'VIEW_MEMBERS', 'EDIT_MEMBERS']
+const permString = ['VIEW_FINANCES', 'EDIT_FINANCES', 'VIEW_MEMBERS', 'EDIT_MEMBERS', 'EDIT_DOCUMENTS']
 
 async function getRolesFromUser(user_id : string, club_id : string) {
 	// get officer from email + club_id
@@ -114,7 +114,7 @@ export async function hasRole(role_id, club_id, _user) {
 
 	var _flag = false
 	roles.forEach(role => {
-		if (role._id == role_id) {
+		if (role._id.toString() === role_id.toString()) {
 			_flag = true
 		}	
 	})

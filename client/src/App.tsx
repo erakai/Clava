@@ -27,8 +27,11 @@ function App() {
         main: "#ffffff"
       },
       background: {
-        default: "#ffe194"
+        default: "#fcefbb"
       }
+    },
+    typography: {
+      fontFamily: 'monospace',
     }
   })
 
