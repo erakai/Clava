@@ -7,6 +7,7 @@ type AddElectionResponse = { election: Election }
 type UpdateElectionResponse = { election: Election }
 type DeleteElectionsResponse = {}
 type VoteResponse = {}
+type NotifyMembersResponse = {}
 type GetResultsResponse = { results: EleRes }
 
 const ElectionInstance = axios.create({
@@ -51,4 +52,8 @@ export const getResults = (election_id: string) => {
 
 export const vote = (election_id: string, candidate: string, amount: number) => {
   return ElectionInstance.post<VoteResponse>('/votes', { election_id, name: candidate, amount})
+}
+
+export const _notifyMembers = ({ message, club_id }: NotifyMembersElectionRequest) => {
+  return ElectionInstance.post<NotifyMembersResponse>("/notifyMembers", { message, club_id })
 }

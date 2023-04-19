@@ -136,9 +136,14 @@ export default function EventRow({
                 {diffPrefix}{(Math.round(attendanceDiff * 100) / 100).toFixed(2)}
               </Typography>
             </DialogContentText>
-            <DialogContentText id="alert-dialog-description">
-              Yield: {attendanceCount / totalMembers * 100}%
-            </DialogContentText>
+            {(() => {
+              if (totalMembers > 0) {
+                return (
+                <DialogContentText id="alert-dialog-description">
+                  Yield: {attendanceCount / totalMembers * 100}%
+                </DialogContentText>)
+              }
+            })}
             <EventPieChart attendance={attendanceCount} totalMembers={totalMembers} />
             <EventBarChart attendanceArr={attendanceArr} eventNameArr={eventNameArr} />
 

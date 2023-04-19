@@ -36,6 +36,10 @@ export default function EventPieChart({ attendance, totalMembers }: PieChartProp
     ],
   }
 
+  if (attendance == 0 && totalMembers == 0) {
+    return null
+  }
+
   return (
     <Pie
       data={data}
