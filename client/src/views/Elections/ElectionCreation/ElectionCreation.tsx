@@ -77,15 +77,15 @@ export default function ElectionCreation({ club_id, settings, elections, setElec
   }
 
   const checkElectionExists = (e: Election) => {
-    let found = false
+    let found = 0
 
     elections.forEach(em => {
       if (em.name.trim().toLowerCase() == e.name.trim().toLowerCase()) {
-        found = true
+        found += 1
       }
     })
 
-    return found
+    return found > 1
   }
 
   return (
