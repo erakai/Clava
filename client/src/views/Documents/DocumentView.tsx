@@ -31,31 +31,25 @@ export default function DocumentView({ club_id, state }: DocumentViewProps) {
 
   const performSearch = (search: string, docs?: ClubDocument[]) => {
     // reset documents
-    console.log("M: " + searchString);
-    console.log("S: " + search);
     setSearchString(search)
+    console.log("what we should search: ", search)
     
-    // searchString = search
-    console.log("M2: " + searchString);
-
-    console.log("MMM: ", searchString)
     let useDocs = documents
     if (docs) {
       useDocs = docs
     }
     //setSearchString(search)
-    console.log("search called on: " + search + "]")
+    // console.log("search called on: " + search + "]")
     //setSearchString(search)
     //searchString = search
-    if (searchString == '') {
+    if (search == '') {
       //console.log("empty search")
       setFilteredDocuments(useDocs)
       return
     }
-    
 
     const filteredDocs = useDocs.filter((document) => document.name.toLowerCase().indexOf(search.toLowerCase()) !== -1)
-    setSearchString(search)
+    // setSearchString(search)
     // console.log(filteredDocs)
     setFilteredDocuments(filteredDocs)
     setSearchString(search)
@@ -144,21 +138,22 @@ export default function DocumentView({ club_id, state }: DocumentViewProps) {
       if (retrieved) {
         setDocuments(retrieved)
         console.log("search stringM: " + searchString + "\\")
-        if (searchString != '') {
+        // if (searchString != '') {
           performSearch(searchString, retrieved)
-        } else {
-          //setFilteredDocuments(retrieved)
-        }
+        // } else {
+        //   //setFilteredDocuments(retrieved)
+        // }
       }
     }
     
     fetchDocuments()
+    // performSearch('')
 
     const interval = setInterval(() => {
       fetchDocuments()
     }, REFRESH_RATE)
     return () => clearInterval(interval)
-  }, [update])
+  }, [update, searchString])
 
   return (
     <Box className="flex" flexDirection="column">
