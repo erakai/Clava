@@ -130,12 +130,20 @@ export default function EventRow({
             <DialogContentText id="alert-dialog-description">
               Attendance Count: {attendanceCount}
             </DialogContentText>
-            <DialogContentText id="alert-dialog-description">
-              Attendance Differential:
-              <Typography variant="button" sx={{ 'color': attendanceDiffColor }}>
-                {diffPrefix}{(Math.round(attendanceDiff * 100) / 100).toFixed(2)}
-              </Typography>
-            </DialogContentText>
+
+            {(()=>{
+              if (!isNaN(attendanceDiff)) {
+                return (
+                    <DialogContentText id="alert-dialog-description">
+                      Attendance Differential:
+                      <Typography variant="button" sx={{ 'color': attendanceDiffColor }}>
+                        {diffPrefix}{(Math.round(attendanceDiff * 100) / 100).toFixed(2)}
+                      </Typography>
+                    </DialogContentText>
+                )
+              }
+            })()}
+
             {(() => {
               if (totalMembers > 0) {
                 return (
