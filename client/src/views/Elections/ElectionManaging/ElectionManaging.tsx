@@ -137,7 +137,7 @@ export default function ElectionManaging({ club_id, settings, elections, setElec
       <Grid item xs={12} md={6} container justifyContent="center" 
         display="flex" alignItems="center">
         {selectRes ? 
-          <ResultsViewer res={selectRes} winner={winner} colors={colors}
+          <ResultsViewer res={selectRes} winner={winner} colors={colors} club_id={club_id}
             selectResults={selectResults}/>
         :
           <Box display="flex" justifyContent="center" alignItems="center" textAlign="center" height="100%">

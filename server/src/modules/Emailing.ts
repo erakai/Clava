@@ -43,6 +43,23 @@ export function sendEmail(template_id, parameters) {
 }
 
 /*
+ * sendElectionResultEmail(recipients, message)
+ * recipients = list of recipients in string form (e.g. "josh@gmail.com, ryan@gmail.com")
+ * message = formatted string containing election results
+ */
+export function sendElectionResultEmail(recipients, message) {
+  const parameters = {
+    subject: "Election Results",
+    body: message,
+    recipient: recipients,
+    recipient_name: "club members",
+    sender: "Executive Team"
+  }
+
+  sendEmail(PLAIN_EMAIL, parameters)
+}
+
+/*
  * sendEventScheduleEmail(recipients, header, event_names, event_dates)
  * recipients = list of recipients in string form (e.g. "josh@gmail.com, ryan@gmail.com")
  * header = custom header to overwrite template header (optional)
