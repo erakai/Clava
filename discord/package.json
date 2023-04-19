@@ -1,0 +1,23 @@
+{
+  "name": "discord",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon ./src/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^14.9.0",
+    "djs-commander": "^0.0.45",
+    "dotenv": "^16.0.3",
+    "mongoose": "^7.0.4",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
+}
