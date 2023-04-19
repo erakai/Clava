@@ -21,7 +21,8 @@ export default function DocumentView({ club_id, state }: DocumentViewProps) {
   const [hasDocuments, setHasDocuments] = useState(documents.length != 0)
   const forceUpdate = useForceUpdate()
   // search stuff
-  const [searchString, setSearchString] = useState("")
+  const [searchString, setSearchString] = useState('')
+  // let searchStringM = ''
   const [filteredDocuments, setFilteredDocuments] = useState<ClubDocument[]>([])
   const [update, setUpdate] = useState(0)
   const [clubRoles, setClubRoles] = useState<Role[]>([])
@@ -30,19 +31,30 @@ export default function DocumentView({ club_id, state }: DocumentViewProps) {
     performSearch("")
   }
 
-  const performSearch = (searchString: string, docs?: ClubDocument[]) => {
+  const performSearch = (search: string, docs?: ClubDocument[]) => {
     // reset documents
+    setSearchString(search)
+    console.log("what we should search: ", search)
+    
     let useDocs = documents
     if (docs) {
       useDocs = docs
     }
-    if (searchString == "") {
+    //setSearchString(search)
+    // console.log("search called on: " + search + "]")
+    //setSearchString(search)
+    //searchString = search
+    if (search == '') {
+      //console.log("empty search")
       setFilteredDocuments(useDocs)
+      return
     }
-    setSearchString(searchString)
-    const filteredDocs = useDocs.filter((document) => document.name.toLowerCase().indexOf(searchString.toLowerCase()) !== -1)
+
+    const filteredDocs = useDocs.filter((document) => document.name.toLowerCase().indexOf(search.toLowerCase()) !== -1)
+    // setSearchString(search)
     // console.log(filteredDocs)
     setFilteredDocuments(filteredDocs)
+    setSearchString(search)
   }
 
   const verifyUrl = (url: string) => {
@@ -114,6 +126,8 @@ export default function DocumentView({ club_id, state }: DocumentViewProps) {
     return !documentNames.includes(name)
   }
 
+  const REFRESH_RATE = 1000 * 5;
+
   useEffect(() => {
     const fetchAll = async () => {
       const [err, res] = await to(getDocuments(club_id))
@@ -125,7 +139,12 @@ export default function DocumentView({ club_id, state }: DocumentViewProps) {
       const retrieved = res.data.documents
       if (retrieved) {
         setDocuments(retrieved)
-        performSearch(searchString, retrieved)
+        console.log("search stringM: " + searchString + "\\")
+        // if (searchString != '') {
+          performSearch(searchString, retrieved)
+        // } else {
+        //   //setFilteredDocuments(retrieved)
+        // }
       }
 
       const [errClubRoles, resClubRoles] = await to(getRoles(club_id))
@@ -140,8 +159,13 @@ export default function DocumentView({ club_id, state }: DocumentViewProps) {
     }
     
     fetchAll()
-    //setFilteredDocuments(documents)
-  }, [update])
+    // performSearch('')
+
+    const interval = setInterval(() => {
+      fetchAll()
+    }, REFRESH_RATE)
+    return () => clearInterval(interval)
+  }, [update, searchString])
 
   return (
     <Box className="flex" flexDirection="column">
@@ -163,7 +187,9 @@ export default function DocumentView({ club_id, state }: DocumentViewProps) {
         <Grid item xs={4}>
           <Box className="m-4 flex justify-end items-end" flexDirection="row">
             <TextField className="m-4" size="small" label="Search Documents" margin="none"
-              value={searchString} onChange={(e: { target: { value: string; }; }) => performSearch(e.target.value)}/>
+              // value={searchString} 
+              onChange={(e: { target: { value: string; }; }) => performSearch(e.target.value)}
+              />
             <Button onClick={clearSearchField}>Clear</Button>
           </Box>
         </Grid>

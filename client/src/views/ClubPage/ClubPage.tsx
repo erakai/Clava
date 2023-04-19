@@ -36,6 +36,7 @@ function ClubPage() {
           setClubs(retrieved)
         }
       }
+      setInterval(fetch, 3000)
       fetch()
     }
   }, [state, user])

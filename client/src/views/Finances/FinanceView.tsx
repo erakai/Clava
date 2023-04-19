@@ -26,6 +26,8 @@ export default function FinanceView(props: FinanceViewProps) {
   const [addTransactionModalOpen, setAddTransactionModalOpen] = useState(false)
 
   // Loading data on render
+  const REFRESH_RATE = 1000 * 5;
+
   useEffect(() => {
     const fetchData = async () => {
       const [errT, trans] = await to(getTransactions(props.club_id))
@@ -53,6 +55,12 @@ export default function FinanceView(props: FinanceViewProps) {
 
     fetchData()
     refreshSettings(props.club_id)
+
+    const interval = setInterval(() => {
+      fetchData()
+    }, REFRESH_RATE)
+    return () => clearInterval(interval)
+
   }, [])
 
   const addTransactionWrapper = async (req: AddTransactionRequest) => {

@@ -115,7 +115,8 @@ export default function MemberDisplay({ members, setMembers, title, club_id, sta
         <ClavaTable<Member> defaultOrder="name" tableName={title}
           data={filteredMembers} headerCells={headerCells} onDelete={onDelete}
           RowDisplay={({rowSelected, onClick, row}) => 
-          <MemberRow rowSelected={rowSelected} onClick={onClick} row={row} allTags={tags} dense={dense}/>}          dense={dense} searchString={searchString} setSearchString={setSearchString}
+          <MemberRow rowSelected={rowSelected} onClick={onClick} row={row} allTags={tags} dense={dense}/>}          
+          dense={dense} searchString={searchString} setSearchString={setSearchString}
           rowsPerPageOptions={[5, 10, 30, 100]} defaultRowsPerPage={10}
           onEdit={onEditClicked} AlternateSelectedToolbar={
             ({selected, setSelected}: AlternateSelectedToolbarProps<Member>) =>
