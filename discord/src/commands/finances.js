@@ -18,7 +18,8 @@ module.exports = {
         .setDescription('Create new transaction')
         .addNumberOption(option =>
           option.setName('amount')
-            .setDescription('The amount that is associated with the transaction.'))
+            .setDescription('The amount that is associated with the transaction.')
+            .setRequired(true))
         .addNumberOption(option =>
           option.setName('month')
             .setDescription('The date of the new event')
