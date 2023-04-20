@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js')
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js')
 const guildSchema = require('../models/Guild.js')
 
 module.exports = {
@@ -7,16 +7,30 @@ module.exports = {
         .setDescription('Get the status of the guild'),
     run: async ({ interaction }) => {
 
-        const data = await guildSchema.findOne({GuildID: interaction.guild.id})
+        var data = await guildSchema.findOne({GuildID: interaction.guild.id})
 
         if(!data) {
-            guildSchema.create({
+            data = await guildSchema.create({
                 GuildID: interaction.guild.id,
                 ClubID: ""
             })
         }
-        else if(data) {
-            console.log("hello")
+
+        const successEmbed = new EmbedBuilder()
+            .setColor('#2fd085')
+            .setTitle('Success')
+            .setDescription('Your server has a club associated with it!')
+
+        const errorEmbed = new EmbedBuilder()
+            .setColor('#ca4835')
+            .setTitle('Error')
+            .setDescription('Your server does not have a club associated with it!')
+
+        if(data.ClubID.length == 0) {
+            interaction.reply( { embeds: [errorEmbed] } )
+        }
+        else {
+            interaction.reply( { embeds: [successEmbed] } )
         }
     }
 
