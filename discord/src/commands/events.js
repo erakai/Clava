@@ -1,6 +1,7 @@
 const { ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder } = require('discord.js')
 
 module.exports = {
+  //deleted: true, // delete command
   data: new SlashCommandBuilder()
     .setName('events')
     .setDescription('Info about events')
@@ -50,7 +51,7 @@ module.exports = {
 
         const confirm = new ButtonBuilder()
           .setCustomId('confirm')
-          .setLabel('Confirm Ban')
+          .setLabel('Confirm')
           .setStyle(ButtonStyle.Danger);
 
         const cancel = new ButtonBuilder()

@@ -1,6 +1,7 @@
 const { ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder } = require('discord.js')
 
 module.exports = {
+  //deleted: true, // This will delete your command
   data: new SlashCommandBuilder()
     .setName('finances')
     .setDescription('Finance hub access')
@@ -42,13 +43,13 @@ module.exports = {
         const amount = interaction.options.getNumber('amount')
 
         const income = new ButtonBuilder()
-          .setCustomId('confirm')
-          .setLabel('Confirm Ban')
+          .setCustomId('confirm_income')
+          .setLabel('Confirm Income')
           .setStyle(ButtonStyle.Success);
 
         const expense = new ButtonBuilder()
-          .setCustomId('confirm')
-          .setLabel('Confirm Ban')
+          .setCustomId('confirm_expense')
+          .setLabel('Confirm Expense')
           .setStyle(ButtonStyle.Success);
 
         const cancel = new ButtonBuilder()
