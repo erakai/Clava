@@ -107,7 +107,7 @@ export default function ResultsViewer({
           {confirmationMessage}
         </DialogContentText>
       </DialogContent>
-    </Dialog>v
+    </Dialog>
 
     <Dialog
     open={shareOpen}

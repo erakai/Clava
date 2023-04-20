@@ -50,7 +50,7 @@ export default function SendEventScheduleModal({
     }
 
     if (date.isBefore(moment())) {
-      setErrorMessage('Invalid date.')
+      setErrorMessage('Date cannot be in the past.')
       return
     }
 
@@ -90,7 +90,7 @@ export default function SendEventScheduleModal({
             </Grid> : <></>}
           <Grid item>
             <TextField className="w-[100%]" size="small" value={header}
-                       label="Email Header (optional)" variant="outlined" type="text"
+                       label="Email Subject (optional)" variant="outlined" type="text"
                        onChange={(e) => { setHeader(e.target.value); setErrorMessage('')}}/>
           </Grid>
           <Grid item>

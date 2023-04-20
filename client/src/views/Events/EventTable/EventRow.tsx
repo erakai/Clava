@@ -130,12 +130,20 @@ export default function EventRow({
             <DialogContentText id="alert-dialog-description">
               Attendance Count: {attendanceCount}
             </DialogContentText>
-            <DialogContentText id="alert-dialog-description">
-              Attendance Differential:
-              <Typography variant="button" sx={{ 'color': attendanceDiffColor }}>
-                {diffPrefix}{(Math.round(attendanceDiff * 100) / 100).toFixed(2)}
-              </Typography>
-            </DialogContentText>
+
+            {(()=>{
+              if (!isNaN(attendanceDiff)) {
+                return (
+                    <DialogContentText id="alert-dialog-description">
+                      Attendance Differential:
+                      <Typography variant="button" sx={{ 'color': attendanceDiffColor }}>
+                        {diffPrefix}{(Math.round(attendanceDiff * 100) / 100).toFixed(2)}
+                      </Typography>
+                    </DialogContentText>
+                )
+              }
+            })()}
+
             {(() => {
               if (totalMembers > 0) {
                 return (
@@ -162,7 +170,10 @@ export default function EventRow({
         </DialogTitle>
         <DialogContent>
           <Box flexDirection="column" className="flex justify-center items-center">
-            <QRCode size={230} className="mb-5" value={qrValue}/>
+            <DialogContentText>
+              {qrValue}
+            </DialogContentText>
+            <QRCode size={230} className="mt-5 mb-5" value={qrValue}/>
             <DialogContentText id="alert-dialog-description">
               Please scan this QR code to record your attendance at this event.
             </DialogContentText>
