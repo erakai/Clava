@@ -165,12 +165,23 @@ module.exports = {
       } else if (subcommand === 'create') {
         const name = interaction.options.getString('name')
         const date = new Date(interaction.options.getInteger('year'), 
-                              interaction.options.getInteger('month') - 1, // months are 0 indexed
-                              interaction.options.getInteger('day'))
-                              .toLocaleDateString('en-us', { weekday:"short", year:"numeric", month:"short", day:"numeric"})
+          interaction.options.getInteger('month') - 1, // months are 0 indexed
+          interaction.options.getInteger('day'))
+
+        // check if event is in the past
+        if (date.getTime() < new Date().getTime()) {
+          const errorEmbed = new EmbedBuilder()
+            .setTitle('Error')
+            .setDescription('Date provided must be in the future')
+            .setColor('#ca4835')
+          await interaction.reply({embeds: [errorEmbed]})
+          return
+        }
+
+        const dateString = date.toLocaleDateString('en-us', { weekday:"short", year:"numeric", month:"short", day:"numeric"})
         const description = interaction.options.getString('description')
 
-        let embedDescription = "**Create Event:** \"" + name + "\"\n**Date:** " + date
+        let embedDescription = "**Create Event:** \"" + name + "\"\n**Date:** " + dateString
         if (description != null) {
           embedDescription += "\n**Description:** " + description
         }
