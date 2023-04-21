@@ -50,16 +50,19 @@ export const vote = async (req: Request, res: Response) => {
   const [err, _] = await createResultsIfNecessary(election_id)
   if (err) return res.status(500).send(err)
 
-  const doc = await ElectionResults.findOneAndUpdate({ election_id: election_id})
-  if (!doc) return res.status(500).json({error: 'something went wrong'})
+  const [err2, results] = await to(ElectionResults.findOne({ election_id: election_id }).exec())
+  if (err2) return res.status(500).send(err) 
 
-  doc.candidates.forEach(c => {
+  let newcan = [...results.candidates]
+  newcan.forEach(c => {
     if (c.name == name) {
       c.votes += amount
     }
   })
 
-  await doc.save()
+  const [err3, l] = await to(ElectionResults.findByIdAndUpdate(results._id, { candidates: newcan }).exec())
+  if (err3) return res.status(500).send({err})
+
   return res.status(200).json({})
 }
 
