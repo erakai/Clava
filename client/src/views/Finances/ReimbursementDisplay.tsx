@@ -85,6 +85,8 @@ export default function ReimbursementDisplay({club_id} : DisplayProps) {
     
   }
 
+  const REFRESH_RATE = 1000 * 5;
+
   // Gets clubs and listens for new clubs added to the DB
   useEffect(() => {
     if (user) {
@@ -106,6 +108,11 @@ export default function ReimbursementDisplay({club_id} : DisplayProps) {
         }
       }
       fetch()
+
+      const interval = setInterval(() => {
+        fetch()
+      }, REFRESH_RATE)
+      return () => clearInterval(interval)
     }
   }, [state, user])
 

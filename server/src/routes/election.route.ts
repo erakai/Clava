@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { getElectionById, getElections, postElection, removeElection } from "../controllers/election.controller";
 import { verifyUser } from "../config/auth";
-import { getResults, vote } from "../controllers/electionresults.controller";
+import {getResults, notifyMembers, vote} from "../controllers/electionresults.controller";
 
 const electionRouter = Router()
 
@@ -26,5 +26,6 @@ electionRouter.get('/id', getElectionById)
 
 electionRouter.get('/votes', verifyUser, getResults)
 electionRouter.post('/votes', vote)
+electionRouter.post('/notifyMembers', verifyUser, notifyMembers)
 
 export default electionRouter

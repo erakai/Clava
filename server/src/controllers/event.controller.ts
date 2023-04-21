@@ -48,6 +48,7 @@ export const sendSchedule = async (req: Request, res: Response) => {
 
     const now = new Date()
 
+    date.setHours(23,59,59,999)
     events.forEach((e: IEvent) => {
       if (e.date <= date && e.date > now) {
         eventNames.push(e.name)

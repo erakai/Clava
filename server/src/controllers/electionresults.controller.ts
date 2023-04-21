@@ -2,6 +2,9 @@ import to from 'await-to-js'
 import type { Request, Response } from 'express'
 import { ElectionResults } from '../models/election.model'
 import { Election } from '../models/election.model'
+import Member from '../models/member.model'
+import {IMember} from "../types/member";
+import {sendElectionResultEmail, sendEventScheduleEmail} from "../modules/Emailing";
 
 const createResultsIfNecessary = async (election_id: string) => {
   const [err, results] = await to(ElectionResults.find({ election_id: election_id }).exec())
@@ -58,4 +61,28 @@ export const vote = async (req: Request, res: Response) => {
 
   await doc.save()
   return res.status(200).json({})
+}
+
+export const notifyMembers = async (req: Request, res: Response) => {
+  let { message, club_id } = req.body
+
+  let recipients = ""
+  Member.find({club_id: club_id}, async (err, members) => {
+    if (err) {
+      return res.status(500).send({err})
+    }
+
+    members.forEach((e: IMember) => {
+      recipients += e.email + ", "
+    })
+
+    if (recipients == "") {
+      return res.status(500).send("No members found")
+    }
+
+    recipients = recipients.slice(0, -2)
+
+    sendElectionResultEmail(recipients, message)
+    return res.status(200).send("Members were successfully notified")
+  })
 }

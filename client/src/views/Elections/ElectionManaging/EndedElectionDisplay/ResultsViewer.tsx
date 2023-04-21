@@ -1,8 +1,11 @@
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, Paper, Stack, Typography } from "@mui/material"
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, ChartData} from "chart.js"
-import { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
+import to from 'await-to-js'
 import { Pie } from "react-chartjs-2"
 import CloseIcon from '@mui/icons-material/Close';
+import { AxiosError } from "axios";
+import {_notifyMembers} from "../../../../api/electionApi";
 
 ChartJS.register(ArcElement, Tooltip, Legend)
 
@@ -11,14 +14,18 @@ type ResultsViewerProps = {
   winner: string
   colors: string[]
   selectResults: (e: Election | null) => Promise<void>
+  club_id: string
 }
 
 export default function ResultsViewer({
-  res, winner, colors, selectResults
+  res, winner, colors, selectResults, club_id
 }: ResultsViewerProps) {
   const [data, setData] = useState<ChartData<"pie", number[], string> | null>(null)
   const [message, setMessage] = useState<string[]>([])
   const [shareOpen, setShareOpen] = useState(false)
+  const [notifyMembersConfirmationOpen, setNotifyMembersConfirmationOpen] = useState(false)
+  const [confirmationMessage, setConfirmationMessage] = useState("")
+  const [confirmationHeader, setConfirmationHeader] = useState("")
 
   useEffect(() => {
     const newdata = {
@@ -39,6 +46,22 @@ export default function ResultsViewer({
 
     setData(newdata)
   }, [res])
+
+  const notifyMembers = async (req: NotifyMembersElectionRequest) => {
+    const [err, res] = await to(_notifyMembers(req))
+
+    if (err && err instanceof AxiosError) {
+      console.log(err)
+      setConfirmationHeader("Something Went Wrong")
+      setConfirmationMessage(err.response?.data)
+      setNotifyMembersConfirmationOpen(true)
+      return
+    }
+
+    setConfirmationHeader("Notification Successful")
+    setConfirmationMessage("All members have been successfully notifed.")
+    setNotifyMembersConfirmationOpen(true)
+  }
 
   const createMessage = () => {
     let string: string[] = ["The results of the the " + res.name + " election are as follows:"]
@@ -70,6 +93,22 @@ export default function ResultsViewer({
   }
 
   return <>
+    <Dialog
+      open={notifyMembersConfirmationOpen}
+      onClose={e => {setNotifyMembersConfirmationOpen(false)}}
+      aria-labelledby="alert-dialog-title"
+      aria-describedby="alert-dialog-description"
+    >
+      <DialogTitle id="alert-dialog-title">
+        {confirmationHeader}
+      </DialogTitle>
+      <DialogContent>
+        <DialogContentText id="alert-dialog-description">
+          {confirmationMessage}
+        </DialogContentText>
+      </DialogContent>
+    </Dialog>
+
     <Dialog
     open={shareOpen}
     onClose={handleClose}
@@ -103,6 +142,16 @@ export default function ResultsViewer({
           <Typography variant="h6">{"Winner: " + winner}</Typography>
           <Button variant="contained" sx={{ marginTop: 6, width: 'min-content' }}
             onClick={handleOpen} >Share</Button>
+          <Button variant="contained" sx={{ marginTop: 6, marginLeft: 3, width: 'max-content' }}
+            onClick={() => {
+              const messageArr = createMessage()
+              const message = messageArr[0] + "\n\n" + messageArr[3] + "\n\n" + messageArr[5]
+              let newNotification: NotifyMembersElectionRequest = {
+                message: message,
+                club_id: club_id
+              }
+              notifyMembers(newNotification)
+            }} >Notify Members</Button>
         </Box>
       </Stack>
       {data && 

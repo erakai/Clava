@@ -199,6 +199,11 @@ interface MassCreateEventRequest {
   club_id: string
 }
 
+interface NotifyMembersElectionRequest {
+  message: string,
+  club_id: string
+}
+
 interface Log {
   _id : string,
   user_id : string,
