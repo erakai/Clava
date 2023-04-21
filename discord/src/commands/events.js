@@ -96,12 +96,12 @@ module.exports = {
             let index = (currPage - 1) * 10 + i
             if (index < events.length) {
               const e = events[index]
-              let val = "-Date: " + e.date.toLocaleDateString('en-us', { weekday:"short", year:"numeric", month:"short", day:"numeric"})
+              let val = "**Date:** " + e.date.toLocaleDateString('en-us', { weekday:"short", year:"numeric", month:"short", day:"numeric"})
               if (e.description != null) {
-                val += "\n-Description: " + e.description
+                val += "\n**Description:** " + e.description
               }
               if (e.started == true) {
-                val += "\n-Attendance: " + e.attendance
+                val += "\n**Attendance:** " + e.attendance
               }
               //console.log(events[index].name)
               embed.addFields({name: e.name, value: val})
@@ -170,9 +170,9 @@ module.exports = {
                               .toLocaleDateString('en-us', { weekday:"short", year:"numeric", month:"short", day:"numeric"})
         const description = interaction.options.getString('description')
 
-        let embedDescription = "Create Event: \"" + name + "\"\nDate: " + date
+        let embedDescription = "**Create Event:** \"" + name + "\"\n**Date:** " + date
         if (description != null) {
-          embedDescription += "\nDescription: " + description
+          embedDescription += "\n**Description:** " + description
         }
 
         const createEmbed = new EmbedBuilder()

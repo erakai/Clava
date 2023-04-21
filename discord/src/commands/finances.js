@@ -1,4 +1,4 @@
-const { ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder, EmbedBuilder } = require('discord.js')
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder, EmbedBuilder, ComponentType } = require('discord.js')
 const guildSchema = require('../models/Guild.js')
 const transactionSchema = require('../models/Transaction.js')
 
@@ -83,7 +83,7 @@ module.exports = {
       const incomePageCount = Math.floor((incomes.length - 1) / 10) + 1
       const expensePageCount = Math.floor((expenses.length - 1) / 10) + 1
 
-      const createTransactionEmbed = async (transactions) => {
+      const createTransactionEmbed = (transactions) => {
         let embed = new EmbedBuilder()
         .setTitle(isIncome ? 'Incomes' : 'Expenses')
         .setColor('#ffd300')
@@ -106,11 +106,13 @@ module.exports = {
           let index = (currPage - 1) * 10 + i
           if (index < transactions.length) {
             const e = transactions[index]
-            let val = "-Date: " + new Date(e.date).toLocaleDateString('en-us', { weekday:"short", year:"numeric", month:"short", day:"numeric"})
+            let date = new Date(0)
+            date.setUTCMilliseconds(e.date)
+            let val = "**Date:** " + date.toLocaleDateString('en-us', { weekday:"short", year:"numeric", month:"short", day:"numeric"})
             if (isIncome) {
-              val += "\n-Amount: $" + (Math.round(e.amount * 100) / 100).toFixed(2)
+              val += "\n**Amount:** $" + (Math.round(e.amount * 100) / 100).toFixed(2)
             } else {
-              val += "\n-Amount: $" + (Math.round(e.amount * -100) / 100).toFixed(2)
+              val += "\n**Amount:** $" + (Math.round(e.amount * -100) / 100).toFixed(2)
             }
             embed.addFields({name: e.source, value: val})
           }
@@ -130,7 +132,7 @@ module.exports = {
         .setCustomId('finance_prev_button')
         .setLabel('Prev')
         .setStyle(ButtonStyle.Primary)
-        .setDisabled(true) // start on first page
+        .setDisabled(currIncomePage == 1) // start on first page
 
       const next = new ButtonBuilder()
         .setCustomId('finance_next_button')
@@ -142,7 +144,8 @@ module.exports = {
         .addComponents(prev, next, toggleTransactionView);
 
 
-      let embed = createTransactionEmbed(incomes)
+      const embed = createTransactionEmbed(incomes)
+
       const response = await interaction.reply({embeds: [embed], components: [row]})
 
       const collectorFilter = i => i.user.id === interaction.user.id;
@@ -167,6 +170,7 @@ module.exports = {
               pageCount = expensePageCount
               embed = createTransactionEmbed(expenses)
             }
+            console.log("Prev page count: " + pageCount)
             prev.setDisabled(currPage == 1)
             next.setDisabled(currPage == pageCount)
             await i.reply({embeds: [embed], components: [row]})
@@ -187,6 +191,25 @@ module.exports = {
               currPage = currExpensePage
               pageCount = expensePageCount
               embed = createTransactionEmbed(expenses)
+            }
+            console.log("next: " + pageCount)
+            prev.setDisabled(currPage == 1)
+            next.setDisabled(currPage == pageCount)
+            await i.reply({embeds: [embed], components: [row]})
+            await interaction.editReply({embeds: [embed], components: [row]})
+            await i.deleteReply()
+          } else if (buttonId === 'finance_toggle_button') {
+            // switch and 
+            isIncome = !isIncome
+            toggleTransactionView.setLabel(isIncome ? 'See Expenses' : 'See Incomes')
+            createTransactionEmbed(isIncome ? incomes : expenses)
+            let embed = createTransactionEmbed(isIncome ? incomes : expenses)
+            if (isIncome) {
+              currPage = currIncomePage
+              pageCount = incomePageCount
+            } else {
+              currPage = currExpensePage
+              pageCount = expensePageCount
             }
             prev.setDisabled(currPage == 1)
             next.setDisabled(currPage == pageCount)
