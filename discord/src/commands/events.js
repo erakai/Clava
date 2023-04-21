@@ -19,15 +19,15 @@ module.exports = {
           option.setName('name')
             .setDescription('The name of the new event')
             .setRequired(true))
-        .addNumberOption(option =>
+        .addIntegerOption(option =>
           option.setName('month')
             .setDescription('The month of the new event')
             .setRequired(true))
-        .addNumberOption(option =>
+        .addIntegerOption(option =>
           option.setName('day')
             .setDescription('The day of the new event')
             .setRequired(true))
-        .addNumberOption(option =>
+        .addIntegerOption(option =>
           option.setName('year')
             .setDescription('The year of the new event')
             .setRequired(true))
@@ -65,10 +65,12 @@ module.exports = {
           club_id: data.ClubID
         })
         if (!events) {
-          viewEmbed
-            .setTitle('Event Fetch Failed')
-            .setColor('#7f8c8d')
-          await confirmation.update({ embeds: [viewEmbed], components: [] });
+          errorEmbed
+            .setTitle('Error')
+            .setColor('#ca4835')
+            .setDescription("Failed To Fetch Events")
+          await confirmation.update({ embeds: [errorEmbed], components: [] });
+          return
         }
 
         if (events.length == 0) {
@@ -162,9 +164,9 @@ module.exports = {
 
       } else if (subcommand === 'create') {
         const name = interaction.options.getString('name')
-        const date = new Date(interaction.options.getNumber('year'), 
-                              interaction.options.getNumber('month') - 1, // months are 0 indexed
-                              interaction.options.getNumber('day'))
+        const date = new Date(interaction.options.getInteger('year'), 
+                              interaction.options.getInteger('month') - 1, // months are 0 indexed
+                              interaction.options.getInteger('day'))
                               .toLocaleDateString('en-us', { weekday:"short", year:"numeric", month:"short", day:"numeric"})
         const description = interaction.options.getString('description')
 
