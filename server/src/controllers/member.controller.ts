@@ -46,7 +46,7 @@ export const createMember = async (req: Request, res: Response) => {
   }
 
   Member.find({
-    name: name, email: email
+    name: name, email: email, club_id: club_id
   }, async (err, members) => {
     if (err) {
       return res.status(500).send({err})
