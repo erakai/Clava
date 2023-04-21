@@ -170,7 +170,6 @@ module.exports = {
               pageCount = expensePageCount
               embed = createTransactionEmbed(expenses)
             }
-            console.log("Prev page count: " + pageCount)
             prev.setDisabled(currPage == 1)
             next.setDisabled(currPage == pageCount)
             await i.reply({embeds: [embed], components: [row]})
@@ -192,7 +191,6 @@ module.exports = {
               pageCount = expensePageCount
               embed = createTransactionEmbed(expenses)
             }
-            console.log("next: " + pageCount)
             prev.setDisabled(currPage == 1)
             next.setDisabled(currPage == pageCount)
             await i.reply({embeds: [embed], components: [row]})
@@ -204,13 +202,8 @@ module.exports = {
             toggleTransactionView.setLabel(isIncome ? 'See Expenses' : 'See Incomes')
             createTransactionEmbed(isIncome ? incomes : expenses)
             let embed = createTransactionEmbed(isIncome ? incomes : expenses)
-            if (isIncome) {
-              currPage = currIncomePage
-              pageCount = incomePageCount
-            } else {
-              currPage = currExpensePage
-              pageCount = expensePageCount
-            }
+            const currPage = isIncome ? currIncomePage : currExpensePage
+            const pageCount = isIncome ? incomePageCount : expensePageCount
             prev.setDisabled(currPage == 1)
             next.setDisabled(currPage == pageCount)
             await i.reply({embeds: [embed], components: [row]})
@@ -223,6 +216,16 @@ module.exports = {
       }
     } else if (subcommand === 'create') {
       const amount = interaction.options.getNumber('amount')
+
+      if (amount <= 0) {
+        const errorEmbed = new EmbedBuilder()
+        .setTitle('Error')
+        .setDescription('Amount provided must be a positive number')
+        .setColor('#ca4835')
+        await interaction.reply({embeds: [errorEmbed]})
+        return
+      }
+
       const source = interaction.options.getString('source')
       const date = new Date(interaction.options.getInteger('year'), 
         interaction.options.getInteger('month') - 1, // months are 0 indexed
@@ -247,8 +250,7 @@ module.exports = {
       const row = new ActionRowBuilder()
         .addComponents(cancel, income, expense);
 
-      const embedDescription = "Create Transaction:\n" 
-        + "Source: " + source + "\n"
+      const embedDescription = "Source: " + source + "\n"
         + "Amount: $" + amount + "\n"
         + "Date: " + dateString + "\n"
 

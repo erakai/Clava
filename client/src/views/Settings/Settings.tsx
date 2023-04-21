@@ -29,6 +29,7 @@ export default function Settings({ clubName, club_id }: SettingsProp) {
   const [eventExpanded, setEventExpanded] = useState(false)
   const [docExpanded, setDocExpanded] = useState(false)
   const [financeExpanded, setFinanceExpanded] = useState(false)
+  const [discordExpanded, setDiscordExpanded] = useState(false)
 
   useEffect(() => {
     refreshSettings(club_id)
@@ -98,6 +99,17 @@ export default function Settings({ clubName, club_id }: SettingsProp) {
             </AccordionSummary>
             <AccordionDetails>
               Settings coming soon!
+            </AccordionDetails>
+          </Accordion>
+
+          <Accordion expanded={discordExpanded} onChange={() => setDiscordExpanded(!discordExpanded)}
+            sx={{ minWidth: '100%'}}>
+            <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
+              <Typography fontWeight='bold' variant='subtitle1'>Discord Bot</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Typography variant='subtitle1'>Club Id</Typography>
+              <Typography variant='body2'>{club_id}</Typography>
             </AccordionDetails>
           </Accordion></>
         )}
