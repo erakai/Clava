@@ -34,6 +34,26 @@ module.exports = {
             .setDescription('The date of the new event')
             .setRequired(true))),
     run: async ({ interaction, client }) => {
+      
+      var data = await guildSchema.findOne({GuildID: interaction.guild.id})
+
+      if(!data) {
+        data = await guildSchema.create({
+          GuildID: interaction.guild.id,
+          ClubID: ""
+        })
+      }
+
+      const errorEmbed = new EmbedBuilder()
+        .setColor('#ca4835')
+        .setTitle('Error')
+        .setDescription('Your server does not have a club associated with it!')
+
+      if(data.ClubID.length == 0) {
+        interaction.reply( { embeds: [errorEmbed] } )
+        return
+      }
+      // otherwise club associated with server, continue
       const subcommand = interaction.options.getSubcommand()
       if (subcommand === 'incomes') {
         interaction.reply("Display income transactions.")
@@ -60,7 +80,7 @@ module.exports = {
         const row = new ActionRowBuilder()
           .addComponents(cancel, income, expense);
 
-        await interaction.reply({ 
+        const response = await interaction.reply({ 
           content: "Create Transaction:\n" 
                 + "Amount: " + amount + "\n"
                 + "On: " + "date\n"
