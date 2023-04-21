@@ -1,6 +1,6 @@
 import {BrowserRouter, Route, Routes, useParams} from 'react-router-dom'
 import Test from '../../views/Main/Test'
-import ClubComposite from '../ClubComposite'
+import { ClubComposite } from '../ClubComposite'
 import ClubPage from '../ClubPage'
 import UrlNotFound from '../Error/UrlNotFound'
 import Login from '../Login'

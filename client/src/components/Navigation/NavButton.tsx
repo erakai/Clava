@@ -12,20 +12,23 @@ import BallotIcon from '@mui/icons-material/Ballot';
 import { useNavigate } from "react-router-dom";
 
 import { ReactNode } from 'react';
+import { hasPermission } from '../../views/ClubComposite';
 
 type ButtonParams = {
 	name: 'Members' | 'Events' | 'Documents' | 'Finances' | 'Elections';
+	disabled: boolean
 	icon?: ReactNode;
 	onClick? : () => any;
 	route?: string
 }
 
 function getButtonParams(title : string) : ButtonParams {
-	var buttonParams : ButtonParams = { name : title as 'Members' | 'Events' | 'Documents' | 'Finances' |  'Elections'}
+	var buttonParams : ButtonParams = { name : title as 'Members' | 'Events' | 'Documents' | 'Finances' |  'Elections', disabled: false}
 	switch (title) {
 		case 'Members': {
 			buttonParams.icon = <GroupsIcon />;
 			buttonParams.route = "/members"
+			buttonParams.disabled = !hasPermission("VIEW_MEMBERS")
 			break;
 		} 
 		case 'Events' : {
@@ -41,6 +44,7 @@ function getButtonParams(title : string) : ButtonParams {
 		case 'Finances' : {
 			buttonParams.icon = <PaidOutlinedIcon />;
 			buttonParams.route = "/finances";
+			buttonParams.disabled = !hasPermission("VIEW_FINANCES")
 			break;
 		}  
 		case 'Elections' : {
@@ -70,7 +74,7 @@ function NavButton({title, isSelected, clubId}: NavButtonProps) {
 		<Tooltip title={title}>
 			<Avatar sx={{ bgcolor: "secondary.main", mx:1, width:48, height:48 }}>
 				<IconButton
-					disabled={isSelected}
+					disabled={isSelected || buttonParams.disabled}
 			        key={title as string}
 			        onClick={onLinkChange}	
 			        sx={{ color: 'white', display: 'block', width:48, height:48 }}

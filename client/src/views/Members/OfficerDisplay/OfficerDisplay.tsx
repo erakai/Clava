@@ -11,6 +11,7 @@ import OfficerToolbarExtension from "./OfficerToolbarExtension"
 import to from "await-to-js";
 import {_deleteEvents} from "../../../api/eventApi";
 import {_deleteOfficers} from "../../../api/officerApi";
+import { hasPermission } from "../../ClubComposite"
 
 const headerCells: HeaderCell<Officer>[] = [
   {
@@ -99,8 +100,10 @@ export default function OfficerDisplay({ officers, setOfficers, title, club_id, 
           onEdit={onEditClicked} AlternateSelectedToolbar={
             ({selected, setSelected}: AlternateSelectedToolbarProps<Officer>) =>
             <OfficerToolbarExtension selected={selected} setSelected={setSelected} 
-              allRoles={roles} officers={officers} setOfficers={setOfficers} forceUpdate={forceUpdate}/>
+              allRoles={roles} officers={officers} setOfficers={setOfficers} forceUpdate={forceUpdate}
+            />
           }
+          disableDelete={!hasPermission("OWNER")} disableEdit={!hasPermission("OWNER")}
         />
         {editModalOpen && 
           <div></div>

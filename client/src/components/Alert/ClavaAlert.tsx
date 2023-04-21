@@ -17,6 +17,17 @@ type AlertProps = {
 export default function ClavaAlert({key, type, message} : AlertProps) {
   const [open, setOpen] = React.useState(true);
 
+   React.useEffect(() => {
+    const timeId = setTimeout(() => {
+      // After 3 seconds set the show value to false
+      setOpen(false)
+    }, 5000)
+
+    return () => {
+      clearTimeout(timeId)
+    }
+  }, []);
+
   return (
     <Box sx={{ width: '100%' }}>
       <Collapse in={open}>

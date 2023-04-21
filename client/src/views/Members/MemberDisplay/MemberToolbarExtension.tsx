@@ -4,6 +4,7 @@ import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 import AddIcon from '@mui/icons-material/Add';
 import { addTagsToMember } from "../../../api/memberApi";
 import to from "await-to-js";
+import { hasPermission } from "../../ClubComposite";
 
 type MemberToolbarExtensionProps = {
   selected: Member[]
@@ -52,7 +53,7 @@ function MemberToolbarExtension({
         <Collapse in={adding} orientation="vertical" className='w-full'>
           <Stack direction="row">
             <Tooltip title="Add Tag">
-              <IconButton onClick={() => {addTags()}}>
+              <IconButton disabled={!hasPermission("EDIT_MEMBERS")} onClick={() => {addTags()}}>
                 <AddIcon/>
               </IconButton>
             </Tooltip>
@@ -64,7 +65,7 @@ function MemberToolbarExtension({
       </Grid>
       <Grid item xs={4} lg={2}>
         <Tooltip title="Add Tag">
-          <IconButton onClick={() => setAdding(!adding)}>
+          <IconButton disabled={!hasPermission("EDIT_MEMBERS")} onClick={() => setAdding(!adding)}>
             <LocalOfferIcon/>
           </IconButton>
         </Tooltip>

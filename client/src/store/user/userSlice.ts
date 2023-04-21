@@ -1,6 +1,7 @@
 import { createAction, createSlice } from "@reduxjs/toolkit"
 import { errorT, StoreState } from "../../store"
 import { login, logout, register, getUser } from "./userThunk"
+import { permission, permissions } from "../../types/permissions"
 
 export enum UserState {
   NONE,

@@ -4,6 +4,7 @@ import * as React from 'react';
 import CreateTagDialog from './CreateTagDialog';
 import TagChip from './TagChip';
 import to from 'await-to-js';
+import { hasPermission } from '../../ClubComposite';
 
 const pages = ['Members', 'Events', 'Documents', 'Finances'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
@@ -50,7 +51,7 @@ function TagsEditorDialog({createTag, club_id, tags, setTags, forceUpdate}: Tags
 
   return (
     <Box height="100%">
-      <Button className='h-full' variant="contained" color="secondary" onClick={open}>
+      <Button className='h-full' variant="contained" color="secondary" onClick={open} disabled={!hasPermission("EDIT_MEMBERS")}>
         Edit Tags
       </Button>
       <Dialog 

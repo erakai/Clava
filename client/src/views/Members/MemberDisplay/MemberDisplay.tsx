@@ -9,6 +9,7 @@ import { UserState } from "../../../store/user/userSlice"
 import MemberRow from "./MemberRow"
 import MemberToolbarExtension from "./MemberToolbarExtension"
 import { AlternateSelectedToolbarProps } from "../../../components/ClavaTable/TableToolbar"
+import { hasPermission } from "../../ClubComposite"
 
 const headerCells: HeaderCell<Member>[] = [
   {
@@ -122,6 +123,7 @@ export default function MemberDisplay({ members, setMembers, title, club_id, sta
             <MemberToolbarExtension selected={selected} setSelected={setSelected} 
               allTags={tags} members={members} setMembers={setMembers} forceUpdate={forceUpdate}/>
           }
+          disableDelete={!hasPermission("EDIT_MEMBERS")} disableEdit={!hasPermission("EDIT_MEMBERS")}
         />
         {editModalOpen && 
           <EditMemberModal 

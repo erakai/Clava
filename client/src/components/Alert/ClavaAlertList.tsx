@@ -12,6 +12,24 @@ function createClavaAlert(t: string, m: string, s?: number) {
 	addAlert(c)
 }
 
+const defaultMessages: { [key: number]: string } = {
+  403: "Sorry, you don't have permissions to do that!",
+  200: "Success! "
+}
+
+function getStatusMessage(msg : string, statusCode? : number) : string {
+  if (statusCode) {
+    if (statusCode == 200) {
+      return defaultMessages[statusCode] + msg
+    }
+
+    if (defaultMessages[statusCode]) {
+      return defaultMessages[statusCode]
+    }
+  }
+  return msg
+}
+
 type AlertValues = {
 	type : string,
 	message : string
@@ -24,7 +42,7 @@ function generate(element: React.ReactElement, alertValues: AlertValues[]) {
 	    {React.cloneElement(element, {
 	    	key: alertValues.indexOf(value),
 	    	type: value.type,
-	    	message: value.message,  
+	    	message: getStatusMessage(value.message, value.statusCode),
 	    })}
 	</ListItem>
   );

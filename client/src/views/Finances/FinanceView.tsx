@@ -10,6 +10,8 @@ import { ScrollTop } from "../../components/Navigation"
 import useSettings from "../../hooks/useSettings"
 import { TransactionDisplay } from "./Transactions"
 import AddTransactionModal from './Transactions/AddTransactionModal';
+import { hasPermission } from '../ClubComposite';
+import { createClavaAlert } from '../../components/Alert';
 
 type FinanceViewProps = {
   club_id: string
@@ -49,6 +51,10 @@ export default function FinanceView(props: FinanceViewProps) {
       setBalance(b)
       setIncome(incomeTemp)
       setExpenses(expensesTemp)
+    }
+
+    if (!hasPermission("VIEW_FINANCES")) {
+      createClavaAlert("warning", "Sorry! You do not have permission to view finances.")
     }
 
     fetchData()

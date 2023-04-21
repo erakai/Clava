@@ -50,6 +50,8 @@ type ClavaTableProps<T> = {
   headerCells: HeaderCell<T>[]
   onDelete: (deleted: T[]) => void,
   onEdit?: (edited: T) => void
+  disableDelete?: boolean,
+  disableEdit?: boolean,
   searchString: string,
   setSearchString: Dispatch<React.SetStateAction<string>>,
   RowDisplay: (r: RowDisplayProps<T>) => JSX.Element,
@@ -63,7 +65,7 @@ type ClavaTableProps<T> = {
 export default function ClavaTable<T>({defaultOrder, tableName, 
   data, onDelete, searchString, setSearchString,
   headerCells, RowDisplay, dense, rowsPerPageOptions, defaultOrderDirection,
-  defaultRowsPerPage, onEdit, AlternateSelectedToolbar}: ClavaTableProps<T>) {
+  defaultRowsPerPage, onEdit, AlternateSelectedToolbar, disableDelete, disableEdit}: ClavaTableProps<T>) {
   const [order, setOrder] = useState(defaultOrderDirection || -1)
   const [orderBy, setOrderBy] = useState<keyof T>(defaultOrder)
   const [selected, setSelected] = useState<T[]>([])
@@ -125,7 +127,9 @@ export default function ClavaTable<T>({defaultOrder, tableName,
         <Paper className='w-full mb-2' elevation={3}>
           <TableToolbar<T> numSelected={selected.length} tableName={tableName}
             searchString={searchString} setSearchString={setSearchString} onDelete={onDeleteWrapper}
-            onEdit={onEdit} selected={selected} setSelected={setSelected} AlternateSelectedToolbar={AlternateSelectedToolbar}/>
+            onEdit={onEdit} selected={selected} setSelected={setSelected} AlternateSelectedToolbar={AlternateSelectedToolbar}
+            disableDelete={disableDelete} disableEdit={disableEdit}
+          />
           <TableContainer>
             <Table className='min-w-max' size={dense ? 'small' : 'medium'}>
               <TableHeader numSelected={selected.length}

@@ -33,7 +33,16 @@ export default function OfficerRow(
     const onDeleteRole = async (role: Role) => {
       const [err, res] = await to(deleteRoleFromOfficer({role_id: role._id, officer_id: row._id}))
       if (err) {
-        createClavaAlert("warning", err.message)
+        console.log(err)
+        var statusCode = undefined
+        try {
+          const statusCode : number = (err as any).response.status
+        } catch {}
+        if (statusCode) {
+          createClavaAlert("warning", err.message, statusCode)
+        } else {
+          createClavaAlert("warning", err.message)
+        }
         return
       }
 

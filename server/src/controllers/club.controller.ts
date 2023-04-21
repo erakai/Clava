@@ -9,6 +9,14 @@ import { getDefaultSettings } from 'http2'
 import { defaultSettings } from './settings.controller'
 import { isOwner, isUserOfClub } from '../modules/Permissions'
 import Officer from "../models/officer.model";
+import Member from '../models/member.model'
+import ClubDocument from '../models/document.model'
+import { Election, ElectionResults } from '../models/election.model'
+import Reimbursement from '../models/reimbursement.model'
+import Log from '../models/log.model'
+import Role from '../models/role.model'
+import Transaction from '../models/transanction.model'
+import Tag from '../models/tag.model'
 
 export const getClubs = async (req: Request, res: Response) => {
   let { user_id } = req.query
@@ -160,4 +168,68 @@ export const removeClubFromUser = async (req: Request, res: Response) => {
     }
 
   })
+}
+
+export const deleteClub = async (req: Request, res: Response) => {
+  let { club_id } = req.body
+
+  if (!club_id) {
+    return res.status(500).json({error: 'no club id provided'})
+  }
+
+  const [errOwner, isUserOwner] = await to(isOwner((req.user as any)._id, club_id))
+  if (errOwner) { return res.status(500).send({errOwner}) }
+  if (!isUserOwner) {
+    return res.status(401).json({error: "incorrect perms to delete club"})
+  }
+
+  // PURGE
+  await to(Officer.deleteMany({ 'club_id': { '$in': club_id }}).exec())
+  await to(Member.deleteMany({ 'club_id': { '$in': club_id }}).exec())
+  await to(ClubDocument.deleteMany({ 'club_id': { '$in': club_id }}).exec())
+  await to(Election.deleteMany({ 'club_id': { '$in': club_id }}).exec())
+  await to(ElectionResults.deleteMany({ 'club_id': { '$in': club_id }}).exec())
+  await to(Log.deleteMany({ 'club_id': { '$in': club_id }}).exec())
+  await to(Reimbursement.deleteMany({ 'club_id': { '$in': club_id }}).exec())
+  await to(Role.deleteMany({ 'club_id': { '$in': club_id }}).exec())
+  await to(Settings.deleteMany({ 'club_id': { '$in': club_id }}).exec())
+  await to(Tag.deleteMany({ 'club_id': { '$in': club_id }}).exec())
+  await to(Transaction.deleteMany({ 'club_id': { '$in': club_id }}).exec())
+  // PURGE OVER
+
+  const _id = club_id
+  Club.findByIdAndDelete({
+    _id
+  }, async (err, role) => {
+    if (err) {
+      console.log("dying here", err.message)
+      return res.status(500).send({err})
+    }
+
+    return res.status(200).json({role})
+  })
+}
+
+export const transferOwnership = async (req: Request, res: Response) => {
+  let { club_id, user_id } = req.body
+
+  if (!club_id) {
+    return res.status(500).json({error: 'no club id provided'})
+  }
+
+  if (!user_id) {
+    return res.status(500).json({error: 'no user id provided'})
+  }
+
+  const [errOwner, isUserOwner] = await to(isOwner((req.user as any)._id, club_id))
+  if (errOwner) { return res.status(500).send({errOwner}) }
+  if (!isUserOwner) {
+    return res.status(401).json({error: "incorrect perms to delete club"})
+  }
+
+  const _id = club_id
+  const [err] = await to (Club.findOneAndUpdate(_id, {owner_id : user_id}).exec())
+  if (err) { return res.status(500).send({err})}
+
+  return res.status(200).json({})
 }

@@ -99,7 +99,6 @@ function ClubPage() {
 
   return (
     <Box className="ClubPage w-screen">
-
       <AppBar position="sticky">
         <Container maxWidth={false}>
           <Toolbar disableGutters>

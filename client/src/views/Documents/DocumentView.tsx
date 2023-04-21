@@ -8,11 +8,15 @@ import useForceUpdate from '../../hooks/useForceUpdate'
 import DocumentCard from "./DocumentCard"
 import { deleteDocument as _deleteDocument, createDocument as _createDocument, editDocument as _editDocument, getDocuments } from '../../api/documentApi'
 import { getRoles } from "../../api/roleApi";
+import { hasPermission } from "../ClubComposite";
+import { createClavaAlert } from "../../components/Alert";
 
 type DocumentViewProps = {
   club_id: string
   state: UserState
 }
+
+const loadingRole : Role = {_id: "LOADING", name:"", color:"", perms:[], club_id: ""}
 
 export default function DocumentView({ club_id, state }: DocumentViewProps) {
 
@@ -24,7 +28,7 @@ export default function DocumentView({ club_id, state }: DocumentViewProps) {
   const [searchString, setSearchString] = useState("")
   const [filteredDocuments, setFilteredDocuments] = useState<ClubDocument[]>([])
   const [update, setUpdate] = useState(0)
-  const [clubRoles, setClubRoles] = useState<Role[]>([])
+  const [clubRoles, setClubRoles] = useState<Role[]>([loadingRole])
 
   const clearSearchField = () => {
     performSearch("")
@@ -55,6 +59,7 @@ export default function DocumentView({ club_id, state }: DocumentViewProps) {
   const addDocument = async (document: AddDocumentRequest) => {
     const [err, res] = await to(_createDocument(document))
     if (err) {
+      createClavaAlert("warning", err.message)
       console.log(err)
     } else if (res) {
       setDocuments([...documents, res.data.document])
@@ -66,6 +71,7 @@ export default function DocumentView({ club_id, state }: DocumentViewProps) {
   const editDocument = async (document: EditDocumentRequest) => {
     const [err, res] = await to(_editDocument(document))
     if (err) {
+      createClavaAlert("warning", err.message)
       console.log(err)
     } else if (res) {
       let retrieved : ClubDocument = res.data.document
@@ -90,6 +96,7 @@ export default function DocumentView({ club_id, state }: DocumentViewProps) {
     }
     const [err, res] = await to(_deleteDocument(deleteDocReq))
     if (err) {
+      createClavaAlert("warning", err.message)
       console.log(err)
     } else if (res) {
       let retrieved = res.data.document
@@ -119,6 +126,7 @@ export default function DocumentView({ club_id, state }: DocumentViewProps) {
       const [err, res] = await to(getDocuments(club_id))
       if (err) {
         console.log(err)
+        createClavaAlert("warning", err.message)
         return
       }
 
@@ -131,6 +139,7 @@ export default function DocumentView({ club_id, state }: DocumentViewProps) {
       const [errClubRoles, resClubRoles] = await to(getRoles(club_id))
       if (errClubRoles) {
         console.log(errClubRoles)
+        createClavaAlert("warning", errClubRoles.message)
         return
       }
 
@@ -170,7 +179,7 @@ export default function DocumentView({ club_id, state }: DocumentViewProps) {
       </Grid>
       <Box className="m-4">
         <Grid container spacing={2}>
-          {filteredDocuments.length > 0 ? filteredDocuments.map(document => (
+          {filteredDocuments.length > 0 && clubRoles[0]._id !== "LOADING" ? filteredDocuments.map(document => (
             <DocumentCard 
               docName={document.name} 
               docLink={document.link}
@@ -189,12 +198,14 @@ export default function DocumentView({ club_id, state }: DocumentViewProps) {
           </Box>}
         </Grid>
       </Box>
+      {hasPermission("EDIT_DOCUMENTS") &&
       <Fab onClick={() => setAddDocOpen(true)} color="secondary" sx={{
         position: 'fixed',
         bottom: 64,
         right: 64,}}>
         <AddIcon/>
       </Fab>
+      }
     </Box>
   )
 }
