@@ -67,7 +67,6 @@ module.exports = {
         if (!events) {
           viewEmbed
             .setTitle('Event Fetch Failed')
-            //.setDescription("Event creation cancelled")
             .setColor('#7f8c8d')
           await confirmation.update({ embeds: [viewEmbed], components: [] });
         }
@@ -94,10 +93,16 @@ module.exports = {
             // get the 10 or less events on the curr page
             let index = (currPage - 1) * 10 + i
             if (index < events.length) {
+              const e = events[index]
+              let val = "-Date: " + e.date.toLocaleDateString('en-us', { weekday:"short", year:"numeric", month:"short", day:"numeric"})
+              if (e.description != null) {
+                val += "\n-Description: " + e.description
+              }
+              if (e.started == true) {
+                val += "\n-Attendance: " + e.attendance
+              }
               //console.log(events[index].name)
-              embed.addFields({name: "Event", value: events[index].name})
-            } else {
-              embed.addFields({name: "Event", value: "-"})
+              embed.addFields({name: e.name, value: val})
             }
           }
           return embed
@@ -161,10 +166,16 @@ module.exports = {
                               interaction.options.getNumber('month') - 1, // months are 0 indexed
                               interaction.options.getNumber('day'))
                               .toLocaleDateString('en-us', { weekday:"short", year:"numeric", month:"short", day:"numeric"})
+        const description = interaction.options.getString('description')
+
+        let embedDescription = "Create Event: \"" + name + "\"\nDate: " + date
+        if (description != null) {
+          embedDescription += "\nDescription: " + description
+        }
 
         const createEmbed = new EmbedBuilder()
           .setTitle('Confirm Event Creation')
-          .setDescription("Create Event: \"" + name + "\"\nDate: " + date)
+          .setDescription(embedDescription)
           .setColor('#ffd300')
 
         const confirm = new ButtonBuilder()
@@ -193,7 +204,7 @@ module.exports = {
             // create the new event
             data = await eventSchema.create({
               name: name,
-              description: interaction.options.getString('description'),
+              description: description,
               date: date,
               started: false,
               attendance: 0,
@@ -203,14 +214,14 @@ module.exports = {
             if (!data) {
               createEmbed
               .setTitle("Event Creation Failed!")
-              .setDescription("Event Name: " + name + "\nDate: " + date)
+              .setDescription(embedDescription)
               .setColor('#ca4835')
               await confirmation.update({embeds: [createEmbed], components: []})
               return
             }
             createEmbed
             .setTitle("Event Successfully Created!")
-            .setDescription("Event Name: " + name + "\nDate: " + date)
+            .setDescription(embedDescription)
             .setColor('#2fd085')
             await confirmation.update({embeds: [createEmbed], components: []})
 
