@@ -1,7 +1,7 @@
 import to from 'await-to-js'
 import type { Request, Response } from 'express'
 import Role from '../models/role.model'
-import { isOwner } from '../modules/Permissions'
+import { getRolesFromUser, isOwner } from '../modules/Permissions'
 import cluster from 'cluster'
 import Club from '../models/club.model'
 import Officer from '../models/officer.model'
@@ -19,7 +19,6 @@ export const getRoles = async (req: Request, res: Response) => {
   if(!club) return res.status(401).send('Unauthorized')
   
   // make sure club exists
-
   Club.find({
     club_id: club_id
   }, async (err) => {
@@ -37,8 +36,49 @@ export const getRoles = async (req: Request, res: Response) => {
     }
 
     return res.status(200).json({roles})
-
   })
+}
+
+export const getPerms = async (req: Request, res: Response) => {
+  let { club_id } = req.query
+  if (!club_id) {
+    return res.status(500).json({error: 'no club id'})
+  }
+
+  const club: IClub = await Club.findById(club_id)
+
+  if(!club) return res.status(401).send('Unauthorized')
+  
+  // make sure club exists
+  Club.find({
+    club_id: club_id
+  }, async (err) => {
+    if (err) {
+      console.log("no club")
+      return res.status(500).send({err})
+    }
+  })
+  
+  const user_id = (req.user as any)._id
+
+  const [ownerErr, isUserOwner] = await to(isOwner(user_id, (club_id as string)))
+  if (ownerErr) { return res.status(500).json({ownerErr}) }
+  if (isUserOwner) {
+    const perms = ['OWNER']
+    return res.status(200).json({perms})
+  }
+
+  const [rolesErr, roles] = await to(getRolesFromUser(user_id, (club_id as string)))
+  if (rolesErr) { return res.status(500).json({rolesErr}) }
+  let perms_set = new Set<string>();
+  roles.forEach((role) => {
+    role.perms.forEach((perm) => {
+      perms_set.add(perm)
+    })
+  })
+
+  const perms = Array.from(perms_set);
+  return res.status(200).json({perms})
 }
 
 export const createRole = async (req: Request, res: Response) => {

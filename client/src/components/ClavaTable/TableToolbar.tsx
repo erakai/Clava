@@ -17,6 +17,8 @@ type ToolbarProps<T> = {
   searchString: string,
   setSearchString: Dispatch<React.SetStateAction<string>>
   onDelete: () => void,
+  disableDelete?: boolean,
+  disableEdit?: boolean,
   selected: T[],
   setSelected: Dispatch<React.SetStateAction<T[]>>
   onEdit?: (edited: T) => void
@@ -26,7 +28,7 @@ type ToolbarProps<T> = {
 export default function TableToolbar<T>({
   tableName, numSelected, searchString, setSearchString, 
   onDelete, onEdit, selected, AlternateSelectedToolbar,
-  setSelected}: ToolbarProps<T>)
+  setSelected, disableDelete, disableEdit}: ToolbarProps<T>)
 {
   const [filtering, setFiltering] = useState(false)
 
@@ -64,7 +66,7 @@ export default function TableToolbar<T>({
           {onEdit && numSelected == 1 ?
             <Grid item xs={2} lg={1}>
               <Tooltip title="Edit">
-                <IconButton onClick={() => onEdit(selected[0])}>
+                <IconButton disabled={disableEdit} onClick={() => onEdit(selected[0])}>
                   <EditIcon />
                 </IconButton>
               </Tooltip> 
@@ -72,7 +74,7 @@ export default function TableToolbar<T>({
           }
           <Grid item xs={2} lg={2}>
             <Tooltip title="Delete">
-              <IconButton onClick={handleDeleteModalOpen}>
+              <IconButton disabled={disableDelete} onClick={handleDeleteModalOpen}>
                 <Delete />
               </IconButton>
             </Tooltip>

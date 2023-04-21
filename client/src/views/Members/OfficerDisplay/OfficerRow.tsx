@@ -2,6 +2,7 @@ import { Checkbox, TableCell, TableRow } from "@mui/material"
 import to from "await-to-js"
 import { useEffect, useState } from "react"
 import { deleteRoleFromOfficer } from "../../../api/roleApi"
+import { createClavaAlert } from "../../../components/Alert"
 import { RowDisplayProps } from "../../../components/ClavaTable"
 import RoleRowDisplay from "../RolesEditor/RoleRowDisplay"
 
@@ -30,10 +31,25 @@ export default function OfficerRow(
     }, [])
 
     const onDeleteRole = async (role: Role) => {
-      let newRoles = officerRoles.filter(t => t != role)
-      setOfficerRoles(newRoles)
-    
       const [err, res] = await to(deleteRoleFromOfficer({role_id: role._id, officer_id: row._id}))
+      if (err) {
+        console.log(err)
+        var statusCode = undefined
+        try {
+          const statusCode : number = (err as any).response.status
+        } catch {}
+        if (statusCode) {
+          createClavaAlert("warning", err.message, statusCode)
+        } else {
+          createClavaAlert("warning", err.message)
+        }
+        return
+      }
+
+      if (res) {
+        let newRoles = officerRoles.filter(t => t != role)
+        setOfficerRoles(newRoles)
+      }
     }
 
     const onAddRole = async (role: Role) => {

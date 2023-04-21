@@ -2,6 +2,7 @@ import { Box, Button, Grid, IconButton, Modal, TextField, Typography } from "@mu
 import React, { Dispatch, useState } from "react"
 import CloseIcon from '@mui/icons-material/Close';
 import useEmailVerify from "../../../hooks/useEmailVerify"
+import { createClavaAlert } from "../../../components/Alert";
 
 type AddOfficerProps = {
     createOfficer: (officer: AddOfficerRequest) => void

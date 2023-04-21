@@ -1,3 +1,3 @@
-import ClubComposite from './ClubComposite'
+import { ClubComposite, hasPermission } from './ClubComposite'
 
-export default ClubComposite;
+export { ClubComposite, hasPermission };

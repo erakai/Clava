@@ -16,8 +16,12 @@ import { Settings } from '../Settings'
 import { Typography } from '@mui/material'
 import ActivityLogView from '../ActivityLog'
 import { ElectionView } from '../Elections'
+import { ClavaAlertList, createClavaAlert } from '../../components/Alert'
+import { getPerms } from '../../api/roleApi'
 
-export default function ClubComposite() {
+export let hasPermission = (perm : string) : boolean => {return false}
+
+export function ClubComposite() {
   const { state, user, logout } = useUser()
   const { clubId, clubRoute } = useParams<{
     clubId: string
@@ -27,6 +31,7 @@ export default function ClubComposite() {
   const [clubName, setClubName] = useState('')
   const [clubOwnerId, setClubOwner] = useState('')
   const [clubLoadCode, setClubLoadCode] = useState('Loading')
+  const [userPerms, setUserPerms] = useState<string[]>(['LOADING'])
 
   useEffect(() => {
     const fetchClub = async () => {
@@ -38,6 +43,7 @@ export default function ClubComposite() {
           if (err.response) {
             status_code = err.response.status.toString();
           }
+          createClavaAlert("warning", err.message)
           setClubLoadCode(status_code)
           return
         }
@@ -55,8 +61,39 @@ export default function ClubComposite() {
         }
       }
     }
+
+    const fetchPerms = async () => {
+      if (clubId) {
+        const [err, res] = await to(getPerms(clubId))
+        if (err instanceof AxiosError) {
+          createClavaAlert("warning", "Permissions: " + err.message)
+        }
+
+        if (!res) {
+          return
+        }
+
+        const retrieved = res.data.perms
+        if (retrieved) {
+          setUserPerms(retrieved)
+        }
+      }
+    }
+
     fetchClub()
+    fetchPerms()
   }, [])
+
+  hasPermission = (perm : string) : boolean => {
+    var _flag = false // !!!!!! I LOVE TYPESCRIPT !!!
+    // WHY WOULD I EVER NEED TO RETURN A BOOLEAN IN MY FOR LOOP???
+    userPerms.forEach(_perm => {
+      if (_perm === perm || _perm === "OWNER") {
+        _flag = true
+      }
+    })
+    return _flag
+  } 
 
   const getRoute = (): JSX.Element => {
     if (!clubId) return <UrlNotFound />
@@ -96,7 +133,7 @@ export default function ClubComposite() {
             club_id={clubId}
            />
         } else {
-          return <div>Loading</div>
+          return <div>Loading...</div>
         }
       default:
         return <UrlNotFound />
@@ -117,7 +154,14 @@ export default function ClubComposite() {
         />
       </div>
       }
-      {getRoute()}
+      <ClavaAlertList />
+      {userPerms[0] !== 'LOADING' ? // wait till permissions are here
+        getRoute()
+      :
+      <div>
+        Loading
+      </div>
+      }
     </div>
   )
 }

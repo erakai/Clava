@@ -7,6 +7,8 @@ import ElectionManaging from "./ElectionManaging/ElectionManaging";
 import useSettings from "../../hooks/useSettings";
 import { getElections } from "../../api/electionApi";
 import to from "await-to-js";
+import { hasPermission } from "../ClubComposite";
+import { useNavigate } from 'react-router-dom'
 
 type ElectionViewProps = {
   club_id: string
@@ -29,7 +31,14 @@ export default function ElectionView({ club_id }: ElectionViewProps) {
     if (mode == 'Management') setMode('Creation')
   }
 
+  let navigate = useNavigate();
   useEffect(() => {
+    if (!hasPermission("OWNER")) {
+      const path = `/${club_id}/documents`
+      refreshSettings(club_id)
+      navigate(path);
+    }
+
     const fetchElections = async () => {
       const [err, fetched] = await to(getElections(club_id))
       if (err) {

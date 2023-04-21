@@ -35,6 +35,7 @@ type EditDocumentProps = {
   clubRoles : Role[]
 }
 
+
 export default function EditDocumentModal({ documentId, open, setOpen, oldName, oldLink, setName, setLink, editDocument, isUniqueDocumentName, verifyUrl, club_id, clubRoles}: EditDocumentProps) {
   const [name, setNewName] = useState(oldName)
   const [nameError, setNewNameError] = useState("")
@@ -63,11 +64,10 @@ export default function EditDocumentModal({ documentId, open, setOpen, oldName, 
         });
         setAvaliableRoles(_aRoles)
       }
-      
     }
 
     fetchRoles()
-  }, [clubRoles, docRoles])
+  }, [])
 
   const handleEdit = () => {
     let badInput = false
@@ -114,6 +114,7 @@ export default function EditDocumentModal({ documentId, open, setOpen, oldName, 
   }
 
   return (
+    <div>
     <Dialog
         open={open}
         onClose={() => setOpen(false)}
@@ -179,6 +180,7 @@ export default function EditDocumentModal({ documentId, open, setOpen, oldName, 
         <Button onClick={handleEdit} variant="contained">Done</Button>
       </DialogActions>
       </Dialog>
+    </div>
   )
 }
 

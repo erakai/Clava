@@ -21,3 +21,7 @@ interface ClubToUserRequest {
   user_id: string,
   club_id: string
 }
+
+interface DeleteClubRequest {
+  club_id: string
+}

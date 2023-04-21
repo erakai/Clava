@@ -3,7 +3,7 @@ import type { Request, Response } from 'express'
 import Club from '../models/club.model'
 import ClubDocument from '../models/document.model'
 import Role from '../models/role.model'
-import { hasPermission, hasRole, isOwner } from '../modules/Permissions'
+import { getRolesFromUser, hasPermission, hasRole, isOwner } from '../modules/Permissions'
 import { IClubDocument } from '../types/document'
 
 export const getDocuments = async (req: Request, res: Response) => {
@@ -56,7 +56,6 @@ export const documentPost = async (req: Request, res: Response) => {
     console.log("no club_id !?!?!?!?")
     return res.status(500).json({error: 'no club id provided'})
   }
-
   
   if (name == "" || link == "") {
     return res.status(500).json({error: 'no doc name or doc link provided'})
@@ -78,10 +77,18 @@ export const documentPost = async (req: Request, res: Response) => {
     }
   })
 
-  // add the new tag to the club
+  const [errRoles, userRoles] = await to(getRolesFromUser((req.user as any)._id, club_id))
+  if (errRoles) { res.status(500).send({errRoles})}
+
+  var role_ids = []
+  userRoles.forEach((role) =>{
+    role_ids.push(role.id)
+  })
+
+  // add the new document to the club
   
   ClubDocument.create({
-    name, link, club_id
+    name, link, club_id, role_ids
   }, async (err, document) => {
     if (err) {
       console.log("couldnt make document")

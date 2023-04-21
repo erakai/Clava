@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { MoreVert as MoreVertIcon, Article as ArticleIcon } from '@mui/icons-material/';
 import EditDocumentModal from "./EditDocumentModal";
 import SmartDisplay from "@mui/icons-material/SmartDisplay";
+import { hasPermission } from "../ClubComposite";
 
 type DocumentCardProps = {
   docName: string
@@ -79,6 +80,7 @@ export default function DocumentCard({ docName, docLink, _id, editDocument, dele
         </Link>
         {/* </Box> */}
         <Divider className="mx-2"></Divider>
+        {hasPermission("EDIT_DOCUMENTS") &&
         <Box className="flex mx-2 my-1">
           <Box className="grow"></Box>
           <Button onClick={handleMenuEditOptionClick}>Edit</Button>
@@ -111,7 +113,8 @@ export default function DocumentCard({ docName, docLink, _id, editDocument, dele
                 <Button onClick={handleDeleteDocumentConfirm}>Delete</Button>
               </DialogActions>
             </Dialog>
-          </Box>
+      </Box>
+      }
       </Card>
       <EditDocumentModal 
         documentId={_id}

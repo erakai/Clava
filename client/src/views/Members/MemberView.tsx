@@ -20,6 +20,8 @@ import useForceUpdate from '../../hooks/useForceUpdate'
 import OfficerDisplay from './OfficerDisplay/OfficerDisplay'
 import { getOfficers } from '../../api/officerApi'
 import useSettings from '../../hooks/useSettings'
+import { createClavaAlert } from '../../components/Alert'
+import { hasPermission } from '../ClubComposite'
 
 type MemberViewProps = {
   club_id: string
@@ -90,6 +92,7 @@ export default function MemberView({ club_id, state, user_id, owner_id }: Member
       console.log(err)
       setErrorMessage(err.response?.data)
     } else if (res) {
+      createClavaAlert("success", "Success! An invitation e-mail has successfully been sent!")
       let newOfficers = officers;
       newOfficers.push(res.data.officer);
       setOfficers(newOfficers);
@@ -143,6 +146,9 @@ export default function MemberView({ club_id, state, user_id, owner_id }: Member
       if (retrievedOff) {
         setOfficers(retrievedOff)
       }
+    }
+    if (!hasPermission("VIEW_MEMBERS")) {
+      createClavaAlert("warning", "Sorry! You do not have permission to view members.")
     }
     refreshSettings(club_id)
     fetchAll()
@@ -212,7 +218,7 @@ export default function MemberView({ club_id, state, user_id, owner_id }: Member
             <Box display="flex" height="100%">
               <Grid container spacing={1}>
                 <Grid item xs={12} md={6} lg={3}>
-                  <Button className='h-full' variant="contained" color="secondary" onClick={() => setMemberOpen(true)}>
+                  <Button className='h-full' variant="contained" color="secondary" onClick={() => setMemberOpen(true)} disabled={!hasPermission("EDIT_MEMBERS")}>
                     Add Member
                   </Button>
                 </Grid>

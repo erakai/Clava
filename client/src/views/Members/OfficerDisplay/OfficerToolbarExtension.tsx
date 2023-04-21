@@ -4,6 +4,7 @@ import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 import AddIcon from '@mui/icons-material/Add';
 import { addRolesToOfficer } from "../../../api/roleApi";
 import to from "await-to-js";
+import { hasPermission } from "../../ClubComposite";
 
 type OfficerToolbarExtensionProps = {
   selected: Officer[]
@@ -66,7 +67,7 @@ function OfficerToolbarExtension({
       </Grid>
       <Grid item xs={4} lg={2}>
         <Tooltip title="Add Role">
-          <IconButton onClick={() => setAdding(!adding)}>
+          <IconButton disabled={!hasPermission("OWNER")} onClick={() => setAdding(!adding)}>
             <LocalOfferIcon/>
           </IconButton>
         </Tooltip>

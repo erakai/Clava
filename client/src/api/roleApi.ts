@@ -8,6 +8,7 @@ type DeleteRoleResponse = { role: Role }
 type EditRoleResponse = { role: Role }
 type DeleteTagFromOfficerResponse = {}
 type AddTagToOfficerResponse = {}
+type GetPermsResponse = { perms : string[] }
 
 
 const RoleInstance = axios.create({
@@ -40,4 +41,8 @@ export const deleteRoleFromOfficer = ({role_id, officer_id}: DeleteRoleFromOffic
 
 export const addRolesToOfficer = ({role_id, officer_ids}: AddRoleToOfficerRequest) => {
   return RoleInstance.post<AddTagToOfficerResponse>('/roles/', {role_id, officer_ids})
+}
+
+export const getPerms = (club_id: string) => {
+  return RoleInstance.get<GetPermsResponse>('/roles/perms/', { params: { club_id : club_id}})
 }

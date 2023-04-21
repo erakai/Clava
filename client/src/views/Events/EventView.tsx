@@ -19,6 +19,7 @@ import to from 'await-to-js'
 import EventDisplay from "./EventTable/EventDisplay"
 import useSettings from "../../hooks/useSettings";
 import { AxiosError } from "axios";
+import { hasPermission } from "../ClubComposite";
 
 
 type EventViewProps = {
@@ -231,13 +232,13 @@ export default function EventView({ club_id }: EventViewProps) {
         <Grid container marginX={2} xs={12} md={100} rowSpacing={2}>
           <Grid item xs={12} md={6} lg={2}>
             <Stack direction="row" spacing={3}>
-              <Button sx={{ whiteSpace: 'nowrap', minWidth: '140px' }} className='h-full' variant="contained" color="secondary" onClick={() => setCreateEventOpen(true)}>
+              <Button sx={{ whiteSpace: 'nowrap', minWidth: '140px' }} className='h-full' variant="contained" color="secondary" onClick={() => setCreateEventOpen(true)} disabled={!hasPermission("EDIT_EVENTS")}>
                 Create Event
               </Button>
-              <Button sx={{ whiteSpace: 'nowrap', minWidth: '200px'}} className='h-full' variant="contained" color="secondary" onClick={() => setSendEventScheduleOpen(true)}>
+              <Button sx={{ whiteSpace: 'nowrap', minWidth: '200px'}} className='h-full' variant="contained" color="secondary" onClick={() => setSendEventScheduleOpen(true)} disabled={!hasPermission("EDIT_EVENTS")}>
                 Send Event Schedule
               </Button>
-              <Button sx={{ whiteSpace: 'nowrap', minWidth: '210px'}} className='h-full' variant="contained" color="secondary" onClick={() => setMassCreateEventOpen(true)}>
+              <Button sx={{ whiteSpace: 'nowrap', minWidth: '210px'}} className='h-full' variant="contained" color="secondary" onClick={() => setMassCreateEventOpen(true)} disabled={!hasPermission("EDIT_EVENTS")}>
                 Setup Weekly Meetings
               </Button>
             </Stack>
