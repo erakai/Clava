@@ -11,29 +11,25 @@ module.exports = {
       subcommand
         .setName('view')
         .setDescription('View past events'))
-    // .addSubcommand(subcommand =>
-    //   subcommand
-    //     .setName('upcoming')
-    //     .setDescription('Display upcoming events'))
     .addSubcommand(subcommand =>
       subcommand
         .setName('create')
-        .setDescription('Create afasfsdfsdf new event')
+        .setDescription('Create a new event')
         .addStringOption(option =>
           option.setName('name')
             .setDescription('The name of the new event')
             .setRequired(true))
         .addNumberOption(option =>
           option.setName('month')
-            .setDescription('The date of the new event')
+            .setDescription('The month of the new event')
             .setRequired(true))
         .addNumberOption(option =>
           option.setName('day')
-            .setDescription('The date of the new event')
+            .setDescription('The day of the new event')
             .setRequired(true))
         .addNumberOption(option =>
           option.setName('year')
-            .setDescription('The date of the new event')
+            .setDescription('The year of the new event')
             .setRequired(true))
         .addStringOption(option =>
           option.setName('description')
@@ -75,6 +71,16 @@ module.exports = {
             .setColor('#7f8c8d')
           await confirmation.update({ embeds: [viewEmbed], components: [] });
         }
+
+        if (events.length == 0) {
+          const embed = new EmbedBuilder()
+            .setTitle('Events')
+            .setColor('#ffd300')
+            .setDescription('No events to display.')
+            interaction.reply({embeds: [embed]})
+            return
+        }
+
         const pageCount = Math.floor((events.length - 1) / 10) + 1
         // console.log("events " + events)
         
@@ -97,8 +103,6 @@ module.exports = {
           return embed
         }
         
-        const viewEmbed = createEventsPageEmbed()
-        
         const prev = new ButtonBuilder()
           .setCustomId('events_prev_button')
           .setLabel('Prev')
@@ -113,6 +117,8 @@ module.exports = {
           
         const row = new ActionRowBuilder()
           .addComponents(prev, next);
+
+        const viewEmbed = createEventsPageEmbed()
 
         const response = await interaction.reply({ 
           embeds: [viewEmbed],
@@ -142,7 +148,6 @@ module.exports = {
               await i.reply({embeds: [embed], components: [row]})
               await interaction.editReply({embeds: [embed], components: [row]})
               await i.deleteReply()
-              //console.log("next button pressed!!!")
             }
             // await i.reply(`${i.user} has selected ${selection}!`);
           })
@@ -151,7 +156,6 @@ module.exports = {
         }
 
       } else if (subcommand === 'create') {
-        
         const name = interaction.options.getString('name')
         const date = new Date(interaction.options.getNumber('year'), 
                               interaction.options.getNumber('month') - 1, // months are 0 indexed
@@ -182,10 +186,10 @@ module.exports = {
 
         // filter so that only person who sent the slash command can actually confirm
         const collectorFilter = i => i.user.id === interaction.user.id;
-
+        
         try {
           const confirmation = await response.awaitMessageComponent({ filter: collectorFilter, time: 60000 });
-          if (confirmation.customId === 'confirm') {
+          if (confirmation.customId === 'events_confirm') {
             // create the new event
             data = await eventSchema.create({
               name: name,
@@ -210,7 +214,7 @@ module.exports = {
             .setColor('#2fd085')
             await confirmation.update({embeds: [createEmbed], components: []})
 
-          } else if (confirmation.customId === 'cancel') {
+          } else if (confirmation.customId === 'events_cancel') {
             createEmbed
               .setTitle('Event Creation Cancelled')
               .setDescription("Event creation cancelled")
