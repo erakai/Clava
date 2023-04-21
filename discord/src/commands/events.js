@@ -1,4 +1,4 @@
-const { ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder, EmbedBuilder } = require('discord.js')
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder, EmbedBuilder, ComponentType } = require('discord.js')
 const guildSchema = require('../models/Guild.js')
 const eventSchema = require('../models/Event.js')
 
@@ -9,31 +9,27 @@ module.exports = {
     .setDescription('Info about events')
     .addSubcommand(subcommand =>
       subcommand
-        .setName('past')
-        .setDescription('Display past events'))
-    .addSubcommand(subcommand =>
-      subcommand
-        .setName('upcoming')
-        .setDescription('Display upcoming events'))
+        .setName('view')
+        .setDescription('View past events'))
     .addSubcommand(subcommand =>
       subcommand
         .setName('create')
-        .setDescription('Create afasfsdfsdf new event')
+        .setDescription('Create a new event')
         .addStringOption(option =>
           option.setName('name')
             .setDescription('The name of the new event')
             .setRequired(true))
-        .addNumberOption(option =>
+        .addIntegerOption(option =>
           option.setName('month')
-            .setDescription('The date of the new event')
+            .setDescription('The month of the new event')
             .setRequired(true))
-        .addNumberOption(option =>
+        .addIntegerOption(option =>
           option.setName('day')
-            .setDescription('The date of the new event')
+            .setDescription('The day of the new event')
             .setRequired(true))
-        .addNumberOption(option =>
+        .addIntegerOption(option =>
           option.setName('year')
-            .setDescription('The date of the new event')
+            .setDescription('The year of the new event')
             .setRequired(true))
         .addStringOption(option =>
           option.setName('description')
@@ -61,30 +57,136 @@ module.exports = {
 
       // otherwise club associated with server, continue
       const subcommand = interaction.options.getSubcommand()
-      if (subcommand === 'past') {
-        interaction.reply("Display past events.")
-      } else if (subcommand === 'upcoming') {
-        interaction.reply("Display upcoming events.")
-      } else if (subcommand === 'create') {
+      if (subcommand === 'view') {
+        let currPage = 1;
+
+        // get array of events
+        const events = await eventSchema.find({
+          club_id: data.ClubID
+        })
+        if (!events) {
+          errorEmbed
+            .setTitle('Error')
+            .setColor('#ca4835')
+            .setDescription("Failed To Fetch Events")
+          await confirmation.update({ embeds: [errorEmbed], components: [] });
+          return
+        }
+
+        if (events.length == 0) {
+          const embed = new EmbedBuilder()
+            .setTitle('Events')
+            .setColor('#ffd300')
+            .setDescription('No events to display.')
+            interaction.reply({embeds: [embed]})
+            return
+        }
+
+        const pageCount = Math.floor((events.length - 1) / 10) + 1
+        // console.log("events " + events)
         
+        const createEventsPageEmbed = () => {
+          let embed = new EmbedBuilder()
+            .setTitle('Events')
+            .setColor('#ffd300')
+            .setFooter({text: "Page: " + currPage})
+          //let eventNames = "";
+          for (let i = 0; i < 10; i++) {
+            // get the 10 or less events on the curr page
+            let index = (currPage - 1) * 10 + i
+            if (index < events.length) {
+              const e = events[index]
+              let val = "**Date:** " + e.date.toLocaleDateString('en-us', { weekday:"short", year:"numeric", month:"short", day:"numeric"})
+              if (e.description != null) {
+                val += "\n**Description:** " + e.description
+              }
+              if (e.started == true) {
+                val += "\n**Attendance:** " + e.attendance
+              }
+              //console.log(events[index].name)
+              embed.addFields({name: e.name, value: val})
+            }
+          }
+          return embed
+        }
+        
+        const prev = new ButtonBuilder()
+          .setCustomId('events_prev_button')
+          .setLabel('Prev')
+          .setStyle(ButtonStyle.Primary)
+          .setDisabled(true) // start on first page
+
+        const next = new ButtonBuilder()
+          .setCustomId('events_next_button')
+          .setLabel('Next')
+          .setStyle(ButtonStyle.Primary)
+          .setDisabled(currPage == pageCount) // if we are on last page
+          
+        const row = new ActionRowBuilder()
+          .addComponents(prev, next);
+
+        const viewEmbed = createEventsPageEmbed()
+
+        const response = await interaction.reply({ 
+          embeds: [viewEmbed],
+          components: [row] });
+
+        const collectorFilter = i => i.user.id === interaction.user.id;
+
+        try {
+          const collector = response.createMessageComponentCollector({ filter: collectorFilter, componentType: ComponentType.Button, time: 300000 }); // times out in 5 mins
+          collector.on('collect', async i => {
+            const buttonId = i.customId;
+            if (buttonId === 'events_prev_button') {
+              // paginate backwards
+              currPage--
+              prev.setDisabled(currPage == 1)
+              next.setDisabled(currPage == pageCount)
+              const embed = createEventsPageEmbed()
+              await i.reply({embeds: [embed], components: [row]})
+              await interaction.editReply({embeds: [embed], components: [row]})
+              await i.deleteReply()
+            } else if (buttonId === 'events_next_button') {
+              // paginate forwards
+              currPage++
+              prev.setDisabled(currPage == 1)
+              next.setDisabled(currPage == pageCount)
+              const embed = createEventsPageEmbed()
+              await i.reply({embeds: [embed], components: [row]})
+              await interaction.editReply({embeds: [embed], components: [row]})
+              await i.deleteReply()
+            }
+            // await i.reply(`${i.user} has selected ${selection}!`);
+          })
+        } catch (e) {
+          console.log(e)
+        }
+
+      } else if (subcommand === 'create') {
         const name = interaction.options.getString('name')
-        const date = new Date(interaction.options.getNumber('year'), 
-                              interaction.options.getNumber('month') - 1, // months are 0 indexed
-                              interaction.options.getNumber('day'))
+        const date = new Date(interaction.options.getInteger('year'), 
+                              interaction.options.getInteger('month') - 1, // months are 0 indexed
+                              interaction.options.getInteger('day'))
                               .toLocaleDateString('en-us', { weekday:"short", year:"numeric", month:"short", day:"numeric"})
+        const description = interaction.options.getString('description')
+
+        let embedDescription = "**Create Event:** \"" + name + "\"\n**Date:** " + date
+        if (description != null) {
+          embedDescription += "\n**Description:** " + description
+        }
 
         const createEmbed = new EmbedBuilder()
           .setTitle('Confirm Event Creation')
-          .setDescription("Create Event: \"" + name + "\"\nDate: " + date)
+          .setDescription(embedDescription)
           .setColor('#ffd300')
 
         const confirm = new ButtonBuilder()
-          .setCustomId('confirm')
+          .setCustomId('events_confirm')
           .setLabel('Confirm')
           .setStyle(ButtonStyle.Success)
 
         const cancel = new ButtonBuilder()
-          .setCustomId('cancel')
+          .setCustomId('events_cancel')
           .setLabel('Cancel')
           .setStyle(ButtonStyle.Secondary);
 
@@ -97,50 +199,48 @@ module.exports = {
 
         // filter so that only person who sent the slash command can actually confirm
         const collectorFilter = i => i.user.id === interaction.user.id;
-
+        
         try {
           const confirmation = await response.awaitMessageComponent({ filter: collectorFilter, time: 60000 });
-          if (confirmation.customId === 'confirm') {
+          if (confirmation.customId === 'events_confirm') {
             // create the new event
-
             data = await eventSchema.create({
               name: name,
-              description: interaction.options.getString('description'),
+              description: description,
               date: date,
               started: false,
               attendance: 0,
               club_id: data.ClubID
             })
+
             if (!data) {
               createEmbed
               .setTitle("Event Creation Failed!")
-              .setDescription("Event Name: " + name + "\nDate: " + date)
+              .setDescription(embedDescription)
               .setColor('#ca4835')
               await confirmation.update({embeds: [createEmbed], components: []})
               return
-              //return res.status(500).send({err})
             }
             createEmbed
             .setTitle("Event Successfully Created!")
-            .setDescription("Event Name: " + name + "\nDate: " + date)
+            .setDescription(embedDescription)
             .setColor('#2fd085')
             await confirmation.update({embeds: [createEmbed], components: []})
 
-          } else if (confirmation.customId === 'cancel') {
+          } else if (confirmation.customId === 'events_cancel') {
             createEmbed
               .setTitle('Event Creation Cancelled')
               .setDescription("Event creation cancelled")
               .setColor('#7f8c8d')
             await confirmation.update({ embeds: [createEmbed], components: [] });
-          }        
+          }       
         } catch (e) {
-          console.log("timedout")
+          //console.log("timedout")
           const timeoutEmbed = new EmbedBuilder()
             .setTitle('Event Creation Cancelled')
             .setDescription("Confirmation not received within 1 minute, cancelling")
-            .setColor('#ca4835')
-          console.log(e)
-          await confirmation.update({ embeds: [timeoutEmbed], components: [] });
+            .setColor('#7f8c8d')
+          await interaction.editReply({ embeds: [timeoutEmbed], components: [] });
           return
         }
       }

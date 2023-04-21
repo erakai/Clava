@@ -9,9 +9,4 @@ const eventSchema = new Schema({
   club_id: SchemaTypes.ObjectId
 })
 
-let guildSchema = new Schema({
-  GuildID: String,
-  ClubID: String
-})
-
 module.exports = model('event', eventSchema)
