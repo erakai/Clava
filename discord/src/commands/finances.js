@@ -313,7 +313,7 @@ module.exports = {
           .setColor('#2fd085')
           await confirmation.update({embeds: [createEmbed], components: []})
         
-        } else if (confirmation.customId === 'finances_cancel') {
+        } else if (confirmation.customId === 'finance_cancel') {
           createEmbed
             .setTitle('Transaction Creation Cancelled')
             .setDescription("Transaction creation cancelled.")
