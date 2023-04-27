@@ -6,7 +6,7 @@ function Main() {
   return (
     <Stack sx={{ height: '100vh' }}  justifyContent="center" alignItems="center"
       style={{ background: 'linear-gradient(45deg, #ffb500 15%, #f5e65f 90%)' }}>
-      <ImageList variant="masonry" cols={6} gap={4}>
+      {/* <ImageList variant="masonry" cols={6} gap={4}>
         {Array(10).fill(1).map((i) => (
           <ImageListItem key={i}>
             <img
@@ -16,7 +16,7 @@ function Main() {
               loading="lazy" />
           </ImageListItem>
         ))}
-        </ImageList>
+        </ImageList> */}
       <Paper elevation={8} sx={{ bgcolor: 'secondary.main', margin: 2, width: '40%' }}>
         <Stack margin={2}>
           <Typography variant="h1">Clava</Typography>
@@ -28,7 +28,7 @@ function Main() {
           </Link>
         </Stack>
       </Paper>
-      <ImageList variant="masonry" cols={6} gap={4}>
+      {/* <ImageList variant="masonry" cols={6} gap={4}>
         {Array(10).fill(1).map((i) => (
           <ImageListItem key={i}>
             <img
@@ -38,7 +38,7 @@ function Main() {
               loading="lazy" />
           </ImageListItem>
         ))}
-        </ImageList>
+        </ImageList> */}
     </Stack>
   )
 }
