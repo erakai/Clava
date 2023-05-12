@@ -85,7 +85,7 @@ export default function ElectionCreation({ club_id, settings, elections, setElec
       }
     })
 
-    return found >= 1
+    return found > 1
   }
 
   return (

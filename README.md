@@ -7,6 +7,8 @@ Clava is a management software targeted at college organizations. It offers a su
 - An event manager with attendance tracking through generated QRs
 - A centralized documentation system with Google Drive and YouTube integration
 
+Additionally, Clava also offers an alternative frontend in the form of Discord integration, with servers being allowed to link themselves to a club. Various hubs can be accessed and edited through slash commands.
+
 ## Background
 
 Originally designed by students of Purdue University for CS307, most Purdue clubs previously used BoilerLink, which was offered directly by Purdue. Unfortunately, BoilerLink's primary purpose was to centralize club information and enforce
@@ -41,3 +43,8 @@ Clava is a MERN app developed with a frontend React application that, using HTTP
 - Kris Leungwattanakij
 
 ## Screenshots
+
+![clubpage](screenshots/clubpage.png)
+![roles](screenshots/rolecreation.png)
+![finances](screenshots/finances.png)
+![settings](screenshots/settings.png)

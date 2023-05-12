@@ -165,7 +165,7 @@ export default function EventView({ club_id }: EventViewProps) {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {"Event Schedule Notifcation Success"}
+          {"Event Schedule Notification Success"}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
